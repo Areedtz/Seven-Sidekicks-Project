@@ -1,0 +1,2 @@
+# placeholder dependencies
+pytest==4.2.1
