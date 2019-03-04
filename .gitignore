@@ -1,4 +1,7 @@
-
+music/*
+.vscode/
 .idea/
 venv/
 *.pyc
+
+!*/.gitkeep
