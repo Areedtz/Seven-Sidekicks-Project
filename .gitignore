@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-
-music/*
-testMusic/*
-=======
 ### Excludes ###
 music/*
+testMusic/*
 .vscode/
->>>>>>> 0267feb38ffff8fcdb62937b52a2b64089ee8d42
 .idea/
 venv/
 *.pyc
