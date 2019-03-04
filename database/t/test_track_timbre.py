@@ -15,15 +15,15 @@ def test_database_name():
 
 def test_add_and_get():
     tbpm = TrackTimbre()
-    tbpm.add(1, 'bright', 3.)
+    tbpm.add(1, 'bright', .79)
     track = tbpm.get(1)
     assert track['song_id'] == 1
     assert track['timbre'] == 'bright'
-    assert track['confidence'] == 3.
+    assert track['confidence'] == .79
 
 
 def test_get_all():
     tbpm = TrackTimbre()
-    tbpm.add(1, 'bright', 3.)
+    tbpm.add(1, 'bright', .79)
     tracks = tbpm.get_all()
     assert len(tracks) > 0
