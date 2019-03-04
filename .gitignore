@@ -1,4 +1,9 @@
-
+### Excludes ###
+music/*
+.vscode/
 .idea/
 venv/
 *.pyc
+
+### Includes ###
+!*/.gitkeep

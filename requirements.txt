@@ -1,2 +1,4 @@
 # placeholder dependencies
 pytest==4.2.1
+essentia
+tabulate
