@@ -4,7 +4,7 @@ import os
 from multiprocessing import Pool
 from tabulate import tabulate
 
-from BPM_extractor import get_song_BPM
+from bpm_extractor import get_song_BPM
 
 
 if __name__ == "__main__":

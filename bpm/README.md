@@ -3,7 +3,7 @@ Takes a folder containing Diskoteket *.wav* files and prints a table with the ID
 
 Can be run with the following command
 ```
-python BPM FOLDERPATH
+python bpm FOLDERPATH
 ```
 
 If trying to retrieve the BPM and confidence for a single *.wav* file, use ``BPM_extractor.get_song_BPM(FILENAME)``

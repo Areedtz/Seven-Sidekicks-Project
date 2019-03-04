@@ -10,7 +10,7 @@ from essentia.standard import MonoLoader, RhythmExtractor2013
 def get_song_id(filename):
     return filename.split("/")[-1].split("-")[0]
 
-def get_song_BPM(filename):
+def get_song_bpm(filename):
     loader = MonoLoader(filename=filename)
     audio = loader()
     
@@ -29,7 +29,7 @@ if __name__ == "__main__":
             files.append(os.path.join(sys.argv[1], file))
 
     pool = Pool(8)
-    res = pool.map(get_song_BPM, files)
+    res = pool.map(get_song_bpm, files)
     pool.close()
 
     print(tabulate(res, headers=['Song ID', 'BPM', 'Confidence'], tablefmt='orgtbl'))
