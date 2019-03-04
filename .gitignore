@@ -1,4 +1,6 @@
 
+music/*
+testMusic/*
 .idea/
 venv/
 *.pyc

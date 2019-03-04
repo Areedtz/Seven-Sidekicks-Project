@@ -1,0 +1,73 @@
+{
+"highlevel": {
+    "mood_party": {
+        "all": {
+            "not_party": 0.552365541458,
+            "party": 0.447634458542
+        },
+        "probability": 0.552365541458,
+        "value": "not_party"
+    },
+    "mood_relaxed": {
+        "all": {
+            "not_relaxed": 0.987154603004,
+            "relaxed": 0.012845418416
+        },
+        "probability": 0.987154603004,
+        "value": "not_relaxed"
+    },
+    "timbre": {
+        "all": {
+            "bright": 0.995911002159,
+            "dark": 0.00408902298659
+        },
+        "probability": 0.995911002159,
+        "value": "bright"
+    }
+},
+"metadata": {
+    "audio_properties": {
+        "analysis_sample_rate": 44100,
+        "bit_rate": 1411200,
+        "equal_loudness": 0,
+        "length": 197.506668091,
+        "lossless": 1,
+        "replay_gain": -8.56081581116,
+        "sample_rate": 44100,
+        "codec": "pcm_s16le",
+        "downmix": "mix",
+        "md5_encoded": "a87d0921fa2ab4ab29120d1795b0f3a2"
+    },
+    "tags": {
+        "file_name": "2200734-1-5_The-Doors_Love-Me-Two-Times-Live.wav",
+        "album": ["Alive, She Cried"],
+        "albumartist": ["Doors, The"],
+        "artist": ["Doors, The"],
+        "composer": ["Jim Morrison\/Ray Manzarek\/John Densmore\/Robby Krieger"],
+        "contentgroup": ["Rock & Roll\/Hard Rock\/Psychedelic\/Contemporary Pop\/Rock\/Proto-Punk\/Album Rock\/AM Pop"],
+        "date": ["1983"],
+        "discnumber": ["1\/1"],
+        "encodedby": ["dBpoweramp Release 15.3"],
+        "encoding": ["-compression=\"PCM\""],
+        "genre": ["Pop\/Rock"],
+        "label": ["Elektra"],
+        "media": ["CD (Lossless)"],
+        "title": ["Love Me Two Times"],
+        "tracknumber": ["5\/7"]
+    },
+    "version": {
+        "highlevel": {
+            "essentia": "2.1-beta5-dev",
+            "essentia_git_sha": "v2.1_beta4-532-g6b584720",
+            "extractor": "music 2.0",
+            "gaia": "2.4.5",
+            "gaia_git_sha": "v2.4.4-44-g95f4851"
+        },
+        "lowlevel": {
+            "essentia": "2.1-beta2",
+            "essentia_git_sha": "v2.1_beta2",
+            "extractor": "music 1.0"
+        }
+    }
+}
+}
