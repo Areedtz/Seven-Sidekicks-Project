@@ -22,17 +22,20 @@ def test_augment_document():
     assert _augment_document(doc1, doc2) == expected
 
 
-def test_add_and_get_track_BPM():
+def test_insert_and_find():
     db = Database()
-    db.add_track_BPM(1200, 100., 3.)
-    track = db.get_track_BPM(1200)
-    print(track)
-    assert track['song_id'] == 1200
-    assert track['bpm'] == 100.
-    assert track['confidence'] == 3.
+    db.insert('test', 1, {
+        "key": "value"
+    })
+    track = db.find('test', 1)
+    assert track['song_id'] == 1
+    assert isinstance(track['last_updated'], datetime.datetime)
 
 
 def test_get_track_BPMs():
     db = Database()
-    tracks = db.get_track_BPMs()
+    db.insert('test', 1, {
+        "key": "value"
+    })
+    tracks = db.find_all('test')
     assert len(tracks) > 0
