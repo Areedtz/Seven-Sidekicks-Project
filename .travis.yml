@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.6"
+  - '3.6'
 
 # command to install dependencies
 install:
@@ -9,6 +9,10 @@ install:
 # command to run tests
 script:
   - pytest
+
+# services
+services:
+  - mongod
 
 # slack integration
 notifications:
