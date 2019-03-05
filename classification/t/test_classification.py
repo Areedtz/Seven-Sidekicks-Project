@@ -1,21 +1,18 @@
 import os
 import sys
 
-from ../classification.extractor.high_level_data_extractor import get_high_level_data
-from ../classification.classifier.profile_data_extractor import get_profile_data
+from classification.extractor.high_level_data_extractor import make_high_level_data_file
+from classification.classifier.profile_data_extractor import get_classifier_data
 
-def test_get_song_file():
-    assert os.path.exists('./test_classification/8376-Demolition_Man_proud_music_preview.wav')
 
-def test_song_extraction():
-    dirname = os.path.dirname(__file__)
+def test_song_data_extraction():
+    dirname = os.path.abspath(os.path.dirname(__file__))
+    print(dirname)
     filename = os.path.join(
-        dirname, 
-        "8376-Demolition_Man_proud_music_preview.wav")
-    outputfilename = "8376-Demolition_Man_proud_music_preview_output.json"
-    
-    get_high_level_data(filename, outputfilename)
+        dirname,
+        "./test_classification/8376-Demolition_Man_proud_music_preview.wav")
+    output_filename = os.path.join(dirname, "./8376_output.json")
 
-    get_profile_data(outputfilename)
+    make_high_level_data_file(filename, output_filename)
 
-    assert os.path.exists('./test_classification/8376-Demolition_Man_proud_music_preview_output.json')
+    assert os.path.isfile(output_filename)

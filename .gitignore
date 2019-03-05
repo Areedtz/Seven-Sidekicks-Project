@@ -5,8 +5,7 @@ testMusic/*
 .idea/
 venv/
 *.pyc
-*.yaml
-*.yml
+**/output/*
 
 ### Includes ###
 !*/.gitkeep

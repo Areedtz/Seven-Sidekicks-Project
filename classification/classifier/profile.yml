@@ -1,3 +1,0 @@
-highlevel:
-    compute: 1
-    svm_models: ['./classification/classifier/models/timbre.history', './classification/classifier/models/mood_relaxed.history', './classification/classifier/models/mood_party.history']
