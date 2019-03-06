@@ -4,7 +4,7 @@ import os
 from multiprocessing import Pool
 from tabulate import tabulate
 
-from bpm_extractor import get_song_BPM
+from bpm_extractor import get_song_bpm
 
 
 if __name__ == "__main__":
@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     # Multithreaded runthrough of all files
     pool = Pool(8)
-    res = pool.map(get_song_BPM, files)
+    res = pool.map(get_song_bpm, files)
     pool.close()
 
     # Create a neat table of the data

@@ -21,13 +21,16 @@ def get_classifier_data(data_file_name):
 
     highlevel = data['highlevel']
 
-    timbre = highlevel['timbre']['all']['bright']
-    mood_relaxed = highlevel['mood_relaxed']['all']['relaxed']
-    mood_party = highlevel['mood_party']['all']['party']
+    timbre = highlevel['timbre']['value']
+    timbre_probability = highlevel['timbre']['probability']
+    mood_relaxed = highlevel['mood_relaxed']['value']
+    mood_relaxed_probability = highlevel['mood_relaxed']['probability']
+    mood_party = highlevel['mood_party']['value']
+    mood_party_probability = highlevel['mood_party']['probability']
 
     subprocess.run("rm {}".format(output_file_path), shell=True)
 
-    return timbre, mood_relaxed, mood_party
+    return (timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability), (mood_party, mood_party_probability)
 
 
 if __name__ == "__main__":

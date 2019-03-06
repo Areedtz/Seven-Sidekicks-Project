@@ -1,5 +1,7 @@
 import os
 import sys
+import re
+
 from extractor.high_level_data_extractor import make_high_level_data_file
 from classifier.profile_data_extractor import get_classifier_data
 from pprint import pprint
@@ -9,14 +11,14 @@ from multiprocessing import Pool
 
 
 def process_data_and_extract_profiles(song_id, song_file, song_output_file):
-    make_high_level_data_file(song_file, song_output_file)
+    #make_high_level_data_file(song_file, song_output_file)
 
     timbre, mood_relaxed, mood_party = get_classifier_data(song_output_file)
     return song_id, timbre, mood_relaxed, mood_party
 
 
 def get_song_id(filename):
-    return filename.split("/")[-1].split("-")[0]
+    return re.search(r"([0-9]+-[0-9]+-[0-9]+)", filename).group(0)
 
 
 if __name__ == "__main__":

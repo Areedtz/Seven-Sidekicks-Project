@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 from multiprocessing import Pool
 from tabulate import tabulate
@@ -8,7 +9,7 @@ from essentia.standard import MonoLoader, RhythmExtractor2013
 
 
 def get_song_id(filename):
-    return filename.split("/")[-1].split("-")[0]
+    return re.search(r"([0-9]+-[0-9]+-[0-9]+)", filename).group(0)
 
 
 def get_song_bpm(filename):
