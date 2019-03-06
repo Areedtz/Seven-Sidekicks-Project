@@ -25,7 +25,7 @@ class Database:
         return id
 
     def find(self, name, song_id):
-        return self._db[name].find_one({'song_id': song_id})
+        return self._db[name].find({'song_id': song_id}).sort([('last_updated', -1)]).limit(1)[0]
 
     def find_all(self, name):
         results = []
