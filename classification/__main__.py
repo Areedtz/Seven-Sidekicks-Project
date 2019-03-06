@@ -11,7 +11,7 @@ from multiprocessing import Pool
 
 
 def process_data_and_extract_profiles(song_id, song_file, song_output_file):
-    #make_high_level_data_file(song_file, song_output_file)
+    make_high_level_data_file(song_file, song_output_file)
 
     timbre, mood_relaxed, mood_party = get_classifier_data(song_output_file)
     return song_id, timbre, mood_relaxed, mood_party
