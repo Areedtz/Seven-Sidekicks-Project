@@ -10,8 +10,8 @@ def test_song_data_extraction():
     print(dirname)
     filename = os.path.join(
         dirname,
-        "./test_classification/8376-Demolition_Man_proud_music_preview.wav")
-    output_filename = os.path.join(dirname, "./8376_output.json")
+        "./test_classification/8376-1-1_Demolition_Man_proud_music_preview.wav")
+    output_filename = os.path.join(dirname, "./8376-1-1_output.json")
 
     make_high_level_data_file(filename, output_filename)
 
