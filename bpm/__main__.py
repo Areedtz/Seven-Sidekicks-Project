@@ -20,9 +20,8 @@ if __name__ == "__main__":
     pool.close()
 
     # Create a neat table of the data
-    table = tabulate(
-        res,
-        headers=['Song ID', 'BPM', 'Confidence'],
-        tablefmt='orgtbl')
+    table = tabulate(res,
+                     headers=['Song ID', 'BPM', 'Confidence'],
+                     tablefmt='orgtbl')
 
     print(table)

@@ -12,8 +12,8 @@ from database.track_timbre import TrackTimbre
 
 
 def extract_and_save_data_from_song(filename):
-    if not filename.endswith(".wav"):
-        print("File is not a .wav file. Exiting...")
+    if not filename.endswith(".wav", ".mp3"):
+        print("File is not a .wav or .mp3 file. Exiting...")
         exit()
 
     bpm_database_client = TrackBPM()
@@ -44,7 +44,7 @@ def extract_and_save_data_from_song(filename):
 def extract_and_save_data_from_songs_in_folder(folder_path):
     files = []
     for file in os.listdir(folder_path):
-        if file.endswith(".wav"):
+        if file.endswith(".wav", ".mp3"):
             files.append(os.path.join(folder_path, file))
 
     pool = Pool(8)

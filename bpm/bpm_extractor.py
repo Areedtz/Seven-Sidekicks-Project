@@ -1,16 +1,11 @@
 import sys
 import os
-import re
 
 from multiprocessing import Pool
 from tabulate import tabulate
+from utilities.get_song_id import get_song_id
 
 from essentia.standard import MonoLoader, RhythmExtractor2013
-
-
-def get_song_id(filename):
-    return re.search(r"([0-9]+-[0-9]+-[0-9]+)", filename).group(0)
-
 
 def get_song_bpm(filename):
     loader = MonoLoader(filename=filename)
@@ -34,5 +29,6 @@ if __name__ == "__main__":
     res = pool.map(get_song_bpm, files)
     pool.close()
 
-    print(tabulate(res, headers=['Song ID', 'BPM',
-                                 'Confidence'], tablefmt='orgtbl'))
+    print(tabulate(res,
+                   headers=['Song ID', 'BPM','Confidence'],
+                   tablefmt='orgtbl'))
