@@ -1,7 +1,7 @@
 import os
 import sys
 
-from classification.extractor.high_level_data_extractor import make_low_level_data_file
+from classification.extractor.low_level_data_extractor import make_low_level_data_file
 
 def test_song_data_extraction():
     dirname = os.path.abspath(os.path.dirname(__file__))
