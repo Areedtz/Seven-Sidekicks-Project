@@ -14,8 +14,9 @@ def _augment_document(doc1, doc2):
 
 
 class Database:
-    def __init__(self, host="localhost", port=27017):
-        self._client = MongoClient(host, port)
+    def __init__(self, host="localhost", port=27017, username=None, password=None):
+        self._client = MongoClient(
+            host, port, username=username, password=password)
         self._db = self._client['dr']
 
     def insert(self, name, song_id, doc):
