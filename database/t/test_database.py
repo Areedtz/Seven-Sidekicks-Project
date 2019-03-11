@@ -39,3 +39,15 @@ def test_get_track_BPMs():
     })
     tracks = db.find_all('test')
     assert len(tracks) > 0
+
+
+def test_find_returns_latest_with_songid():
+    db = Database()
+    db.insert('test', 1, {
+        "key": "value"
+    })
+    db.insert('test', 1, {
+        "key": "v"
+    })
+    track = db.find('test', 1)
+    assert track["key"] == "v"
