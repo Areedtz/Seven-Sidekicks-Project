@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-sudo apt-get install build-essential libyaml-dev libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev python-dev libsamplerate0-dev libtag1-dev
-sudo apt-get install python-numpy-dev python-numpy python-yaml
+sudo apt-get install build-essential libyaml-dev libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six
+sudo apt-get install python3-dev python3-numpy-dev python3-numpy python3-yaml
 
 git clone https://github.com/MTG/essentia
 
