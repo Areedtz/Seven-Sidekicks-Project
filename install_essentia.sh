@@ -4,6 +4,8 @@ sudo apt-get update
 sudo apt-get install build-essential libyaml-dev libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six
 sudo apt-get install python3-dev python3-numpy-dev python3-numpy python3-yaml
 
+cd ..
+
 git clone https://github.com/MTG/essentia
 
 cd essentia
@@ -13,4 +15,4 @@ cd essentia
 
 python -c 'import essentia'
 
-cd ..
+cd ../Seven-Sidekicks-Project
