@@ -8,8 +8,8 @@ sudo apt-get install python3-dev python3-numpy-dev python3-numpy python3-yaml
 git clone https://github.com/MTG/essentia
 
 cd essentia
-python3 ./waf configure --with-python
-python3 ./waf
-sudo python3 ./waf install
+./waf configure --python=/home/travis/virtualenv/python3.6.7/bin/ --with-python
+./waf
+sudo ./waf install
 
 python -c 'import essentia'
