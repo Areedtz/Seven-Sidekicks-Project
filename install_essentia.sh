@@ -12,3 +12,5 @@ cd essentia
 ./waf install
 
 python -c 'import essentia'
+
+cd ..
