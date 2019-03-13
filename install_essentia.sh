@@ -22,7 +22,7 @@ cd gaia
 
 python2 ./waf configure --with-python-bindings
 python2 ./waf
-python2 ./waf install
+sudo python2 ./waf install
 
 cd ..
 
