@@ -1,9 +1,13 @@
 import sys
 import os
 
+# Start of importing the utilities module
+sys.path.insert(0, os.path.abspath("../utilities/"))
+import get_song_id as s_id
+# End of importing the utilities module
+
 from multiprocessing import Pool
 from tabulate import tabulate
-from utilities.get_song_id import get_song_id
 
 from essentia.standard import MonoLoader, RhythmExtractor2013
 
@@ -14,7 +18,7 @@ def get_song_bpm(filename):
     rhythm_extractor = RhythmExtractor2013()
     bpm, _, beats_confidence, _, _ = rhythm_extractor(audio)
 
-    song_id = get_song_id(filename)
+    song_id = s_id.get_song_id(filename)
 
     return song_id, bpm, beats_confidence
 

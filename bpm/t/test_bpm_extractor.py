@@ -1,10 +1,17 @@
 import os
+import sys
 
-from bpm.bpm_extractor import get_song_id, get_song_bpm
+# Start of importing the utilities module
+sys.path.insert(0, os.path.abspath("utilities/"))
+
+#import get_song_id as s_id
+# End of importing the utilities module
+
+from bpm.bpm_extractor import get_song_bpm, s_id
 
 
 def test_get_song_id():
-    assert get_song_id("8376-1-1_Demolition_Man_proud_music_preview.wav") == "8376-1-1"
+    assert s_id.get_song_id("8376-1-1_Demolition_Man_proud_music_preview.wav") == "8376-1-1"
 
 def test_get_song_bpm():
     dirname = os.path.dirname(__file__)

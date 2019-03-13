@@ -8,10 +8,10 @@ from bpm_extractor import get_song_bpm
 
 
 if __name__ == "__main__":
-    # Go through all .wav files in the given directory
+    # Go through all .wav or .mp3 files in the given directory
     files = []
     for file in os.listdir(sys.argv[1]):
-        if file.endswith(".wav"):
+        if file.endswith((".wav", ".mp3")):
             files.append(os.path.join(sys.argv[1], file))
 
     # Multithreaded runthrough of all files

@@ -7,7 +7,7 @@ from pprint import pprint
 
 def get_classifier_data(data_file_name):
     dirname = os.path.abspath(os.path.dirname(__file__))
-    profile_file = os.path.join(dirname, "timbre_relaxed_party_profile.yaml")
+    profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_relaxed_party_profile.yaml")
 
     output_file_path = data_file_name.split(".")[0] + "-model-data.json"
 

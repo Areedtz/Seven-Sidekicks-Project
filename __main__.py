@@ -2,8 +2,13 @@ import sys
 import os
 from multiprocessing import Pool
 
+# Start of importing the utilities module
+# Needed due to the fact it imports a module that uses the utility module
+sys.path.insert(0, os.path.abspath("utilities/"))
+# End of importing the utilities module
+
 from bpm.bpm_extractor import get_song_bpm
-from classification.extractor.high_level_data_extractor import make_high_level_data_file
+from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
 from database.track_bpm import TrackBPM
 from database.track_party import TrackParty
@@ -12,7 +17,7 @@ from database.track_timbre import TrackTimbre
 
 
 def extract_and_save_data_from_song(filename):
-    if not filename.endswith(".wav", ".mp3"):
+    if not filename.endswith((".wav", ".mp3")):
         print("File is not a .wav or .mp3 file. Exiting...")
         exit()
 
@@ -30,7 +35,7 @@ def extract_and_save_data_from_song(filename):
     output_file_name = "{}_output.json".format(song_id)
     output_file_path = os.path.join(output_folder_abs_path, output_file_name)
 
-    make_high_level_data_file(filename, output_file_path)
+    make_low_level_data_file(filename, output_file_path)
 
     timbre, relaxed, party = get_classifier_data(output_file_path)
 
@@ -44,7 +49,7 @@ def extract_and_save_data_from_song(filename):
 def extract_and_save_data_from_songs_in_folder(folder_path):
     files = []
     for file in os.listdir(folder_path):
-        if file.endswith(".wav", ".mp3"):
+        if file.endswith((".wav", ".mp3")):
             files.append(os.path.join(folder_path, file))
 
     pool = Pool(8)
