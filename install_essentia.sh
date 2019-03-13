@@ -5,7 +5,7 @@ cd ..
 # Install gaia
 sudo apt-get update
 sudo apt-get install build-essential libqt4-dev libyaml-dev pkg-config
-sudo apt-get install swig3.0=3.0.12-1.2
+sudo apt-get install swig3.0
 
 git clone https://github.com/MTG/gaia/
 cd gaia
