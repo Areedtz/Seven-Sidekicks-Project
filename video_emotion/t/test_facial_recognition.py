@@ -1,6 +1,6 @@
 import os
 
-from videoemotion.facial_recognition import facial_recognition
+from video_emotion.facial_recognition.facial_recognition import facial_recognition
 
 def test_facial_recognition_of_two_faces_in_one_frame():
     dirname = os.path.dirname(__file__)
