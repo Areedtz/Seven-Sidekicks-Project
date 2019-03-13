@@ -10,9 +10,9 @@ cd ..
 git clone https://github.com/MTG/gaia/
 cd gaia
 
-./waf configure --with-python-bindings
-./waf
-./waf install
+python2 ./waf configure --with-python-bindings
+python2 ./waf
+python2 ./waf install
 
 cd ..
 
