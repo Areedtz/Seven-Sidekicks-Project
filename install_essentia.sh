@@ -2,10 +2,20 @@
 
 cd ..
 
+# Install swig
+git clone https://github.com/swig/swig.git
+cd swig
+
+./autogen.sh
+./configure
+make
+make install
+
+cd ..
+
 # Install gaia
 sudo apt-get update
 sudo apt-get install build-essential libqt4-dev libyaml-dev pkg-config
-sudo apt-get install swig3.0=3.0.7-2
 
 git clone https://github.com/MTG/gaia/
 cd gaia
