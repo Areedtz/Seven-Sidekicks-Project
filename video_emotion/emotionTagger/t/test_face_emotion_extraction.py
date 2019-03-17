@@ -5,7 +5,7 @@ def testAngryFace():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
         dirname,
-        "test_face_emotion_extraction_data\\angry1.png")
+        "test_face_emotion_extraction_data/angry1.png")
     im = cv2.imread(filename)
     faceData = classify_face(im)
     assert len(faceData) == 7
@@ -14,7 +14,7 @@ def testHappy1():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
         dirname,
-        "test_face_emotion_extraction_data\\happy1.png")
+        "test_face_emotion_extraction_data/happy1.png")
     im = cv2.imread(filename)
     faceData = classify_face(im)
     assert len(faceData) == 7
@@ -23,7 +23,7 @@ def testHappy2():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
         dirname,
-        "test_face_emotion_extraction_data\\happy2.png")
+        "test_face_emotion_extraction_data/happy2.png")
     im = cv2.imread(filename)
     faceData = classify_face(im)
     assert len(faceData) == 7
@@ -32,7 +32,7 @@ def testHappy3():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
         dirname,
-        "test_face_emotion_extraction_data\\happy3.png")
+        "test_face_emotion_extraction_data/happy3.png")
     im = cv2.imread(filename)
     faceData = classify_face(im)
     assert len(faceData) == 7
@@ -41,7 +41,7 @@ def testNeutral1():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
         dirname,
-        "test_face_emotion_extraction_data\\neutral1.png")
+        "test_face_emotion_extraction_data/neutral1.png")
     im = cv2.imread(filename)
     faceData = classify_face(im)
     assert len(faceData) == 7
