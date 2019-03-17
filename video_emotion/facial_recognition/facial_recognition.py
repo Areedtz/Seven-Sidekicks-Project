@@ -1,12 +1,9 @@
 import numpy as np
 import cv2
+import os
 
-opencv_prototxt = "deploy.prototxt.txt"
-opencv_model = "res10_300x300_ssd_iter_140000_fp16.caffemodel"
-CONFIDENCE_MINIMUM = 0.7
 
-# Load model from disk
-net = cv2.dnn.readNetFromCaffe(opencv_prototxt, opencv_model)
+
 
 
 def analyze_video(video_path, time_range=None):
@@ -45,6 +42,15 @@ def analyze_video(video_path, time_range=None):
 
 
 def analyze_frame(frame):
+    dirname = os.path.dirname(__file__)
+    opencv_prototxt = os.path.join(
+        dirname, "deploy.prototxt.txt")
+    opencv_model = os.path.join(
+        dirname, "res10_300x300_ssd_iter_140000_fp16.caffemodel")
+    CONFIDENCE_MINIMUM = 0.7
+    # Load model from disk
+    net = cv2.dnn.readNetFromCaffe(opencv_prototxt, opencv_model)
+
     # Get width and height of frame
     (h, w) = frame.shape[:2]
 
