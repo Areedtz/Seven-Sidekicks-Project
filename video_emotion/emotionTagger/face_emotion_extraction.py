@@ -21,10 +21,8 @@ def classify_face(face):
     dirname = os.path.abspath(os.path.dirname(__file__))
     emotion_model_path = os.path.join(
         dirname,
-        "models\emotion_model.hdf5")
+        "models/emotion_model.hdf5")
     emotion_labels = get_labels('fer2013')
-
-    #emotion_offsets = (20, 40)
 
     # loading models
     emotion_classifier = load_model(emotion_model_path)
@@ -50,10 +48,7 @@ def classify_face(face):
     #print("Mood: [" + str(emotion_labels[4]) + "]       Percentage: [" + str(emotion_prediction[0][4]) + "]")
     #print("Mood: [" + str(emotion_labels[5]) + "]  Percentage: [" + str(emotion_prediction[0][5]) + "]")
     #print("Mood: [" + str(emotion_labels[6]) + "]   Percentage: [" + str(emotion_prediction[0][6]) + "]")
-    print(emotion_prediction[0])
     return emotion_prediction[0]
-    #gray_image = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-    #rgb_image = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
     
 if __name__ == "__main__":	
     for filename in glob.glob('./faces/*.png'): #assuming gif
