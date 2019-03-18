@@ -19,7 +19,6 @@ def analyze_video(video_path, time_range=None):
         fro, to = time_range
     cap = cv2.VideoCapture(video_path)
     dict_of_faces = {}
-    i = 1
     while(cap.isOpened()):
         # Get frame from video
         ret, frame = cap.read()
@@ -41,8 +40,8 @@ def analyze_video(video_path, time_range=None):
 
         # Add found frames to our dictionary
         if len(faces) > 0:
-            dict_of_faces[str(i)] = faces
-        i += 1
+            frame_number = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
+            dict_of_faces[str(frame_number)] = faces
     # Release resources used to open video
     cap.release()
 
