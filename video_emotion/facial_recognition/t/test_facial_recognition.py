@@ -1,4 +1,5 @@
 import os
+import cv2
 
 from video_emotion.facial_recognition.facial_recognition import analyze_video, analyze_frame
 
@@ -14,7 +15,7 @@ def test_facial_recognition_of_at_least_one_face():
     frame_key = "80"
     faces = output_frames.get(frame_key)
 
-    assert len(faces) = 2
+    assert len(faces) == 2
 
 def test_facial_recognition_of_two_faces_in_single_frame():
     dirname = os.path.dirname(__file__)
@@ -23,13 +24,14 @@ def test_facial_recognition_of_two_faces_in_single_frame():
 
     cap = cv2.VideoCapture(test_filename)
     frame = cap.read()
-    timestamp = cap.get(cv2.CAP_PROP_POS_MSEC)
-    if timestamp < 3080:
-        continue
-    elif timestamp > 3081:
-        break
+    while(cap.isOpened()):
+        timestamp = cap.get(cv2.CAP_PROP_POS_MSEC)
+        if timestamp < 3080:
+            continue
+        elif timestamp > 3081:
+            break
 
     output_tuple = analyze_frame(frame)
 
     assert len(output_tuple) != 0
-    assert len(output_tuple) = 2
+    assert len(output_tuple) == 2
