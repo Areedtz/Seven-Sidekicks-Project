@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+# Install apt dependencies
+echo "Installing apt dependencies..."
 sudo apt-get update
 sudo apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config
 
