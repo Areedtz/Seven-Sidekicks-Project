@@ -3,19 +3,23 @@ import os
 import numpy as np
 from keras.models import load_model
 import glob
+
 def get_labels(dataset_name):
     if dataset_name == 'fer2013':
-        return {0:'angry',1:'disgust',2:'fear',3:'happy',
-                4:'sad',5:'surprise',6:'neutral'}
+        return {0:'angry', 1:'disgust', 2:'fear',
+                3:'happy', 4:'sad', 5:'surprise',
+                6:'neutral'}
     else:
         raise Exception('Invalid dataset name')
+
 def preprocess_input(x, v2=True):
     x = x.astype('float32')
     x = x / 255.0
     if v2:
         x = x - 0.5
         x = x * 2.0
-    return x		
+    return x
+    
 def classify_face(face):
     # parameters for loading data and images
     dirname = os.path.abspath(os.path.dirname(__file__))
