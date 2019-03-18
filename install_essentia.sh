@@ -42,7 +42,7 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
 fi
 
 # Install Essentia if not already installed
-if [ ! -d "/home/travis/essentia" ]; then
+if [ ! -d "$HOME/essentia" ]; then
     echo "Essentia not installed. Installing Essentia..."
     cd $HOME
 
