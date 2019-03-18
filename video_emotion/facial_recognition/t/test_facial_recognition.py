@@ -30,8 +30,7 @@ def test_facial_recognition_of_two_faces_in_single_frame():
             continue
         elif timestamp > 3081:
             break
-
-    output_tuple = analyze_frame(frame)
+        output_tuple = analyze_frame(frame)
 
     assert len(output_tuple) != 0
     assert len(output_tuple) == 2
