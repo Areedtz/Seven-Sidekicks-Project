@@ -10,6 +10,7 @@ def testAngryFace():
     faceData = classify_face(im)
     assert len(faceData) == 7
     assert faceData[0] > 0.5
+
 def testHappy1():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
@@ -19,6 +20,7 @@ def testHappy1():
     faceData = classify_face(im)
     assert len(faceData) == 7
     assert faceData[3] > 0.5
+
 def testHappy2():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
@@ -28,6 +30,7 @@ def testHappy2():
     faceData = classify_face(im)
     assert len(faceData) == 7
     assert faceData[3] > 0.5
+
 def testHappy3():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
@@ -37,6 +40,7 @@ def testHappy3():
     faceData = classify_face(im)
     assert len(faceData) == 7
     assert faceData[3] > 0.3
+    
 def testNeutral1():
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
