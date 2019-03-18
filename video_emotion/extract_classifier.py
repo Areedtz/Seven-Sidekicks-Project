@@ -1,5 +1,5 @@
-from facial_recognition.facial_recognition import analyze_video
-from emotionTagger.face_emotion_extraction import classify_face
+from video_emotion.facial_recognition.facial_recognition import analyze_video
+from video_emotion.emotionTagger.face_emotion_extraction import classify_face
 
 def classify_video(video_path,time_range=None):
     faces = analyze_video(video_path,time_range)
@@ -27,5 +27,5 @@ def classify_video(video_path,time_range=None):
     }
 
 if __name__ == "__main__":
-    data = classify_video('./Fun_at_a_Fair.mp4',(4000, 5000))
+    data = classify_video('./Fun_at_a_Fair.mp4',(4900, 5000))
     print(data)
