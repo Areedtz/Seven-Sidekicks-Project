@@ -28,4 +28,4 @@ def classify_video(video_path,time_range=None):
 
 if __name__ == "__main__":
     data = classify_video('./Fun_at_a_Fair.mp4',(4900, 5000))
-    print(data)
+    print(data + "data")
