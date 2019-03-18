@@ -14,7 +14,7 @@ def test_facial_recognition_of_at_least_one_face():
     frame_key = "80"
     faces = output_frames.get(frame_key)
 
-    assert faces.__sizeof__ = 2
+    assert len(faces) = 2
 
 def test_facial_recognition_of_two_faces_in_single_frame():
     dirname = os.path.dirname(__file__)
