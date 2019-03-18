@@ -4,9 +4,9 @@
 # Install apt dependencies
 echo "Installing apt dependencies..."
 sudo apt-get update
-sudo apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config
+sudo apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config libyaml-dev
 
-sudo apt-get install -y libyaml-dev libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev
+sudo apt-get install -y libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev
 sudo apt-get install -y python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six
 sudo apt-get install -y python3-dev python3-numpy-dev python3-numpy python3-yaml
 
