@@ -11,6 +11,8 @@ cache:
     - /usr/local/include/
     - /usr/local/lib
     - /usr/local/share
+    - /usr/local/bin
+    - $HOME/essentia
 
 # command to install dependencies
 install:
