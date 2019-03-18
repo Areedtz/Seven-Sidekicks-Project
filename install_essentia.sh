@@ -56,4 +56,4 @@ fi
 
 echo "All dependencies successfully installed. Going to tests..."
 
-cd $HOME/nsst19/Seven-Sidekicks-Project
+cd $TRAVIS_BUILD_DIR
