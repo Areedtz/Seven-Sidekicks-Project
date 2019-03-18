@@ -1,5 +1,4 @@
 import os
-import cv2
 
 from video_emotion.extract_classifier import classify_video
 
@@ -8,7 +7,7 @@ def test_of_emotion_range_in_given_video_snippet():
     test_filename = os.path.join(
         dirname, "test_video_emotion/Fun_at_a_Fair.mp4")
 
-    output_dict = classify_video(test_filename, (3000, 4000))
+    output_dict = classify_video(test_filename, (3000, 3200))
     
     assert len(output_dict) != 0
 
