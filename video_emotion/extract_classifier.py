@@ -4,6 +4,7 @@ from emotionTagger.face_emotion_extraction import classify_face
 def classify_video(video_path,time_range=None):
     faces = analyze_video(video_path,time_range)
     angry_sum = disgust_sum = fear_sum = happy_sum = sad_sum = surprise_sum = neutral_sum = 0.0
+    number_of_faces = 0
     for key,value in faces.items():
         for face in value:
             emotions = classify_face(face)
@@ -14,17 +15,17 @@ def classify_video(video_path,time_range=None):
             sad_sum += emotions[4]
             surprise_sum += emotions[5]
             neutral_sum += emotions[6]
-    numberOfFaces = len(faces)
+            number_of_faces = number_of_faces + 1
     return {
-        "angry":angry_sum/numberOfFaces,
-        "disgust":disgust_sum/numberOfFaces,
-        "fear":fear_sum/numberOfFaces,
-        "happy":happy_sum/numberOfFaces,
-        "sad":sad_sum/numberOfFaces,
-        "surprise":surprise_sum/numberOfFaces,
-        "neutral":neutral_sum/numberOfFaces
+        "angry":angry_sum/number_of_faces,
+        "disgust":disgust_sum/number_of_faces,
+        "fear":fear_sum/number_of_faces,
+        "happy":happy_sum/number_of_faces,
+        "sad":sad_sum/number_of_faces,
+        "surprise":surprise_sum/number_of_faces,
+        "neutral":neutral_sum/number_of_faces
     }
 
 if __name__ == "__main__":
-    data = classify_video('./Fun_at_a_Fair.mp4')
+    data = classify_video('./Fun_at_a_Fair.mp4',(4000, 5000))
     print(data)
