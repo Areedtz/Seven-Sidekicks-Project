@@ -16,5 +16,5 @@ def test_of_emotion_range_in_given_video_snippet():
     assert output_dict['fear'] < 0.1
     assert output_dict['happy'] > 0.6
     assert output_dict['sad'] < 0.1
-    assert output_dict['suprise'] < 0.1
+    assert output_dict['surprise'] < 0.1
     assert output_dict['neutral'] > 0.1
