@@ -1,3 +1,7 @@
+sudo: required
+
+dist: cosmic
+
 language: python
 python:
   - '3.6'
@@ -13,6 +17,9 @@ script:
 # services
 services:
   - mongod
+
+before_install:
+- bash install_essentia.sh
 
 # slack integration
 notifications:
