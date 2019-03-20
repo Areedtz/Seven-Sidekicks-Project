@@ -1,6 +1,7 @@
+import os
+
 import numpy as np
 import cv2
-import os
 
 dirname = os.path.dirname(__file__)
 CONFIDENCE_MINIMUM = 0.7
