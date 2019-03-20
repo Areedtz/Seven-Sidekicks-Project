@@ -1,13 +1,15 @@
-from database.video_emotion_database import VEDatabase
+from database.video_music_emotion_database import VMEDatabase
 from database.storinator import Storinator
 
 
-class VideoEmotion(Storinator):
-    def __init__(self, host="localhost", port=27017, username=None, password=None):
-        self._dbname = 'video_emotion'
-        self._db = VEDatabase(host, port, username, password)
+class VideoMusicEmotion(Storinator):
+    def __init__(self, host="localhost", port=27017, 
+                 username=None, password=None):
+        self._dbname = 'video_music_emotion'
+        self._db = VMEDatabase(host, port, username, password)
 
-    def add(self, song_id, video_id, bpm, timbre, party, relaxed, emotions):
+    def add(self, song_id, video_id, 
+            bpm, timbre, party, relaxed, emotions):
         return self._db.insert(self._dbname, song_id, video_id, bpm, timbre, party, relaxed, emotions)
 
     def get(self, song_id, video_id):

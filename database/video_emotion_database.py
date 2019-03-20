@@ -15,18 +15,21 @@ def _augment_document(doc1, doc2):
 
 
 class VEDatabase:
-    def __init__(self, host="localhost", port=27017, username=None, password=None):
+    def __init__(self, host="localhost", port=27017, 
+                 username=None, password=None):
         self._client = MongoClient(
             host, port, username=username, password=password)
         self._db = self._client['dr']
 
-    def insert(self, name, song_id, video_id, doc):
+    def insert(self, name, 
+               song_id, video_id, doc):
         collection = self._db[name]
         ins = _augment_document(_create_default_document(song_id, video_id), doc)
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, name, song_id, video_id):
+    def find(self, name, 
+             song_id, video_id):
         return self._db[name].find({'song_id': song_id, 'video_id': video_id}).sort([('last_updated', -1)]).limit(1)[0]
 
     def find_all(self, name):
