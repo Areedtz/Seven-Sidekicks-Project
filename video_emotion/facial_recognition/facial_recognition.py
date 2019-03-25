@@ -64,7 +64,11 @@ def analyze_frame(frame):
     (h, w) = frame.shape[:2]
 
     # Resize frame and load it as blob
-    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (IMAGE_RESIZE, IMAGE_RESIZE)), SIZE_CONSTANT, (IMAGE_RESIZE, IMAGE_RESIZE), (RED, GREEN, BLUE))
+    blob = cv2.dnn.blobFromImage(cv2.resize(frame,
+                                            (IMAGE_RESIZE, IMAGE_RESIZE)),
+                                            SIZE_CONSTANT,
+                                            (IMAGE_RESIZE, IMAGE_RESIZE),
+                                            (RED, GREEN, BLUE))
 
     # Detect faces in the frame and loop over the detections
     NET.setInput(blob)
