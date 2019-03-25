@@ -5,5 +5,8 @@ highlevel:
             "../../utilities/ressources/models/timbre.history",
             "../../utilities/ressources/models/mood_relaxed.history",
             "../../utilities/ressources/models/mood_party.history",
+            "../../utilities/ressources/models/mood_aggressive.history",
+            "../../utilities/ressources/models/mood_happy.history",
+            "../../utilities/ressources/models/mood_sad.history"
             
         ]

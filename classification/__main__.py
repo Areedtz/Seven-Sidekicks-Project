@@ -19,8 +19,8 @@ from multiprocessing import Pool
 def process_data_and_extract_profiles(song_id, song_file, song_output_file):
     make_low_level_data_file(song_file, song_output_file)
 
-    timbre, mood_relaxed, mood_party = get_classifier_data(song_output_file)
-    return song_id, timbre, mood_relaxed, mood_party
+    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
+    return song_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 if __name__ == "__main__":
     # Go through all .wav files in the given directory
@@ -46,5 +46,9 @@ if __name__ == "__main__":
     pool.close()
 
     print(tabulate(res,
-                   headers=['Song ID', 'Timbre', 'Mood relaxed', 'Mood party'],
+                   headers=[
+                        'Song ID', 'Timbre', 'Mood relaxed', 'Mood party',
+                        'Mood aggressive', 'Mood happy', 'Mood sad'
+                        ],
                    tablefmt='orgtbl'))
+ 
