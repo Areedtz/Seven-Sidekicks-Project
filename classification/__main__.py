@@ -48,3 +48,4 @@ if __name__ == "__main__":
     print(tabulate(res,
                    headers=['Song ID', 'Timbre', 'Mood relaxed', 'Mood party', 'Mood aggressive', 'Mood happy', 'Mood sad'],
                    tablefmt='orgtbl'))
+ 
