@@ -17,4 +17,4 @@ def test_profile_song_data():
     assert song_data[2] == ("not_party", 0.643296301365)
     assert song_data[3] == ("aggressive", 0.993713259697)
     assert song_data[4] == ("not_happy", 0.926596462727)
-    assert song_data[5] == ("sad", 0.9)
+    assert song_data[5] == ("not_sad", 0.977098941803)
