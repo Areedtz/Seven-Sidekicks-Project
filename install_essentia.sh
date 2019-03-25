@@ -47,7 +47,7 @@ if [ ! -d "/usr/local/include/essentia" ]; then
     cd $HOME
 
     wget https://github.com/MTG/essentia/archive/v2.1_beta4.zip
-    unzip v.2.1_beta4.zip
+    unzip v2.1_beta4.zip
     cd essentia-2.1_beta4
 
     ./waf configure --build-static --with-examples --with-python --with-gaia
