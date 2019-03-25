@@ -46,6 +46,9 @@ if __name__ == "__main__":
     pool.close()
 
     print(tabulate(res,
-                   headers=['Song ID', 'Timbre', 'Mood relaxed', 'Mood party', 'Mood aggressive', 'Mood happy', 'Mood sad'],
+                   headers=[
+                        'Song ID', 'Timbre', 'Mood relaxed', 'Mood party',
+                        'Mood aggressive', 'Mood happy', 'Mood sad'
+                        ],
                    tablefmt='orgtbl'))
  
