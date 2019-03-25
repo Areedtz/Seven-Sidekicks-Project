@@ -30,7 +30,9 @@ class VEDatabase:
 
     def find(self, name, 
              song_id, video_id):
-        return self._db[name].find({'song_id': song_id, 'video_id': video_id}).sort([('last_updated', -1)]).limit(1)[0]
+        return self._db[name].find({'song_id': song_id, 'video_id': video_id}
+                            ).sort([('last_updated', -1)]
+                            ).limit(1)[0]
 
     def find_all(self, name):
         results = []
