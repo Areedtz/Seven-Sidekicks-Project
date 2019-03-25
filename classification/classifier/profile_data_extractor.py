@@ -26,18 +26,27 @@ def get_classifier_data(data_file_name):
 
     mood_relaxed = highlevel['mood_relaxed']['value']
     mood_relaxed_probability = highlevel['mood_relaxed']['probability']
+    
     mood_party = highlevel['mood_party']['value']
     mood_party_probability = highlevel['mood_party']['probability']
+    
     mood_aggressive = highlevel['mood_aggressive']['value']
     mood_aggressive_probability = highlevel['mood_aggressive']['probability']
+    
     mood_happy = highlevel['mood_happy']['value']
     mood_happy_probability = highlevel['mood_happy']['probability']
+    
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
 
     subprocess.run("rm {}".format(output_file_path), shell=True)
 
-    return (timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability), (mood_party, mood_party_probability), (mood_aggressive, mood_aggressive_probability), (mood_happy, mood_happy_probability), (mood_sad, mood_sad_probability)
+    return  (timbre, timbre_probability), 
+            (mood_relaxed, mood_relaxed_probability), 
+            (mood_party, mood_party_probability), 
+            (mood_aggressive, mood_aggressive_probability), 
+            (mood_happy, mood_happy_probability), 
+            (mood_sad, mood_sad_probability)
 
 
 if __name__ == "__main__":
