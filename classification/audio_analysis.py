@@ -17,50 +17,49 @@ from tabulate import tabulate
 
 from multiprocessing import Pool
 
-
-def process_data_and_extract_profiles(song_id, song_file, song_output_file):
-    split_song_list = split_song(song_file)
-
-    for i in range(split_song_list.__len__):
-        make_low_level_data_file(split_song_list[i], song_output_file)
-
-    
+def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
+    make_low_level_data_file(song_file, song_output_file)
 
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
-    return song_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
-def segment_song_and_extract_profiles(song_file):
+    return segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
+
+
+def segment_song_and_extract_profile_data(song_file):
     # Go through all .wav files in the given directory
     dirname = os.path.abspath(os.path.dirname(__file__))
     output_folder_path = os.path.join(dirname, "output/")
     argument_triples = []
 
-    csvData = [['Person', 'Age'], ['Peter', '22'], ['Jasmine', '21'], ['Sam', '24']]
+    song_id = s_id.get_song_id(song_file)
+    
+    split_song_list = split_song(song_file)
 
-    with open('person.csv', 'w') as csvFile:
-        writer = csv.writer(csvFile)
-        writer.writerows(csvData)
+    for i in range(split_song_list.__len__):
+        song_output_file = "{}{}_{}_output.json".format(
+                output_folder_path, i, song_id)
+                
+        argument_triples.append((
+            song_id,
+            split_song_list[i],
+            song_output_file))
 
-    csvFile.close()
+        #make_low_level_data_file(split_song_list[i], song_output_file)
 
-    for file in os.listdir(sys.argv[1]):
-        if file.endswith((".wav", "mp3")):
-            song_file = os.path.join(sys.argv[1], file)
-            song_id = s_id.get_song_id(song_file)
-            song_output_file = "{}{}_output.json".format(
-                output_folder_path, song_id)
-
-            argument_triples.append(( 
-                song_id,
-                song_file,
-                song_output_file))
 
     # Multithreaded runthrough of all files
     pool = Pool(8)
     res = pool.starmap(process_data_and_extract_profiles, argument_triples)
     pool.close()
 
-    print(tabulate(res,
-                   headers=['Song ID', 'Timbre', 'Mood relaxed', 'Mood party', 'Mood aggressive', 'Mood happy', 'Mood sad'],
-                   tablefmt='orgtbl'))
+    csv_data = [res]
+
+    csv_output_file = "{}{}_output.csv".format(
+            output_folder_path, song_id)
+
+    with open(csv_output_file, 'a') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerows(csv_data)
+
+    csv_file.close()
  
