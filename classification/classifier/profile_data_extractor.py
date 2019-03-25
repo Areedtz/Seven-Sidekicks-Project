@@ -30,8 +30,8 @@ def get_classifier_data(data_file_name):
     mood_party_probability = highlevel['mood_party']['probability']
     mood_aggressive = highlevel['mood_aggressive']['value']
     mood_aggressive_probability = highlevel['mood_aggressive']['probability']
-    mood_happy = highlevel['mood_party']['value']
-    mood_happy_probability = highlevel['mood_party']['probability']
+    mood_happy = highlevel['mood_happy']['value']
+    mood_happy_probability = highlevel['mood_happy']['probability']
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
 
