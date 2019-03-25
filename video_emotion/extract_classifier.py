@@ -2,7 +2,7 @@ import sys
 
 
 from video_emotion.facial_recognition.facial_recognition import analyze_video
-from video_emotion.emotionTagger.face_emotion_extraction import classify_face, classify_faces
+from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
 
 
 def classify_video(video_path, time_range=None):
