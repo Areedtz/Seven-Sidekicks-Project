@@ -24,6 +24,7 @@ def classify_video(video_path, time_range=None):
         surprise_sum += emotions[5]
         neutral_sum += emotions[6]
         number_of_faces = number_of_faces + 1
+
     return {
         "angry": angry_sum / number_of_faces,
         "disgust": disgust_sum / number_of_faces,
