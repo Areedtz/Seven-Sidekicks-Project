@@ -46,12 +46,13 @@ if [ ! -d "/usr/local/include/essentia" ]; then
     echo "Essentia not installed. Installing Essentia..."
     cd $HOME
 
-    git clone https://github.com/MTG/essentia
-    cd essentia
+    wget https://github.com/MTG/essentia/archive/v2.1_beta4.zip
+    unzip v.2.1_beta4.zip
+    cd essentia-2.1_beta4
 
     ./waf configure --build-static --with-examples --with-python --with-gaia
     ./waf
-    ./waf install
+    sudo python3 ./waf install
 
     python -c 'import essentia'
     echo "Essentia installed."
