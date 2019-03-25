@@ -1,9 +1,0 @@
-highlevel:
-    compute: 1
-    svm_models:
-        [
-            "../../utilities/ressources/models/timbre.history",
-            "../../utilities/ressources/models/mood_relaxed.history",
-            "../../utilities/ressources/models/mood_party.history",
-            
-        ]

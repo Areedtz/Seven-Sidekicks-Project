@@ -1,5 +1,11 @@
 # placeholder dependencies
 pytest==4.2.1
 pymongo==3.5.1
-essentia
 tabulate
+#Video dependencies
+scipy
+h5py
+opencv-python
+tensorflow
+numpy
+keras
