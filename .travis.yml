@@ -1,6 +1,19 @@
+sudo: required
+
+dist: cosmic
+
 language: python
 python:
   - '3.6'
+
+cache:
+  directories:
+    - /usr/local/include
+    - /usr/local/lib
+    - /usr/local/share
+    - /usr/local/bin
+    - $HOME/essentia
+    - $HOME/virtualenv
 
 # command to install dependencies
 install:
@@ -13,6 +26,9 @@ script:
 # services
 services:
   - mongod
+
+before_install:
+- bash install_essentia.sh
 
 # slack integration
 notifications:
