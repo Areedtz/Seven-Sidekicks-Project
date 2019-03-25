@@ -1,28 +1,42 @@
+import os
+
 import numpy as np
 import cv2
-import os
 
 dirname = os.path.dirname(__file__)
 CONFIDENCE_MINIMUM = 0.7
 
-opencv_prototxt = os.path.join(
-        dirname, "deploy.prototxt.txt")
+OPENCV_PROTOTXT = os.path.join(
+    dirname,
+    "deploy.prototxt.txt")
 
-opencv_model = os.path.join(
-        dirname, "res10_300x300_ssd_iter_140000_fp16.caffemodel")
+OPENCV_MODEl = os.path.join(
+    dirname,
+    "res10_300x300_ssd_iter_140000_fp16.caffemodel")
 
 # Load model from disk
-net = cv2.dnn.readNetFromCaffe(opencv_prototxt, opencv_model)
+NET = cv2.dnn.readNetFromCaffe(OPENCV_PROTOTXT, OPENCV_MODEl)
+
+
+# Various numeral constants
+IMAGE_RESIZE = 300
+SIZE_CONSTANT = 1.0
+RED = 104.0
+GREEN = 177.0
+BLUE = 123.0
 
 def analyze_video(video_path, time_range=None):
     if time_range is not None:
         fro, to = time_range
     cap = cv2.VideoCapture(video_path)
     dict_of_faces = {}
-    i = 1
-    while(cap.isOpened()):
+    while cap.isOpened():
         # Get frame from video
         ret, frame = cap.read()
+
+        # Check if we received a frame
+        if ret is False:
+            break
 
         # Ignore frames that are not within the given time_range
         if time_range is not None:
@@ -32,17 +46,13 @@ def analyze_video(video_path, time_range=None):
             elif timestamp > to:
                 break
 
-        # Check if we received a frame
-        if ret is False:
-            break
-
         # Get faces from frame
         faces = analyze_frame(frame)
 
         # Add found frames to our dictionary
         if len(faces) > 0:
-            dict_of_faces[str(i)] = faces
-        i += 1
+            frame_number = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
+            dict_of_faces[str(frame_number)] = faces
     # Release resources used to open video
     cap.release()
 
@@ -54,14 +64,13 @@ def analyze_frame(frame):
     (h, w) = frame.shape[:2]
 
     # Resize frame and load it as blob
-    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (IMAGE_RESIZE, IMAGE_RESIZE)), SIZE_CONSTANT, (IMAGE_RESIZE, IMAGE_RESIZE), (RED, GREEN, BLUE))
 
-    # Detect faces in the frame and
-    net.setInput(blob)
-    detections = net.forward()
+    # Detect faces in the frame and loop over the detections
+    NET.setInput(blob)
+    detections = NET.forward()
 
     faces_tuple = []
-    # loop over the detections
     for i in range(0, detections.shape[2]):
         # extract the confidence of this specific detection
         confidence = detections[0, 0, i, 2]
@@ -71,9 +80,9 @@ def analyze_frame(frame):
         if confidence < CONFIDENCE_MINIMUM:
             continue
 
-        # Get the bounding box of the detection
-        box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-        (startX, startY, endX, endY) = box.astype("int")
+        # Get the bounding bounding_box of the detection
+        bounding_box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+        (startX, startY, endX, endY) = bounding_box.astype("int")
 
         # Filter out detections that are outside the image boundary
         # (Not sure why the NN does this)
@@ -90,7 +99,7 @@ def analyze_frame(frame):
         if startY < 0:
             startY = 0
 
-        # Remove detections that have a x to y ratio and
+        # Remove detections that have an x to y ratio and
         # therefore likely, do not contain a face
         xy_ratio = 1 / (endX - startX) * (endY - startY)
         if xy_ratio < 0.5 or xy_ratio > 2:
