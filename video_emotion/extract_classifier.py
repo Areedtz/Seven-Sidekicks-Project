@@ -1,7 +1,7 @@
 import sys
 
-from facial_recognition.facial_recognition import analyze_video
-from emotionTagger.face_emotion_extraction import classify_face,classify_faces
+from video_emotion.facial_recognition.facial_recognition import analyze_video
+from video_emotion.emotionTagger.face_emotion_extraction import classify_face,classify_faces
 def classify_video(video_path,time_range=None):
     faces = analyze_video(video_path,time_range)
     angry_sum = disgust_sum = fear_sum = happy_sum = sad_sum = surprise_sum = neutral_sum = 0.0
