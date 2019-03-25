@@ -1,5 +1,5 @@
-from database.video_music_emotion_database import VMEDatabase
 from database.storinator import Storinator
+from database.video_music_emotion_database import VMEDatabase
 
 
 class VideoMusicEmotion(Storinator):

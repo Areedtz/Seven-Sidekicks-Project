@@ -1,5 +1,5 @@
-from database.video_emotion_database import VEDatabase
 from database.storinator import Storinator
+from database.video_emotion_database import VEDatabase
 
 
 class VideoEmotion(Storinator):

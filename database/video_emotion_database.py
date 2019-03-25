@@ -1,5 +1,5 @@
-from pymongo import MongoClient
 import datetime
+from pymongo import MongoClient
 
 
 def _create_default_document(id, id2):
