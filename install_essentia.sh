@@ -46,9 +46,11 @@ if [ ! -d "/usr/local/include/essentia" ]; then
     echo "Essentia not installed. Installing Essentia..."
     cd $HOME
 
-    wget https://github.com/MTG/essentia/archive/v2.1_beta4.zip
-    unzip v2.1_beta4.zip
-    cd essentia-2.1_beta4
+    git clone https://github.com/MTG/essentia
+    cd essentia
+    
+    # As of the moment I'm making this commit (25/03/2019), their master doesn't work. This commit works.
+    git reset --hard 6b584720c2d0dc0202a9ed5fc4e2121756dadd3a
 
     ./waf configure --build-static --with-examples --with-python --with-gaia
     ./waf
