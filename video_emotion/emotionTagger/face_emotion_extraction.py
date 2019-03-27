@@ -20,7 +20,8 @@ def preprocess_input(x):
 def classify_faces(faces):
     # parameters for loading data and images
     emotion_model_path = get_absolute_path("video_emotion/"
-                                           "emotionTagger/models/emotion_model.hdf5")
+                                           + "emotionTagger/"
+                                           + "models/emotion_model.hdf5")
 
     # loading models
     emotion_classifier = load_model(emotion_model_path)
@@ -35,6 +36,7 @@ def classify_faces(faces):
         face_expanded_more = numpy.expand_dims(face_processed, -1)
         processed_faces.append(face_expanded_more)
 
-    emotion_prediction = emotion_classifier.predict(numpy.asarray(processed_faces))
+    emotion_prediction = emotion_classifier.predict(numpy.
+                                                    asarray(processed_faces))
 
     return emotion_prediction

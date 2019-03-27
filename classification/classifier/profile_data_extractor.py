@@ -8,7 +8,8 @@ from utilities.filehandler.handle_path import get_absolute_path
 
 
 def get_classifier_data(data_file_name):
-    profile_file = get_absolute_path("utilities/ressources/timbre_moods_profile.yaml")
+    profile_file = get_absolute_path("utilities/ressources/"
+                                     + "timbre_moods_profile.yaml")
 
     output_file_path = data_file_name.split(".")[0] + "-model-data.json"
 
@@ -44,9 +45,12 @@ def get_classifier_data(data_file_name):
     subprocess.run("rm {}".format(output_file_path), shell=True)
 
     # list for beautifying code
-    t = [(timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability),
-         (mood_party, mood_party_probability), (mood_aggressive, mood_aggressive_probability),
-         (mood_happy, mood_happy_probability), (mood_sad, mood_sad_probability)
+    t = [(timbre, timbre_probability),
+         (mood_relaxed, mood_relaxed_probability),
+         (mood_party, mood_party_probability),
+         (mood_aggressive, mood_aggressive_probability),
+         (mood_happy, mood_happy_probability),
+         (mood_sad, mood_sad_probability)
          ]
 
     return t[0], t[1], t[2], t[3], t[4], t[5]
