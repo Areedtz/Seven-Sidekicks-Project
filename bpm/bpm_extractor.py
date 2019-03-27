@@ -1,9 +1,6 @@
 import sys
 import os
 
-import utilities.get_song_id as s_id
-# End of importing the utilities module
-
 from multiprocessing import Pool
 from tabulate import tabulate
 
