@@ -17,7 +17,8 @@ def preprocess_input(x):
 
 def classify_faces(faces):
     # parameters for loading data and images
-    emotion_model_path = get_absolute_path("video_emotion/emotionTagger/models/emotion_model.hdf5")
+    emotion_model_path = get_absolute_path("video_emotion/"
+                                           "emotionTagger/models/emotion_model.hdf5")
 
     # loading models
     emotion_classifier = load_model(emotion_model_path)
