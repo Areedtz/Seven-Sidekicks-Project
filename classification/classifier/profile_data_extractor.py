@@ -3,18 +3,21 @@ import os
 import subprocess
 import json
 from pprint import pprint
+from pathlib import PurePath
 
 
 def get_classifier_data(data_file_name):
     dirname = os.path.abspath(os.path.dirname(__file__))
     profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_moods_profile.yaml")
 
-    output_file_path = data_file_name.split(".")[0] + "-model-data.json"
+    p = PurePath(data_file_name)
+    path_name = os.path.join(p.parent, p.stem)
+    output_file_path = path_name + "-model-data.json"
 
     command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
         data_file_name, output_file_path, profile_file)
 
-    subprocess.run("{}".format(command), shell=True)
+    subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 
     with open(output_file_path) as f:
         data = json.load(f)
