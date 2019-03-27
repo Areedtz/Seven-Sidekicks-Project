@@ -1,11 +1,13 @@
 import sys
+import os
+sys.path.insert(0, os.path.abspath("../"))
 
 from video_emotion.extract_classifier import classify_video
 
 
 def generate_log_data(interval, emotion_set):
     output_log_data = ""
-    output_log_data += "From,To,emotion_disgust,emotion_fear," \
+    output_log_data += "From,To,emotion_angry,emotion_disgust,emotion_fear," \
                         + "emotion_happy,emotion_sad," \
                           "emotion_surprise,emotion_neutral\n"
     for x in range(0, len(emotion_set)):
