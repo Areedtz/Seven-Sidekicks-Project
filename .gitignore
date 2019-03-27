@@ -1,9 +1,11 @@
 ### Excludes ###
-music/*
+music*/*
 .vscode/
 .idea/
 venv/
 *.pyc
+random_samples/
+.DS_Store
 
 ### Includes ###
 !*/.gitkeep
