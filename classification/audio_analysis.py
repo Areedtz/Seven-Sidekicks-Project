@@ -34,7 +34,7 @@ if __name__ == "__main__":
     arg = sys.argv[1]
 
     dirname = os.path.abspath(os.path.dirname(__file__))
-    output_folder_path = os.path.join(dirname, "output/")
+    output_folder_path = os.path.join(dirname)
     argument_triples = []
 
     song_id = s_id.get_song_id(arg)
