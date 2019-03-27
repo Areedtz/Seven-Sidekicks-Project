@@ -4,7 +4,7 @@ import subprocess
 import json
 from pprint import pprint
 
-from utilities.filehandler import get_absolute_path
+from utilities.filehandler.handle_path import get_absolute_path
 
 
 def get_classifier_data(data_file_name):
