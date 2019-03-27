@@ -9,8 +9,8 @@ sys.path.insert(0, os.path.abspath("../utilities/"))
 import utilities.get_song_id as s_id
 # End of importing the utilities module
 
-from extractor.low_level_data_extractor import make_low_level_data_file
-from classifier.profile_data_extractor import get_classifier_data
+from classification.extractor.low_level_data_extractor import make_low_level_data_file
+from classification.classifier.profile_data_extractor import get_classifier_data
 from similarity.split_song import split_song
 
 from multiprocessing import Pool
