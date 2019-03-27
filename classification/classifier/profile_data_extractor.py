@@ -9,12 +9,14 @@ def get_classifier_data(data_file_name):
     dirname = os.path.abspath(os.path.dirname(__file__))
     profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_moods_profile.yaml")
     
-    print(data_file_name)
-    output_file_path = data_file_name.split(".")[0] + "-model-data.json"
-    print(output_file_path)
+    print("THIS IS DATA FILE NAME: " + data_file_name)
+    output_file_path = data_file_name.split(".")[0] + "./high_level.json"
+    print("THIS IS THE OUTPUT FILE NAME: " + output_file_path)
 
-    command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
+    command = 'essentia_streaming_extractor_music_svm ../{} {} {}'.format(
         data_file_name, output_file_path, profile_file)
+
+    print("THIS IS THE COMMAND: " + command)
 
     subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 

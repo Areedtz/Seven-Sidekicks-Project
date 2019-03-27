@@ -1,0 +1,83 @@
+{
+"highlevel": {
+    "mood_aggressive": {
+        "all": {
+            "aggressive": 0.0424097813666,
+            "not_aggressive": 0.957590222359
+        },
+        "probability": 0.957590222359,
+        "value": "not_aggressive"
+    },
+    "mood_happy": {
+        "all": {
+            "happy": 0.477610439062,
+            "not_happy": 0.522389531136
+        },
+        "probability": 0.522389531136,
+        "value": "not_happy"
+    },
+    "mood_party": {
+        "all": {
+            "not_party": 0.898841261864,
+            "party": 0.101158738136
+        },
+        "probability": 0.898841261864,
+        "value": "not_party"
+    },
+    "mood_relaxed": {
+        "all": {
+            "not_relaxed": 0.119177535176,
+            "relaxed": 0.880822479725
+        },
+        "probability": 0.880822479725,
+        "value": "relaxed"
+    },
+    "mood_sad": {
+        "all": {
+            "not_sad": 0.285365343094,
+            "sad": 0.714634656906
+        },
+        "probability": 0.714634656906,
+        "value": "sad"
+    },
+    "timbre": {
+        "all": {
+            "bright": 0.965166687965,
+            "dark": 0.034833304584
+        },
+        "probability": 0.965166687965,
+        "value": "bright"
+    }
+},
+"metadata": {
+    "audio_properties": {
+        "analysis_sample_rate": 44100,
+        "bit_rate": 4608000,
+        "equal_loudness": 0,
+        "length": 167.427444458,
+        "lossless": 1,
+        "replay_gain": 2.36413383484,
+        "sample_rate": 96000,
+        "codec": "pcm_s24le",
+        "downmix": "mix",
+        "md5_encoded": "d138de8539185d3a756edff45312274b"
+    },
+    "tags": {
+        "file_name": "77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav"
+    },
+    "version": {
+        "highlevel": {
+            "essentia": "2.1-beta5-dev",
+            "essentia_git_sha": "v2.1_beta4-532-g6b584720",
+            "extractor": "music 2.0",
+            "gaia": "2.4.5",
+            "gaia_git_sha": "v2.4.4-44-g95f4851"
+        },
+        "lowlevel": {
+            "essentia": "2.1-beta2",
+            "essentia_git_sha": "v2.1_beta2",
+            "extractor": "music 1.0"
+        }
+    }
+}
+}
