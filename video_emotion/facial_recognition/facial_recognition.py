@@ -3,17 +3,14 @@ import os
 import numpy as np
 import cv2
 
+from utilities.filehandler import get_absolute_path
+
 dirname = os.path.dirname(__file__)
 CONFIDENCE_MINIMUM = 0.7
 
-OPENCV_PROTOTXT = os.path.join(
-    dirname,
-    "deploy.prototxt.txt")
+OPENCV_PROTOTXT = get_absolute_path("video_emotion/facial_recognition/deploy.prototxt.txt")
 
-OPENCV_MODEl = os.path.join(
-    dirname,
-    "res10_300x300_ssd_iter_140000_fp16.caffemodel")
-
+OPENCV_MODEl = get_absolute_path("video_emotion/facial_recognition/res10_300x300_ssd_iter_140000_fp16.caffemodel")
 # Load model from disk
 NET = cv2.dnn.readNetFromCaffe(OPENCV_PROTOTXT, OPENCV_MODEl)
 

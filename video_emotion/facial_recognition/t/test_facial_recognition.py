@@ -1,14 +1,8 @@
-import os
-
-import cv2
-
-from video_emotion.facial_recognition.facial_recognition import analyze_video, analyze_frame
-
+from video_emotion.facial_recognition.facial_recognition import analyze_video
+from utilities.filehandler import get_absolute_path
 
 def test_facial_recognition_of_at_least_one_face():
-    dirname = os.path.dirname(__file__)
-    test_filename = os.path.join(
-        dirname, "test_facial_recognition/Fun_at_a_Fair.mp4")
+    test_filename = get_absolute_path("video_emotion/facial_recognition/t//test_facial_recognition/Fun_at_a_Fair.mp4")
 
     output_frames = analyze_video(test_filename, (3000, 5000))  # analyze from 3s to 5s for performance reasons
 
