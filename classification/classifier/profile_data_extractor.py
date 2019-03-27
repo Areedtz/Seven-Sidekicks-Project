@@ -14,7 +14,7 @@ def get_classifier_data(data_file_name):
     command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
         data_file_name, output_file_path, profile_file)
 
-    subprocess.run("cd {} && {}".format(dirname, command), shell=True)
+    subprocess.run("{}".format(command), shell=True)
 
     with open(output_file_path) as f:
         data = json.load(f)

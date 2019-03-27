@@ -29,4 +29,4 @@ def test_profile_song_data():
                 song_output_file))
 
 
-    assert result.__len__ != 0
+    assert len(result) != 0
