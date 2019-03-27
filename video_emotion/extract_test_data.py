@@ -5,12 +5,20 @@ from video_emotion.extract_classifier import classify_video
 
 def generate_log_data(interval, emotion_set):
     output_log_data = ""
-    output_log_data += "From,To,Emotions\n"
+    output_log_data += "From,To,emotion_disgust,emotion_fear," \
+                        + "emotion_happy,emotion_sad," \
+                          "emotion_surprise,emotion_neutral\n"
     for x in range(0, len(emotion_set)):
         output_log_data += str(x * interval) +\
                            "," +\
                            str((x + 1) * interval) +\
-                           "," + str(emotion_set[x-1]) +\
+                           "," + str(emotion_set[x-1]["angry"]) +\
+                           "," + str(emotion_set[x-1]["disgust"]) +\
+                           "," + str(emotion_set[x-1]["fear"]) +\
+                           "," + str(emotion_set[x-1]["happy"]) +\
+                           "," + str(emotion_set[x-1]["sad"]) +\
+                           "," + str(emotion_set[x-1]["surprise"]) +\
+                           "," + str(emotion_set[x-1]["neutral"]) +\
                            "\n"
     return output_log_data
 
