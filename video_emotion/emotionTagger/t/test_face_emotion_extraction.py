@@ -1,9 +1,12 @@
 import numpy as np
 import cv2
 
-from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
-from video_emotion.emotionTagger.face_emotion_extraction import get_labels
-from video_emotion.emotionTagger.face_emotion_extraction import preprocess_input
+from video_emotion.emotionTagger.\
+    face_emotion_extraction import classify_faces
+from video_emotion.emotionTagger.\
+    face_emotion_extraction import get_labels
+from video_emotion.emotionTagger.\
+    face_emotion_extraction import preprocess_input
 from utilities.filehandler.handle_path import get_absolute_path
 current_directory = "video_emotion/emotionTagger/t/"
 
