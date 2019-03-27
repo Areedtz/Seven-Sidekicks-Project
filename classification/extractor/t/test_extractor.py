@@ -2,12 +2,13 @@ import os
 import sys
 
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
+from filehandler.handle_path import get_absolute_path
 
 def test_song_data_extraction():
+    filename = get_absolute_path("classification/extractor/test_extractor/8376-1-1_Demolition_Man_proud_music_preview"
+                                 ".wav")
+
     dirname = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        dirname,
-        "test_extractor/8376-1-1_Demolition_Man_proud_music_preview.wav")
     output_filename = os.path.join(dirname, "8376-1-1_output.json")
 
     make_low_level_data_file(filename, output_filename)

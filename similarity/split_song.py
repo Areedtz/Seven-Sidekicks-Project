@@ -1,12 +1,9 @@
 import essentia
 import os
 
-from essentia.standard import MonoLoader
 
 
-def split_song(filename, segment_length=5):
-    loader = MonoLoader(filename=filename)
-    audio = loader()
+def split_song(audio, segment_length=5):
 
     sr = 44100
     song_length = len(audio) // sr
