@@ -1,8 +1,7 @@
 import os
-import sys
 
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
-from filehandler.handle_path import get_absolute_path
+from utilities.filehandler import get_absolute_path
 
 def test_song_data_extraction():
     filename = get_absolute_path("classification/extractor/t/test_extractor/8376-1-1_Demolition_Man_proud_music_preview"

@@ -1,8 +1,6 @@
-import os
-
 from similarity.split_song import split_song
 
-from filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler import get_MonoLoaded_Song
 
 
 def test_split_song():

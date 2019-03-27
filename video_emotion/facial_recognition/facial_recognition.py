@@ -3,7 +3,7 @@ import os
 import numpy as np
 import cv2
 
-from filehandler.handle_path import get_absolute_path
+from utilities.filehandler import get_absolute_path
 
 dirname = os.path.dirname(__file__)
 CONFIDENCE_MINIMUM = 0.7

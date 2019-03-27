@@ -1,8 +1,4 @@
-import sys
-import os
-
-
-from filehandler.handle_path import get_absolute_path
+from utilities.filehandler import get_absolute_path
 from essentia.standard import MonoLoader
 
 

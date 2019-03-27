@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath("utilities/"))
 # End of importing the utilities module
 
 from bpm.bpm_extractor import get_song_bpm
-from filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler import get_MonoLoaded_Song
 
 
 def test_get_song_bpm():
