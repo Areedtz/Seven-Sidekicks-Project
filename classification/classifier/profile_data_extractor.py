@@ -8,8 +8,10 @@ from pprint import pprint
 def get_classifier_data(data_file_name):
     dirname = os.path.abspath(os.path.dirname(__file__))
     profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_moods_profile.yaml")
-
+    
+    print(data_file_name)
     output_file_path = data_file_name.split(".")[0] + "-model-data.json"
+    print(output_file_path)
 
     command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
         data_file_name, output_file_path, profile_file)
@@ -39,7 +41,7 @@ def get_classifier_data(data_file_name):
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
 
-    subprocess.run("rm {}".format(output_file_path), shell=True)
+    #subprocess.run("rm {}".format(output_file_path), shell=True)
 
     #list for beautifying code
     t = [(timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability), 
