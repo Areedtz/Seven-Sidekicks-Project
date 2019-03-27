@@ -12,6 +12,7 @@ import utilities.get_song_id as s_id
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
 from similarity.split_song import split_song
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
 from multiprocessing import Pool
 
@@ -39,7 +40,9 @@ if __name__ == "__main__":
 
     song_id = s_id.get_song_id(arg)
     
-    split_song_list = split_song(arg)
+    loaded_song = get_MonoLoaded_Song(arg)
+
+    split_song_list = split_song(loaded_song)
 
     for i in range(len(split_song_list)):
         song_output_file = "{}{}_{}_output.json".format(
