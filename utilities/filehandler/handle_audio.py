@@ -1,4 +1,4 @@
-from utilities.filehandler import get_absolute_path
+from utilities.filehandler.handle_path import get_absolute_path
 from essentia.standard import MonoLoader
 
 
