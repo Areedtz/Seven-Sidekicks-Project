@@ -41,7 +41,7 @@ if __name__ == "__main__":
     
     split_song_list = split_song(arg)
 
-    for i in range(split_song_list.__len__-1):
+    for i in range(split_song_list.__len__):
         song_output_file = "{}{}_{}_output.json".format(
                 output_folder_path, i, song_id)
 
