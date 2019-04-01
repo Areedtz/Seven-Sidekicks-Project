@@ -11,6 +11,7 @@ import utilities.get_song_id as s_id
 
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
+from classification import __main__
 from similarity.split_song import split_song
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 from utilities.filehandler.handle_path import get_absolute_path
@@ -22,7 +23,7 @@ from multiprocessing import Pool
 def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
     path = get_absolute_path("{}.wav".format(segment_id))
 
-    writer = MonoWriter(filename=path)(song_file)
+    MonoWriter(filename=path)(song_file)
 
     make_low_level_data_file(path, song_output_file)
 
@@ -55,7 +56,7 @@ if __name__ == "__main__":
                 output_folder_path, i, song_id)
 
         argument_triples.append((
-            song_id,
+            i,
             split_song_list[i],
             song_output_file))
 

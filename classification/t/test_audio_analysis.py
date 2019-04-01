@@ -9,7 +9,7 @@ from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
 def test_profile_song_data():
     dirname = os.path.abspath(os.path.dirname(__file__))
-    output_folder_path = os.path.join(dirname, "output/")
+    output_folder_path = os.path.join(dirname, "")
     filename = os.path.join(
         dirname,
         "test_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
