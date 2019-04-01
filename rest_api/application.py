@@ -8,7 +8,7 @@ import bpm_extractor as bpm_extract
 
 # Importing the classification module
 sys.path.insert(0, os.path.abspath("../classification"))
-import main as mood_extract
+import __main__ as mood_extract
 
 
 from flask import Flask
@@ -54,7 +54,7 @@ class AnalyzeSong(Resource):
     @api.doc(body=song_fields)
     def post(self):
         # ../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav
-        retdict = {}
+        retdict = {}    
         a = request.get_json()
         #song_id, song_bpm, confidence = bpm_extract.get_song_bpm(a["SourcePath"])
         #retdict["song_id"] = song_id
@@ -65,7 +65,7 @@ class AnalyzeSong(Resource):
         mood_extract.process_data_and_extract_profiles(
             "77245-1-1",
             "../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav",
-            "../rest_api/ree.json")
+            "yikes.json")
         #ree = mood_extract.get_classifier_data("../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav")
         
         return "The request has been sent and should be updated in Splunk as soon as it is done."

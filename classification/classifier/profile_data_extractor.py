@@ -3,25 +3,26 @@ import os
 import subprocess
 import json
 from pprint import pprint
-
+from tempfile import NamedTemporaryFile
 
 def get_classifier_data(data_file_name):
     dirname = os.path.abspath(os.path.dirname(__file__))
     profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_moods_profile.yaml")
-    
-    print("THIS IS DATA FILE NAME: " + data_file_name)
-    output_file_path = data_file_name.split(".")[0] + "./high_level.json"
-    print("THIS IS THE OUTPUT FILE NAME: " + output_file_path)
 
-    command = 'essentia_streaming_extractor_music_svm ../{} {} {}'.format(
-        data_file_name, output_file_path, profile_file)
+    # Temp file used instead of writing to an actual file
+    temp_file = NamedTemporaryFile(delete=True)
+
+    command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
+        data_file_name, temp_file.name, profile_file)
 
     print("THIS IS THE COMMAND: " + command)
 
     subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 
-    with open(output_file_path) as f:
+    with temp_file as f:
         data = json.load(f)
+
+    temp_file.close()
 
     highlevel = data['highlevel']
 
@@ -42,8 +43,6 @@ def get_classifier_data(data_file_name):
     
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
-
-    #subprocess.run("rm {}".format(output_file_path), shell=True)
 
     #list for beautifying code
     t = [(timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability), 
