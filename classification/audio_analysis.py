@@ -11,7 +11,6 @@ import utilities.get_song_id as s_id
 
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
-from classification import __main__
 from similarity.split_song import split_song
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 from utilities.filehandler.handle_path import get_absolute_path
