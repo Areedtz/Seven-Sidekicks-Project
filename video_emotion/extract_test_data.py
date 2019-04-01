@@ -14,13 +14,13 @@ def generate_log_data(interval, emotion_set):
         output_log_data += str(x * interval) +\
                            "," +\
                            str((x + 1) * interval) +\
-                           "," + str(emotion_set[x-1]["angry"]) +\
-                           "," + str(emotion_set[x-1]["disgust"]) +\
-                           "," + str(emotion_set[x-1]["fear"]) +\
-                           "," + str(emotion_set[x-1]["happy"]) +\
-                           "," + str(emotion_set[x-1]["sad"]) +\
-                           "," + str(emotion_set[x-1]["surprise"]) +\
-                           "," + str(emotion_set[x-1]["neutral"]) +\
+                           "," + str(emotion_set[x]["angry"]) +\
+                           "," + str(emotion_set[x]["disgust"]) +\
+                           "," + str(emotion_set[x]["fear"]) +\
+                           "," + str(emotion_set[x]["happy"]) +\
+                           "," + str(emotion_set[x]["sad"]) +\
+                           "," + str(emotion_set[x]["surprise"]) +\
+                           "," + str(emotion_set[x]["neutral"]) +\
                            "\n"
     return output_log_data
 
