@@ -21,9 +21,8 @@ from multiprocessing import Pool
 
 def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
     path = get_absolute_path("{}.wav".format(segment_id))
-    
-    writer = MonoWriter(filename=path)
-    writer(song_file)
+
+    writer = MonoWriter(filename=path)(song_file)
 
     make_low_level_data_file(path, song_output_file)
 
