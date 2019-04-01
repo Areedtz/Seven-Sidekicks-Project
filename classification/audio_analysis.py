@@ -23,7 +23,7 @@ def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
 
     #removing the segments classifier data file
-    #subprocess.run("rm {}".format(song_output_file), shell=True)
+    subprocess.run("rm {}".format(song_output_file), shell=True)
 
     return segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 

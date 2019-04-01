@@ -18,15 +18,14 @@ def test_profile_song_data():
     
     split_song_list = split_song(filename)
 
-    for i in range(len(split_song_list)):
-        song_output_file = "{}{}_{}_output.json".format(
-                output_folder_path, i, song_id)
+    #for i in range(len(split_song_list)):
+    song_output_file = "{}{}_{}_output.json".format(
+            output_folder_path, 0, song_id)
         
-        result.append(
-            process_data_and_extract_profiles(
-                song_id, 
-                split_song_list[i], 
-                song_output_file))
+    segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = process_data_and_extract_profiles(
+            song_id, 
+            split_song_list[0], 
+            song_output_file)
 
 
-    assert result
+    assert segment_id == "0"
