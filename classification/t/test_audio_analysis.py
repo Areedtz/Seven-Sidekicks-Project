@@ -13,7 +13,6 @@ def test_profile_song_data():
     filename = os.path.join(
         dirname,
         "test_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
-    result = []
 
     song_id = s_id.get_song_id(filename)
     
