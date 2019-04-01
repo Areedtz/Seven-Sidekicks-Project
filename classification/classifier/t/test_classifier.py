@@ -1,7 +1,8 @@
 import os
 import sys
 
-from classification.classifier.profile_data_extractor import get_classifier_data
+from classification.classifier.profile_data_extractor \
+    import get_classifier_data
 
 def test_profile_song_data():
     dirname = os.path.abspath(os.path.dirname(__file__))
