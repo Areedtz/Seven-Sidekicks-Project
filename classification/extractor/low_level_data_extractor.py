@@ -13,6 +13,8 @@ def make_low_level_data_file(filename, output_file_path):
 
     subprocess.run(command, shell=True)
 
+    print("I am inside the extractor")
+
 
 if __name__ == "__main__":
     filename, output_filename = sys.argv[1], sys.argv[2]

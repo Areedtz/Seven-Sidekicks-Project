@@ -8,7 +8,7 @@ import bpm_extractor as bpm_extract
 
 # Importing the classification module
 sys.path.insert(0, os.path.abspath("../classification"))
-import __main__ as mood_extract
+import main as mood_extract
 
 
 from flask import Flask

@@ -24,6 +24,8 @@ def get_classifier_data(data_file_name):
 
     temp_file.close()
 
+    print("I am inside the extractor")
+
     highlevel = data['highlevel']
 
     timbre = highlevel['timbre']['value']
