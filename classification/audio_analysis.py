@@ -13,12 +13,17 @@ from classification.extractor.low_level_data_extractor import make_low_level_dat
 from classification.classifier.profile_data_extractor import get_classifier_data
 from similarity.split_song import split_song
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.handle_path import get_absolute_path
+from essentia.standard import MonoWriter
 
 from multiprocessing import Pool
 
 
 def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
-    make_low_level_data_file(song_file, song_output_file)
+    path = get_absolute_path("{}.wav".format(segment_id))
+    writer = MonoWriter(filename=path)
+    writer(song_file)
+    make_low_level_data_file(path, song_output_file)
 
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
 
