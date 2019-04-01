@@ -29,4 +29,4 @@ def test_profile_song_data():
                 song_output_file))
 
 
-    assert result.size > 0
+    assert result
