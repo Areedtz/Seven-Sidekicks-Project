@@ -4,6 +4,7 @@ import sys
 from classification.audio_analysis import process_data_and_extract_profiles
 import utilities.get_song_id as s_id
 from similarity.split_song import split_song
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
 
 def test_profile_song_data():
@@ -16,7 +17,9 @@ def test_profile_song_data():
 
     song_id = s_id.get_song_id(filename)
     
-    split_song_list = split_song(filename)
+    loaded_song = get_MonoLoaded_Song(filename)
+
+    split_song_list = split_song(loaded_song)
 
     #for i in range(len(split_song_list)):
     song_output_file = "{}{}_{}_output.json".format(
