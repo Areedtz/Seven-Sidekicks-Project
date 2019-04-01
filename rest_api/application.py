@@ -27,10 +27,12 @@ hostURL = "0.0.0.0"
 hostPort = 1337
 apiRoute = '/hello'
 
+
 @api.route(apiRoute)
 class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
+
 
 # Model is nested inside the song_fields model
 id_model = api.model('IdModel', {
@@ -44,6 +46,7 @@ song_fields = api.model('SongModel', {
     'SourcePath': fields.String(description='The path of the song to analyze', required=True),
     'User': fields.String(description='The requesting user', required=True),
 })
+
 
 @api.route('/analyze_song')
 class AnalyzeSong(Resource):
@@ -59,13 +62,15 @@ class AnalyzeSong(Resource):
         #retdict["confidence"] = confidence
         #ree = mood_extract.get_classifier_data(a["SourcePath"])
         print("------------------------------------------------------")
-        mood_extract.process_data_and_extract_profiles("77245-1-1", "../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav", "../rest_api/ree.json")
+        mood_extract.process_data_and_extract_profiles(
+            "77245-1-1",
+            "../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav",
+            "../rest_api/ree.json")
         #ree = mood_extract.get_classifier_data("../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav")
         
         return "The request has been sent and should be updated in Splunk as soon as it is done."
     
 
-        
 @api.route('/shutdown')
 class Shutdown(Resource):
     def get(self):
@@ -73,6 +78,7 @@ class Shutdown(Resource):
         if func is None:
             raise RuntimeError('Not running with the Werkzeug Server')
         func()
-    
+
+
 if __name__ == '__main__':
     app.run(host=hostURL, port=hostPort, debug=True)
