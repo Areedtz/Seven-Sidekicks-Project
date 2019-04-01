@@ -28,8 +28,7 @@ def process_file(filename):
 
         harmonic, percussive = librosa.effects.hpss(sample)
 
-        tempo, beat_frames = librosa.beat.beat_track(
-            y=percussive, sr=sr)
+        tempogram = librosa.feature.tempogram(percussive)
 
         mfcc = librosa.feature.mfcc(sample)
         fm = np.ndarray.flatten(mfcc)
@@ -41,7 +40,8 @@ def process_file(filename):
         chromagram = librosa.feature.chroma_cqt(y=harmonic, sr=sr)
         fc = np.ndarray.flatten(chromagram)
 
-        songs.append((filename, 5*i, fm, fa, fc, np.array(tempo)))
+        songs.append((filename, 5*i, fm, fa, fc,
+                      np.ndarray.flatten(tempogram)))
 
     print('Processed: ' + filename)
     return songs
@@ -66,9 +66,9 @@ def myround(x, base=5):
     return base * round(x/base)
 
 
-weights = (4, 1, 400, 300)
+weights = (33, 10, 4000, 2000)
 
-for line in fileinput.input():
+""" for line in fileinput.input():
     if (len(line.split(' ')) < 2):
         print("Invalid search")
         continue
@@ -83,7 +83,16 @@ for line in fileinput.input():
 
     if (sample_index == None):
         print("Not found")
-        continue
+        continue """
+
+
+def find_similar(name):
+    sample_index = next((i for i, v in enumerate(songs)
+                         if v[0] == name and v[1] == 30), None)
+
+    if (sample_index == None):
+        print("Not found")
+        return
 
     dist1s = []
     dist2s = []
@@ -115,13 +124,26 @@ for line in fileinput.input():
     print(sum(dist2s) / len(songs))
     print(sum(dist3s) / len(songs))
     print(sum(dist4s) / len(songs))
+    print()
 
     print(songs[low][0], songs[low][1], low_dist)
+    print()
 
     # Save comparison file
     y, sr = librosa.load('./' + folder + '/' + songs[sample_index][0])
     sample = y[songs[sample_index][1]*sr: (songs[sample_index][1]+5)*sr]
     y, sr = librosa.load('./' + folder + '/' + songs[low][0])
     sample1 = y[songs[low][1]*sr: (songs[low][1]+5)*sr]
-    librosa.output.write_wav('random_samples/' + songs[sample_index][0] + '-' + str(
+    librosa.output.write_wav('random_samples/' + str(weights) + '_' + songs[sample_index][0] + '-' + str(
         songs[sample_index][1]) + '_' + songs[low][0] + '-' + str(songs[low][1]) + '.wav', np.concatenate([sample, sample1]), sr)
+
+
+for line in fileinput.input():
+
+    if (len(line.split(' ')) == 4):
+        split = line.split(' ')
+        weights = (int(split[0]), int(split[1]), int(split[2]), int(split[3]))
+
+    p = Pool(cpu_count())
+    # only does sideeffects, but is easy async
+    p.map(find_similar, filenames)
