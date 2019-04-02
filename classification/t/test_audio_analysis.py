@@ -25,9 +25,10 @@ def test_profile_song_data():
             output_folder_path, 0, song_id)
         
     segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = process_data_and_extract_profiles(
-            song_id, 
+            0, 
             split_song_list[0], 
             song_output_file)
 
 
     assert segment_id == "0"
+    #assert timbre == ("dark", 0.728462159634)
