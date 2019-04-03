@@ -31,4 +31,4 @@ def test_profile_song_data():
 
 
     assert segment_id == 0
-    #assert timbre == ("dark", 0.728462159634)
+    assert timbre == ("dark", 0.728462159634)
