@@ -35,6 +35,6 @@ def test_profile_song_data():
             song_output_file)
 
     assert segment_id == 0
-    assert segment_id == 1
+    assert segment_id1 == 1
     assert timbre == ('dark', 0.862666606903)
-    assert timbre != ('dark', 0.862666606903)
+    assert timbre1 != ('dark', 0.862666606903)
