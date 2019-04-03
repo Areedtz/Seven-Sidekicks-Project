@@ -29,6 +29,12 @@ def test_profile_song_data():
             split_song_list[0], 
             song_output_file)
 
+    segment_id1, timbre1, mood_relaxed1, mood_party1, mood_aggressive1, mood_happy1, mood_sad1 = process_data_and_extract_profiles(
+            1, 
+            split_song_list[1], 
+            song_output_file)
 
     assert segment_id == 0
-    assert timbre == ("dark", 0.728462159634)
+    assert segment_id == 1
+    assert timbre == ('dark', 0.862666606903)
+    assert timbre != ('dark', 0.862666606903)
