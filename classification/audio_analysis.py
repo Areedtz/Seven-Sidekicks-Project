@@ -33,20 +33,15 @@ def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
 
     return segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
- 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        exit()
 
-    arg = sys.argv[1]
-
-    dirname = os.path.abspath(os.path.dirname(__file__))
+def segment_song_and_return_arguments(filename, song_file):
+    dirname = os.path.abspath(os.path.dirname(filename))
     output_folder_path = os.path.join(dirname)
     argument_triples = []
 
-    song_id = s_id.get_song_id(arg)
+    song_id = s_id.get_song_id(song_file)
     
-    loaded_song = get_MonoLoaded_Song(arg)
+    loaded_song = get_MonoLoaded_Song(song_file)
 
     split_song_list = split_song(loaded_song)
 
@@ -58,6 +53,16 @@ if __name__ == "__main__":
             i,
             split_song_list[i],
             song_output_file))
+
+    return song_id, output_folder_path, argument_triples
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        exit()
+
+    arg = sys.argv[1]
+
+    song_id, output_folder_path, argument_triples = segment_song_and_return_arguments(__file__, arg)
 
     csv_output_file = "{}{}_segmented_output.csv".format(
             output_folder_path, song_id)
