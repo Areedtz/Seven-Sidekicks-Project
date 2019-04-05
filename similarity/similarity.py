@@ -18,7 +18,6 @@ def flatten(l): return [item for sublist in l for item in sublist]
 def process_file(filename):
     print('Loading: ' + filename)
     y, sr = librosa.load('./' + folder + '/' + filename)
-    print('Loaded: ' + filename)
     songs = []
 
     print('Processing: ' + filename)
@@ -29,25 +28,31 @@ def process_file(filename):
         harmonic, percussive = librosa.effects.hpss(sample)
 
         tempogram = librosa.feature.tempogram(percussive)
+        ft = np.ndarray.flatten(tempogram)
 
         mfcc = librosa.feature.mfcc(sample)
         fm = np.ndarray.flatten(mfcc)
 
-        stft = np.abs(librosa.stft(sample))
-        amp = librosa.amplitude_to_db(stft, ref=np.max)
-        fa = np.ndarray.flatten(amp)
-
         chromagram = librosa.feature.chroma_cqt(y=harmonic, sr=sr)
         fc = np.ndarray.flatten(chromagram)
 
-        songs.append((filename, 5*i, fm, fa, fc,
-                      np.ndarray.flatten(tempogram)))
+        # Because we use a lot of RAM :)
+        del harmonic
+        del percussive
+        del tempogram
+        del chromagram
 
-    print('Processed: ' + filename)
+        songs.append((filename, 5*i, fm, fc, ft))
+
+    del y
+
+    print('Done: ' + filename)
     return songs
 
 
 p = Pool(cpu_count())
+#p = Pool(1)
+
 filenames = []
 
 for root, dirs, files in os.walk("./" + folder):
@@ -56,6 +61,8 @@ for root, dirs, files in os.walk("./" + folder):
             filenames.append(filename)
 
 songs = p.map(process_file, filenames)
+
+p.close()
 
 songs = flatten(songs)
 
@@ -66,24 +73,7 @@ def myround(x, base=5):
     return base * round(x/base)
 
 
-weights = (33, 10, 4000, 2000)
-
-""" for line in fileinput.input():
-    if (len(line.split(' ')) < 2):
-        print("Invalid search")
-        continue
-
-    if (len(line.split(' ')) == 4):
-        split = line.split(' ')
-        weights = (int(split[0]), int(split[1]), int(split[2]), int(split[3]))
-        continue
-
-    sample_index = next(i for i, v in enumerate(songs) if v[0] == line.split(' ')
-                        [0] and v[1] == myround(int(line.split(' ')[1])))
-
-    if (sample_index == None):
-        print("Not found")
-        continue """
+weights = (3, 400, 200)
 
 
 def find_similar(name):
@@ -97,7 +87,6 @@ def find_similar(name):
     dist1s = []
     dist2s = []
     dist3s = []
-    dist4s = []
     low = 0
     low_dist = 10000000
     for i in range(0, len(songs)):
@@ -110,11 +99,8 @@ def find_similar(name):
         dist3 = distance.euclidean(
             songs[sample_index][4], songs[i][4])
         dist3s.append(dist3)
-        dist4 = distance.euclidean(
-            songs[sample_index][5], songs[i][5])
-        dist4s.append(dist4)
         dist = dist1 * weights[0] + dist2 * weights[1] + \
-            dist3 * weights[2] + dist4 * weights[3]
+            dist3 * weights[2]
 
         if i != sample_index and songs[sample_index][0] != songs[i][0] and dist < low_dist:
             low_dist = dist
@@ -123,7 +109,6 @@ def find_similar(name):
     print(sum(dist1s) / len(songs))
     print(sum(dist2s) / len(songs))
     print(sum(dist3s) / len(songs))
-    print(sum(dist4s) / len(songs))
     print()
 
     print(songs[low][0], songs[low][1], low_dist)
@@ -139,11 +124,14 @@ def find_similar(name):
 
 
 for line in fileinput.input():
+    del p
 
-    if (len(line.split(' ')) == 4):
+    if (len(line.split(' ')) == 3):
         split = line.split(' ')
-        weights = (int(split[0]), int(split[1]), int(split[2]), int(split[3]))
+        weights = (int(split[0]), int(split[1]), int(split[2]))
 
     p = Pool(cpu_count())
     # only does sideeffects, but is easy async
     p.map(find_similar, filenames)
+
+    p.close()
