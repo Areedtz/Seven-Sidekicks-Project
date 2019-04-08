@@ -29,16 +29,14 @@ def test_profile_song_data():
      mood_aggressive, mood_happy, 
      mood_sad) = process_data_and_extract_profiles(
             0, 
-            split_song_list[0], 
-            song_output_file)
+            split_song_list[0])
 
     (segment_id1, timbre1, 
      mood_relaxed1, mood_party1, 
      mood_aggressive1, mood_happy1, 
      mood_sad1) = process_data_and_extract_profiles(
             1, 
-            split_song_list[1], 
-            song_output_file)
+            split_song_list[1])
 
     assert segment_id == 0
     assert segment_id1 == 1
