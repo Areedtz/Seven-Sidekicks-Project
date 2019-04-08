@@ -15,8 +15,6 @@ def get_classifier_data(data_file_name):
     command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
         data_file_name, temp_file.name, profile_file)
 
-    print("THIS IS THE COMMAND: " + command)
-
     subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 
     with temp_file as f:
@@ -31,16 +29,16 @@ def get_classifier_data(data_file_name):
 
     mood_relaxed = highlevel['mood_relaxed']['value']
     mood_relaxed_probability = highlevel['mood_relaxed']['probability']
-    
+
     mood_party = highlevel['mood_party']['value']
     mood_party_probability = highlevel['mood_party']['probability']
-    
+
     mood_aggressive = highlevel['mood_aggressive']['value']
     mood_aggressive_probability = highlevel['mood_aggressive']['probability']
-    
+
     mood_happy = highlevel['mood_happy']['value']
     mood_happy_probability = highlevel['mood_happy']['probability']
-    
+
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
 

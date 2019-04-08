@@ -3,33 +3,31 @@ import sys
 import re
 import csv
 import subprocess
+import tempfile
 
-# Start of importing the utilities module
-sys.path.insert(0, os.path.abspath("../utilities/"))
-import utilities.get_song_id as s_id
-# End of importing the utilities module
+from multiprocessing import Pool
+from essentia.standard import MonoWriter
 
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
 from similarity.split_song import split_song
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 from utilities.filehandler.handle_path import get_absolute_path
-from essentia.standard import MonoWriter
-
-from multiprocessing import Pool
+from utilities.get_song_id import get_song_id
 
 
 def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
-    path = get_absolute_path("{}.wav".format(segment_id))
+    #creating the temporary segmented music file
+    temp_song = tempfile.NamedTemporaryFile(delete=True)
+    
+    MonoWriter(filename=temp_song.name)(song_file)
 
-    MonoWriter(filename=path)(song_file)
+    make_low_level_data_file(temp_song, song_output_file)
 
-    make_low_level_data_file(path, song_output_file)
+    #closing and effectively deleting the tempfile
+    temp_song.close()
 
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
-
-    #removing the segments classifier data file
-    #subprocess.run("rm {}".format(song_output_file), shell=True)
 
     return segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
@@ -39,7 +37,7 @@ def segment_song_and_return_arguments(filename, song_file):
     output_folder_path = os.path.join(dirname)
     argument_triples = []
 
-    song_id = s_id.get_song_id(song_file)
+    song_id = get_song_id(song_file)
     
     loaded_song = get_MonoLoaded_Song(song_file)
 
@@ -86,4 +84,3 @@ if __name__ == "__main__":
         writer.writerows(csv_data)
 
     csv_file.close()
-

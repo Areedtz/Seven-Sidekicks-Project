@@ -24,12 +24,18 @@ def test_profile_song_data():
     song_output_file = "{}{}_{}_output.json".format(
             output_folder_path, 0, song_id)
         
-    segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = process_data_and_extract_profiles(
+    (segment_id, timbre, 
+     mood_relaxed, mood_party, 
+     mood_aggressive, mood_happy, 
+     mood_sad) = process_data_and_extract_profiles(
             0, 
             split_song_list[0], 
             song_output_file)
 
-    segment_id1, timbre1, mood_relaxed1, mood_party1, mood_aggressive1, mood_happy1, mood_sad1 = process_data_and_extract_profiles(
+    (segment_id1, timbre1, 
+     mood_relaxed1, mood_party1, 
+     mood_aggressive1, mood_happy1, 
+     mood_sad1) = process_data_and_extract_profiles(
             1, 
             split_song_list[1], 
             song_output_file)
