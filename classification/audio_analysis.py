@@ -16,26 +16,29 @@ from utilities.filehandler.handle_path import get_absolute_path
 from utilities.get_song_id import get_song_id
 
 
-def process_data_and_extract_profiles(segment_id, song_file, song_output_file):
-    #creating the temporary segmented music file
+def process_data_and_extract_profiles(segment_id, song_file):
+    #creating the temporary files
     temp_song = tempfile.NamedTemporaryFile(delete=True)
+    temp_classifier = tempfile.NamedTemporaryFile(delete=True)
     
     MonoWriter(filename=temp_song.name)(song_file)
 
-    make_low_level_data_file(temp_song, song_output_file)
+    make_low_level_data_file(temp_song.name, temp_classifier.name)
 
-    #closing and effectively deleting the tempfile
+    #closing and effectively deleting the song tempfile
     temp_song.close()
 
-    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
+    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(temp_classifier.name)
+
+    #closing and effectively deleting the classifier tempfile
+    temp_classifier.close()
 
     return segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 
 def segment_song_and_return_arguments(filename, song_file):
     dirname = os.path.abspath(os.path.dirname(filename))
-    output_folder_path = os.path.join(dirname)
-    argument_triples = []
+    argument_tuples = []
 
     song_id = get_song_id(song_file)
     
@@ -44,15 +47,11 @@ def segment_song_and_return_arguments(filename, song_file):
     split_song_list = split_song(loaded_song)
 
     for i in range(len(split_song_list)):
-        song_output_file = "{}{}_{}_output.json".format(
-                output_folder_path, i, song_id)
-
-        argument_triples.append((
+        argument_tuples.append((
             i,
-            split_song_list[i],
-            song_output_file))
+            split_song_list[i]))
 
-    return song_id, output_folder_path, argument_triples
+    return song_id, dirname, argument_tuples
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     arg = sys.argv[1]
 
-    song_id, output_folder_path, argument_triples = segment_song_and_return_arguments(__file__, arg)
+    song_id, output_folder_path, argument_tuples = segment_song_and_return_arguments(__file__, arg)
 
     csv_output_file = "{}{}_segmented_output.csv".format(
             output_folder_path, song_id)
@@ -74,7 +73,7 @@ if __name__ == "__main__":
 
     # Multithreaded runthrough of all files
     pool = Pool(8)
-    res = pool.starmap(process_data_and_extract_profiles, argument_triples)
+    res = pool.starmap(process_data_and_extract_profiles, argument_tuples)
     pool.close()
 
     csv_data = [res]
