@@ -4,12 +4,13 @@ from librosa import display
 from scipy.spatial import distance
 import numpy as np
 import os
+import falconn
 
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
 import matplotlib.pyplot as plt
 
-folder = 'music'
+folder = 'music_small'
 
 
 def flatten(l): return [item for sublist in l for item in sublist]
@@ -42,7 +43,7 @@ def process_file(filename):
         del tempogram
         del chromagram
 
-        songs.append((filename, 5*i, fm, fc, ft))
+        songs.append((filename, 5*i, np.concatenate((fm, fc * 150, ft * 100))))
 
     del y
 
@@ -64,16 +65,41 @@ songs = p.map(process_file, filenames)
 
 p.close()
 
-songs = flatten(songs)
+songs = np.array(flatten(songs))
 
 print(len(songs))
 
 
+def f(x): return x[2]
+
+
+def g(x): return (x[2].tobytes(), x)
+
+
+toMeta = dict([g(xi) for xi in songs])
+
+
+segments = np.array([f(xi) for xi in songs])
+
+print(segments.shape)
+
+params_cp = falconn.LSHConstructionParameters()
+params_cp.dimension = len(segments[0])
+params_cp.lsh_family = falconn.LSHFamily.CrossPolytope
+params_cp.distance_function = falconn.DistanceFunction.EuclideanSquared
+params_cp.l = 50
+params_cp.num_rotations = 2
+params_cp.seed = 5721840
+params_cp.num_setup_threads = 0
+params_cp.storage_hash_table = falconn.StorageHashTable.BitPackedFlatHashTable
+falconn.compute_number_of_hash_functions(18, params_cp)
+
+table = falconn.LSHIndex(params_cp)
+table.setup(segments)
+
+
 def myround(x, base=5):
     return base * round(x/base)
-
-
-weights = (3, 400, 200)
 
 
 def find_similar(name):
@@ -84,31 +110,27 @@ def find_similar(name):
         print("Not found")
         return
 
-    dist1s = []
-    dist2s = []
-    dist3s = []
+    query_object = table.construct_query_object()
+    query_object.set_num_probes(50)
+
+    results = query_object.find_k_nearest_neighbors(segments[sample_index], 3)
+
+    dists = []
     low = 0
     low_dist = 10000000
     for i in range(0, len(songs)):
-        dist1 = distance.euclidean(
+        dist = distance.euclidean(
             songs[sample_index][2], songs[i][2])
-        dist1s.append(dist1)
-        dist2 = distance.euclidean(
-            songs[sample_index][3], songs[i][3])
-        dist2s.append(dist2)
-        dist3 = distance.euclidean(
-            songs[sample_index][4], songs[i][4])
-        dist3s.append(dist3)
-        dist = dist1 * weights[0] + dist2 * weights[1] + \
-            dist3 * weights[2]
 
         if i != sample_index and songs[sample_index][0] != songs[i][0] and dist < low_dist:
             low_dist = dist
             low = i
 
-    print(sum(dist1s) / len(songs))
-    print(sum(dist2s) / len(songs))
-    print(sum(dist3s) / len(songs))
+    print(songs[low])
+
+    print(low in results)
+
+    print(sum(dists) / len(songs))
     print()
 
     print(songs[low][0], songs[low][1], low_dist)
@@ -119,7 +141,7 @@ def find_similar(name):
     sample = y[songs[sample_index][1]*sr: (songs[sample_index][1]+5)*sr]
     y, sr = librosa.load('./' + folder + '/' + songs[low][0])
     sample1 = y[songs[low][1]*sr: (songs[low][1]+5)*sr]
-    librosa.output.write_wav('random_samples/' + str(weights) + '_' + songs[sample_index][0] + '-' + str(
+    librosa.output.write_wav('random_samples/' + songs[sample_index][0] + '-' + str(
         songs[sample_index][1]) + '_' + songs[low][0] + '-' + str(songs[low][1]) + '.wav', np.concatenate([sample, sample1]), sr)
 
 
