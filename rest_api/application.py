@@ -60,16 +60,16 @@ class AnalyzeSong(Resource):
         #retdict["song_id"] = song_id
         #retdict["song_bpm"] = song_bpm
         #retdict["confidence"] = confidence
-        #ree = mood_extract.get_classifier_data(a["SourcePath"])
-        print("------------------------------------------------------")
-        mood_extract.process_data_and_extract_profiles(
-            "77245-1-1",
-            "../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav",
-            "yikes.json")
+        #ree = mood_extract.get_classifier_data(a["SourcePath"])s
+        #print("------------------------------------------------------")
+        #mood_extract.process_data_and_extract_profiles(
+        #    "77245-1-1",
+        #    "../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav",
+        #    "yikes.json")
         #ree = mood_extract.get_classifier_data("../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav")
         
-        return "The request has been sent and should be updated in Splunk as soon as it is done."
-    
+        return request.get_json() # {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+
 
 @api.route('/shutdown')
 class Shutdown(Resource):

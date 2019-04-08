@@ -1,18 +1,19 @@
-import os
-
 import numpy as np
 import cv2
 
-from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
-from video_emotion.emotionTagger.face_emotion_extraction import get_labels
-from video_emotion.emotionTagger.face_emotion_extraction import preprocess_input
+from video_emotion.emotionTagger.\
+    face_emotion_extraction import classify_faces
+from video_emotion.emotionTagger.\
+    face_emotion_extraction import get_labels
+from video_emotion.emotionTagger.\
+    face_emotion_extraction import preprocess_input
+from utilities.filehandler.handle_path import get_absolute_path
+current_directory = "video_emotion/emotionTagger/t/"
 
 
 def test_angry_face():
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/angry1.png")
+    filename = get_absolute_path(current_directory + "test_face_emotion_extra"
+                                 + "ction_data/angry1.png")
     img = cv2.imread(filename)
     face_data = classify_faces([img])
     assert len(face_data[0]) == 7
@@ -20,10 +21,8 @@ def test_angry_face():
 
 
 def test_happy_1():
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/happy1.png")
+    filename = get_absolute_path(current_directory + "test_face_emotion_extra"
+                                 + "ction_data/happy1.png")
     img = cv2.imread(filename)
     face_data = classify_faces([img])
     assert len(face_data[0]) == 7
@@ -31,10 +30,8 @@ def test_happy_1():
 
 
 def test_happy_2():
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/happy2.png")
+    filename = get_absolute_path(current_directory + "test_face_emotion_extr"
+                                 + "action_data/happy2.png")
     img = cv2.imread(filename)
     face_data = classify_faces([img])
     assert len(face_data[0]) == 7
@@ -42,10 +39,8 @@ def test_happy_2():
 
 
 def test_happy_3():
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/happy3.png")
+    filename = get_absolute_path(current_directory + "test_face_emotion_extra"
+                                 + "ction_data/happy3.png")
     img = cv2.imread(filename)
     face_data = classify_faces([img])
     assert len(face_data[0]) == 7
@@ -53,10 +48,8 @@ def test_happy_3():
 
 
 def test_neutral_1():
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    filename = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/neutral1.png")
+    filename = get_absolute_path(current_directory + "test_face_emotion_extra"
+                                 + "ction_data/neutral1.png")
     img = cv2.imread(filename)
     face_data = classify_faces([img])
     assert len(face_data[0]) == 7
@@ -73,7 +66,8 @@ def test_get_labels_valid_input():
     assert dataset_expected == result
 
 
-def test_preprocess_input():  # expermentially we have reached that it should output the expected value
+def test_preprocess_input():  # expermentially we have reached that it should
+    # output the expected value
     expected = 0.9607843137254901
 
     tf = np.float32(250)  # testing float
@@ -84,19 +78,17 @@ def test_preprocess_input():  # expermentially we have reached that it should ou
 
 def test_Many_Faces():
     face_list = []
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    fileName1 = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/happy1.png")
-    fileName2 = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/happy2.png")
-    fileName3 = os.path.join(
-        dirname,
-        "test_face_emotion_extraction_data/happy3.png")
-    img1 = cv2.imread(fileName1)
-    img2 = cv2.imread(fileName2)
-    img3 = cv2.imread(fileName3)
+
+    filename1 = get_absolute_path(current_directory + "test_face_emotion_extr"
+                                  + "action_data/happy1.png")
+    filename2 = get_absolute_path(current_directory + "test_face_emotion_extr"
+                                  + "action_data/happy2.png")
+    filename3 = get_absolute_path(current_directory + "test_face_emotion_extr"
+                                  + "action_data/happy3.png")
+
+    img1 = cv2.imread(filename1)
+    img2 = cv2.imread(filename2)
+    img3 = cv2.imread(filename3)
     face_list.append(img1)
     face_list.append(img2)
     face_list.append(img3)

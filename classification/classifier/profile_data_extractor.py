@@ -5,9 +5,12 @@ import json
 from pprint import pprint
 from tempfile import NamedTemporaryFile
 
+from utilities.filehandler.handle_path import get_absolute_path
+
+
 def get_classifier_data(data_file_name):
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_moods_profile.yaml")
+    profile_file = get_absolute_path("utilities/ressources/"
+                                     + "timbre_moods_profile.yaml")
 
     # Temp file used instead of writing to an actual file
     temp_file = NamedTemporaryFile(delete=True)
@@ -17,6 +20,7 @@ def get_classifier_data(data_file_name):
 
     print("THIS IS THE COMMAND: " + command)
 
+    dirname = os.path.abspath(os.path.dirname(__file__))
     subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 
     with temp_file as f:
@@ -33,16 +37,16 @@ def get_classifier_data(data_file_name):
 
     mood_relaxed = highlevel['mood_relaxed']['value']
     mood_relaxed_probability = highlevel['mood_relaxed']['probability']
-    
+
     mood_party = highlevel['mood_party']['value']
     mood_party_probability = highlevel['mood_party']['probability']
-    
+
     mood_aggressive = highlevel['mood_aggressive']['value']
     mood_aggressive_probability = highlevel['mood_aggressive']['probability']
-    
+
     mood_happy = highlevel['mood_happy']['value']
     mood_happy_probability = highlevel['mood_happy']['probability']
-    
+
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
 
@@ -53,6 +57,7 @@ def get_classifier_data(data_file_name):
         ]
 
     return t[0], t[1], t[2], t[3], t[4], t[5]
+
 
 if __name__ == "__main__":
     data_file = sys.argv[1]

@@ -28,6 +28,9 @@ def process_data_and_extract_profiles(song_id, song_file, song_output_file):
     # Save file in config directory
     return song_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
+def threaded_process_data_and_extract_profiles(song_id, song_file, song_output_file):
+    
+
 if __name__ == "__main__":
     # Go through all .wav files in the given directory
     dirname = os.path.abspath(os.path.dirname(__file__))
