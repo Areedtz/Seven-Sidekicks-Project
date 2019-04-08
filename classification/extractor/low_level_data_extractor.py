@@ -1,10 +1,12 @@
 import sys
 import subprocess
+import os
 
-from utilities.filehandler.handle_path import get_absolute_path
+sys.path.insert(0, os.path.abspath("../"))
+import utilities.filehandler.handle_path as path_handler 
 
 def make_low_level_data_file(filename, output_file_path):
-    extractor_path = get_absolute_path("utilities/ressources"
+    extractor_path = path_handler.get_absolute_path("utilities/ressources"
                                        + "/extractors/"
                                        + "streaming_extractor_music")
 
