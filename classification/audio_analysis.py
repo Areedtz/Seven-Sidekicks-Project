@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import csv
+import json
 import subprocess
 import tempfile
 
@@ -18,7 +19,7 @@ from utilities.get_song_id import get_song_id
 
 def process_data_and_extract_profiles(segment_id, song_file):
     #creating the temporary files
-    temp_song = tempfile.NamedTemporaryFile(delete=True)
+    temp_song = tempfile.NamedTemporaryFile(delete=True, suffix='.wav')
     temp_classifier = tempfile.NamedTemporaryFile(delete=True)
     
     MonoWriter(filename=temp_song.name)(song_file)
