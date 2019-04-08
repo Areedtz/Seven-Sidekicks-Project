@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath("../.."))
+sys.path.insert(0, os.path.abspath("../"))
 
 from video_emotion.facial_recognition.facial_recognition import analyze_video
 from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
