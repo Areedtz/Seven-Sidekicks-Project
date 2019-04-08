@@ -1,10 +1,12 @@
 import sys
 import os
-
 from multiprocessing import Pool
 from tabulate import tabulate
+from pprint import pprint
 
 from essentia.standard import RhythmExtractor2013
+
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
 def get_song_bpm(audio):
     rhythm_extractor = RhythmExtractor2013()
@@ -19,8 +21,14 @@ if __name__ == "__main__":
         if file.endswith(".wav"):
             files.append(os.path.join(sys.argv[1], file))
 
+    pprint(files)
+
+    monoFiles = []
+    for file in files:
+        monoFiles.append(get_MonoLoaded_Song(file))
+    
     pool = Pool(8)
-    res = pool.map(get_song_bpm, files)
+    res = pool.map(get_song_bpm, monoFiles)
     pool.close()
 
     print(tabulate(res,

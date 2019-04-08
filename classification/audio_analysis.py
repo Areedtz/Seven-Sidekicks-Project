@@ -9,6 +9,7 @@ import tempfile
 from multiprocessing import Pool
 from essentia.standard import MonoWriter
 
+from bpm.bpm_extractor import get_song_bpm
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
 from similarity.split_song import split_song
@@ -29,12 +30,15 @@ def process_data_and_extract_profiles(segment_id, song_file):
     #closing and effectively deleting the song tempfile
     temp_song.close()
 
+    bpm, beats_confidence = get_song_bpm(song_file)
+    bpm_tuple = (bpm, beats_confidence)
+
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(temp_classifier.name)
 
     #closing and effectively deleting the classifier tempfile
     temp_classifier.close()
 
-    return segment_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
+    return segment_id, bpm_tuple, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 
 def segment_song_and_return_arguments(filename, song_file):
