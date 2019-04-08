@@ -1,0 +1,10 @@
+version: '3'
+services:
+  codebase:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    volumes:
+    - ./src:/code
+    command: tail -f /dev/null
+    
