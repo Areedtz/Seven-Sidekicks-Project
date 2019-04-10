@@ -13,8 +13,7 @@ from video_emotion.facial_recognition.facial_recognition import analyze_video
 from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
 
 def generate_log_data(interval, emotion_set):
-    output_log_data = ""
-    output_log_data += "From,To,emotion_angry,emotion_disgust,emotion_fear," \
+    output_log_data = "From,To,emotion_angry,emotion_disgust,emotion_fear," \
                         + "emotion_happy,emotion_sad," \
                           "emotion_surprise,emotion_neutral\n"
     for x in range(0, len(emotion_set)):
