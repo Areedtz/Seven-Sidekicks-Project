@@ -28,7 +28,7 @@ def test_profile_song_data():
     #for i in range(len(split_song_list)):
     song_output_file = "{}{}_{}_output.json".format(
             output_folder_path, 0, song_id)
-        
+
     (segment_id, bpm, 
      timbre, mood_relaxed, 
      mood_party, mood_aggressive, 
@@ -50,12 +50,13 @@ def test_profile_song_data():
     assert timbre == ('dark', 0.862666606903)
     assert timbre1 != ('dark', 0.862666606903)
 
-def test_test_test():
+
+def test_audio_analysis_makes_csvfile():
     dirname = os.path.abspath(os.path.dirname(__file__))
     output_folder_path = os.path.join(dirname, "")
     filename = os.path.join(
         dirname,
-        "test_audio_analysis/172204634_P3_2018-09-15_10-11_Den_sorte_boks._Kristian_Gintberg.wav")
+        "test_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
     argument_tuples = []
 
     song_id = s_id.get_song_id(filename)
