@@ -2,7 +2,6 @@ import sys
 import os
 from multiprocessing import Pool
 from tabulate import tabulate
-from pprint import pprint
 
 from essentia.standard import RhythmExtractor2013
 
@@ -20,8 +19,6 @@ if __name__ == "__main__":
     for file in os.listdir(sys.argv[1]):
         if file.endswith(".wav"):
             files.append(os.path.join(sys.argv[1], file))
-
-    pprint(files)
 
     monoFiles = []
     for file in files:
