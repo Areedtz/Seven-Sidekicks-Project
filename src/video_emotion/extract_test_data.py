@@ -64,15 +64,19 @@ def generate_log_data_images_cutoff(video_path, name,folder):
             i = i + 1
     emotions_data = classify_faces(realFaces)
 
+    returnTuples = []
+
     for x in range(0, len(faces)):
         cutOff_emotions = find_emotions_cutoffs(emotions_data[x])
         if cutOff_emotions != "":
-            cv2.imwrite(folder + name + "_" + facesDict2[str(x)] + "_" + cutOff_emotions + ".jpg", realFaces[x])
+            returnTuples.append((folder + name + "_" + facesDict2[str(x)] + "_" + cutOff_emotions + ".jpg", realFaces[x]))
 
 
 if __name__ == "__main__":
     folder = sys.argv[1]
     onlyfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
+
+    imageTuples = []
     for file in onlyfiles:
         name = file.split('_', 1)[0]
         folder2 = folder + name  + "/"
@@ -81,4 +85,7 @@ if __name__ == "__main__":
         else:
             folder2 = folder + name + "_2" + "/"
             os.mkdir(folder2)
-        generate_log_data_images_cutoff(folder + file, name, folder2)
+        imagesTuples = generate_log_data_images_cutoff(folder + file, name, folder2)
+
+    for(name,img) in imageTuples:
+        cv2.imwrite(name,img)

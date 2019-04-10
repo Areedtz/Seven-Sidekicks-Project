@@ -1,7 +1,9 @@
 import os
+import shutil
 
 from video_emotion.extract_test_data import generate_log_data
 from video_emotion.extract_test_data import generate_log_data_images_cutoff
+from utilities.filehandler.handle_path import get_absolute_path
 
 
 def test_generate_log_data_formats_as_expected():
@@ -20,11 +22,9 @@ def test_generate_log_data_formats_as_expected():
 
 
 def test_generate_log_data_images_cutoff_exists():
-    dirname = os.path.dirname(__file__)
-    test_filename = os.path.join(
-        dirname, "test_video_emotion/Fun_at_a_Fair.mp4")
+    test_filename = get_absolute_path("video_emotion/t/test_video_emotion/Fun_at_a_Fair.mp4")
 
-    generate_log_data_images_cutoff(test_filename + "/", "name", "")
+    os.mkdir(get_absolute_path("video_emotion/t/test_video_emotion/") + "/test/")
+    imageTuples = generate_log_data_images_cutoff(test_filename, "name", "/test/")
 
-    assert os.path.isfile(test_filename+ "/" + "name")
-    os.remove(test_filename + "/" + "name")
+    assert len(imageTuples) != 0
