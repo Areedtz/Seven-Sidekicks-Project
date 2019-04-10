@@ -2,17 +2,13 @@ import os
 import sys
 import re
 
-# Start of importing the utilities module
-import utilities.get_song_id as s_id
-# End of importing the utilities module
-
-from extractor.low_level_data_extractor import make_low_level_data_file
-from classifier.profile_data_extractor import get_classifier_data
-
 from pprint import pprint
 from tabulate import tabulate
-
 from multiprocessing import Pool
+
+import utilities.get_song_id as s_id
+from extractor.low_level_data_extractor import make_low_level_data_file
+from classifier.profile_data_extractor import get_classifier_data
 
 
 def process_data_and_extract_profiles(song_id, song_file, song_output_file):
@@ -26,9 +22,6 @@ def process_data_and_extract_profiles(song_id, song_file, song_output_file):
 
     # Save file in config directory
     return song_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
-
-def threaded_process_data_and_extract_profiles(song_id, song_file, song_output_file):
-    
 
 if __name__ == "__main__":
     # Go through all .wav files in the given directory

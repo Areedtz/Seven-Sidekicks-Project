@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.6
 import os
 import sys
 import re
@@ -8,6 +9,9 @@ import tempfile
 
 from multiprocessing import Pool
 from essentia.standard import MonoWriter
+
+if __name__ == "__main__": 
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
 from bpm.bpm_extractor import get_song_bpm
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
