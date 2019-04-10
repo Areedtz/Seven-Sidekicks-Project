@@ -46,7 +46,7 @@ def process_data_and_extract_profiles(song_id, song_file_path, output_file_path)
         'probability': mood_sad[1]
     }
 
-    with open(output_file_path + '/' + song_id + '.json', 'w') as outfile:  
+    with open(output_file_path + '/' + song_id + '.json', 'w') as outfile:
         json.dump(data, outfile)
 
     return False
