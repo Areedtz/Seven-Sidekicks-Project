@@ -2,25 +2,29 @@ import sys
 import os
 import subprocess
 import json
-from pprint import pprint
+
+from tempfile import NamedTemporaryFile
 
 from utilities.filehandler.handle_path import get_absolute_path
 
-
 def get_classifier_data(data_file_name):
+    dirname = os.path.abspath(os.path.dirname(__file__))
+    
     profile_file = get_absolute_path("utilities/ressources/"
                                      + "timbre_moods_profile.yaml")
 
-    output_file_path = data_file_name.split(".")[0] + "-model-data.json"
+    # Temp file used instead of writing to an actual file
+    temp_file = NamedTemporaryFile(delete=True)
 
     command = 'essentia_streaming_extractor_music_svm {} {} {}'.format(
-        data_file_name, output_file_path, profile_file)
+        data_file_name, temp_file.name, profile_file)
 
-    dirname = os.path.abspath(os.path.dirname(__file__))
     subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 
-    with open(output_file_path) as f:
+    with temp_file as f:
         data = json.load(f)
+
+    temp_file.close()
 
     highlevel = data['highlevel']
 
@@ -42,23 +46,15 @@ def get_classifier_data(data_file_name):
     mood_sad = highlevel['mood_sad']['value']
     mood_sad_probability = highlevel['mood_sad']['probability']
 
-    subprocess.run("rm {}".format(output_file_path), shell=True)
-
-    # list for beautifying code
-    t = [(timbre, timbre_probability),
-         (mood_relaxed, mood_relaxed_probability),
-         (mood_party, mood_party_probability),
-         (mood_aggressive, mood_aggressive_probability),
-         (mood_happy, mood_happy_probability),
-         (mood_sad, mood_sad_probability)
-         ]
+    #list for beautifying code
+    t = [(timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability), 
+         (mood_party, mood_party_probability), (mood_aggressive, mood_aggressive_probability),
+         (mood_happy, mood_happy_probability), (mood_sad, mood_sad_probability)
+        ]
 
     return t[0], t[1], t[2], t[3], t[4], t[5]
-
 
 if __name__ == "__main__":
     data_file = sys.argv[1]
 
     res = get_classifier_data(data_file)
-
-    pprint(res)
