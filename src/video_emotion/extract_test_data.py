@@ -70,6 +70,7 @@ def generate_log_data_images_cutoff(video_path, name,folder):
         cutOff_emotions = find_emotions_cutoffs(emotions_data[x])
         if cutOff_emotions != "":
             returnTuples.append((folder + name + "_" + facesDict2[str(x)] + "_" + cutOff_emotions + ".jpg", realFaces[x]))
+    return returnTuples
 
 
 if __name__ == "__main__":

@@ -23,8 +23,9 @@ def test_generate_log_data_formats_as_expected():
 
 def test_generate_log_data_images_cutoff_exists():
     test_filename = get_absolute_path("video_emotion/t/test_video_emotion/Fun_at_a_Fair.mp4")
+    get_absolute_path
+    print(get_absolute_path(""))
 
-    os.mkdir(get_absolute_path("video_emotion/t/test_video_emotion/") + "/test/")
     imageTuples = generate_log_data_images_cutoff(test_filename, "name", "/test/")
 
     assert len(imageTuples) != 0
