@@ -20,12 +20,12 @@ if __name__ == "__main__":
         if file.endswith(".wav"):
             files.append(os.path.join(sys.argv[1], file))
 
-    monoFiles = []
+    mono_files = []
     for file in files:
-        monoFiles.append(get_MonoLoaded_Song(file))
+        mono_files.append(get_MonoLoaded_Song(file))
     
     pool = Pool(8)
-    res = pool.map(get_song_bpm, monoFiles)
+    res = pool.map(get_song_bpm, mono_files)
     pool.close()
 
     print(tabulate(res,
