@@ -3,21 +3,13 @@ import os
 import json
 import _thread
 
-# Importing the BPM module
-sys.path.insert(0, os.path.abspath("../bpm/"))
-import bpm_extractor as bpm_extract
-
-# Importing the classification module
-sys.path.insert(0, os.path.abspath("../classification"))
-import api_helper as mood_extract
-
-sys.path.insert(0, os.path.abspath("../utilities"))
-from get_song_id import get_song_id
-
-
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, reqparse, fields
+
+import bpm.bpm_extractor as bpm_extract
+import classification.api_helper as mood_extract
+from utilities.get_song_id import get_song_id
 
 app = Flask(__name__)
 api = Api(app)
@@ -50,7 +42,7 @@ song_fields = api.model('SongModel', {
 
 @api.route('/analyze_song')
 class AnalyzeSong(Resource):
-    @api.doc(body=song_fields)
+    @api.expect(song_fields)
     def post(self):
         data = request.get_json()
         song_id = '{}-{}-{}'.format(

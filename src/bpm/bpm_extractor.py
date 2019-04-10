@@ -1,8 +1,8 @@
 import sys
 import os
 from multiprocessing import Pool
-from tabulate import tabulate
 
+from tabulate import tabulate
 from essentia.standard import RhythmExtractor2013
 
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song

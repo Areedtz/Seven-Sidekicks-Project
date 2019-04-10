@@ -1,8 +1,8 @@
 import json
 from tempfile import NamedTemporaryFile
 
-from extractor.low_level_data_extractor import make_low_level_data_file
-from classifier.profile_data_extractor import get_classifier_data
+from classification.extractor.low_level_data_extractor import make_low_level_data_file
+from classification.classifier.profile_data_extractor import get_classifier_data
 
 
 def process_data_and_extract_profiles(song_id, song_file_path, output_file_path):
@@ -48,5 +48,5 @@ def process_data_and_extract_profiles(song_id, song_file_path, output_file_path)
 
     with open(output_file_path + '/' + song_id + '.json', 'w') as outfile:  
         json.dump(data, outfile)
-    
-    return False 
+
+    return False

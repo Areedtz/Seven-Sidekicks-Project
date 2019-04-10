@@ -3,8 +3,7 @@ import sys
 import re
 
 # Start of importing the utilities module
-sys.path.insert(0, os.path.abspath("../utilities/"))
-import get_song_id as s_id
+import utilities.get_song_id as s_id
 # End of importing the utilities module
 
 from extractor.low_level_data_extractor import make_low_level_data_file
