@@ -2,12 +2,16 @@ import sys
 import os
 import subprocess
 import json
-from pprint import pprint
+
 from tempfile import NamedTemporaryFile
+
+from utilities.filehandler.handle_path import get_absolute_path
 
 def get_classifier_data(data_file_name):
     dirname = os.path.abspath(os.path.dirname(__file__))
-    profile_file = os.path.join(dirname, "../../utilities/ressources/timbre_moods_profile.yaml")
+    
+    profile_file = get_absolute_path("utilities/ressources/"
+                                     + "timbre_moods_profile.yaml")
 
     # Temp file used instead of writing to an actual file
     temp_file = NamedTemporaryFile(delete=True)
@@ -54,5 +58,3 @@ if __name__ == "__main__":
     data_file = sys.argv[1]
 
     res = get_classifier_data(data_file)
-
-    pprint(res)
