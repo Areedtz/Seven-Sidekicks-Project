@@ -10,8 +10,3 @@ def test_facial_recognition_of_at_least_one_face():
                                                  # performance reasons
 
     assert len(output_frames) != 0
-
-    frame_key = "79"
-    faces = output_frames[frame_key]
-
-    assert len(faces) == 2
