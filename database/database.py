@@ -35,13 +35,13 @@ class Database:
 
     # Gets the newest entry, the other option would be to overwrite it in the insert method
     def find(self, name, song_id):
-        res = self._db[name].find({'song_id': song_id}
-                                  ).sort([('last_updated', -1)]
-                                         ).limit(1)
-        if (res.retrieved == 0):
-            return None
-        else:
+        if (self._db[name].count({'song_id': song_id}) > 0):
+            res = self._db[name].find({'song_id': song_id}
+                                    ).sort([('last_updated', -1)]
+                                            ).limit(1)
             return res[0]
+
+        return None
 
     def find_all_with_id(self, name, song_id):
         results = []
