@@ -4,22 +4,13 @@ import os
 from multiprocessing import Pool
 from tabulate import tabulate
 
-from essentia.standard import MonoLoader, RhythmExtractor2013
+from essentia.standard import RhythmExtractor2013
 
-
-def get_song_id(filename):
-    return filename.split("/")[-1].split("-")[0]
-
-def get_song_bpm(filename):
-    loader = MonoLoader(filename=filename)
-    audio = loader()
-    
+def get_song_bpm(audio):
     rhythm_extractor = RhythmExtractor2013()
-    bpm, _, beats_confidence, _, _= rhythm_extractor(audio)
-    
-    song_id = get_song_id(filename)
+    bpm, _, beats_confidence, _, _ = rhythm_extractor(audio)
 
-    return song_id, bpm, beats_confidence
+    return bpm, beats_confidence
 
 
 if __name__ == "__main__":
@@ -32,4 +23,6 @@ if __name__ == "__main__":
     res = pool.map(get_song_bpm, files)
     pool.close()
 
-    print(tabulate(res, headers=['Song ID', 'BPM', 'Confidence'], tablefmt='orgtbl'))
+    print(tabulate(res,
+                   headers=[ 'BPM', 'Confidence'],
+                   tablefmt='orgtbl'))

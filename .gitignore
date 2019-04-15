@@ -1,11 +1,16 @@
 ### Excludes ###
 music*/*
+utilities/ressources/music/*.wav
+utilities/ressources/music/*.mp3
+testMusic/*
 .vscode/
 .idea/
 venv/
 *.pyc
 random_samples/
 .DS_Store
+**/output/*
+*__pycache__*
 
 ### Includes ###
 !*/.gitkeep

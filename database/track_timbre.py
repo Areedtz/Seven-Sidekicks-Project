@@ -3,7 +3,8 @@ from database.storinator import Storinator
 
 
 class TrackTimbre(Storinator):
-    def __init__(self, host="localhost", port=27017, username=None, password=None):
+    def __init__(self, host="localhost", port=27017,
+                 username=None, password=None):
         self._dbname = 'track_timbre'
         self._db = Database(host, port, username, password)
 
@@ -18,3 +19,6 @@ class TrackTimbre(Storinator):
 
     def get_all(self):
         return self._db.find_all(self._dbname)
+
+    def close(self):
+        self._db.close()

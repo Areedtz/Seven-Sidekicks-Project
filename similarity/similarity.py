@@ -5,15 +5,27 @@ from scipy.spatial import distance
 import numpy as np
 import os
 import falconn
-
+import time
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
-import matplotlib.pyplot as plt
-
-folder = 'music_small'
+folder = 'music'
 
 
 def flatten(l): return [item for sublist in l for item in sublist]
+
+
+def process_segment(segment, sr):
+    startTime = time.time()
+    harmonic, percussive = librosa.effects.hpss(segment)
+
+    tempogram = librosa.feature.tempogram(
+        percussive, hop_length=1024, win_length=16)
+
+    mfcc = librosa.feature.mfcc(segment, hop_length=1024)
+
+    chromagram = librosa.feature.chroma_cqt(y=harmonic, sr=sr, hop_length=1024)
+
+    return mfcc, chromagram, tempogram
 
 
 def process_file(filename):
@@ -26,31 +38,19 @@ def process_file(filename):
         sample = y[(i * sr * 5):
                    ((i + 1) * sr * 5)]
 
-        harmonic, percussive = librosa.effects.hpss(sample)
+        mfcc, chromagram, tempogram = process_segment(sample, sr)
 
-        tempogram = librosa.feature.tempogram(percussive)
+        fm = np.ndarray.flatten(mfcc)
+        fc = np.ndarray.flatten(chromagram)
         ft = np.ndarray.flatten(tempogram)
 
-        mfcc = librosa.feature.mfcc(sample)
-        fm = np.ndarray.flatten(mfcc)
-
-        chromagram = librosa.feature.chroma_cqt(y=harmonic, sr=sr)
-        fc = np.ndarray.flatten(chromagram)
-
-        # Because we use a lot of RAM :)
-        del harmonic
-        del percussive
-        del tempogram
-        del chromagram
-
-        songs.append((filename, 5*i, np.concatenate((fm, fc * 150, ft * 100))))
-
-    del y
+        songs.append((filename, 5*i, np.concatenate((fm, fc*133, ft*280))))
 
     print('Done: ' + filename)
     return songs
 
 
+"""
 p = Pool(cpu_count())
 #p = Pool(1)
 
@@ -73,13 +73,8 @@ print(len(songs))
 def f(x): return x[2]
 
 
-def g(x): return (x[2].tobytes(), x)
-
-
-toMeta = dict([g(xi) for xi in songs])
-
-
 segments = np.array([f(xi) for xi in songs])
+
 
 print(segments.shape)
 
@@ -102,6 +97,9 @@ def myround(x, base=5):
     return base * round(x/base)
 
 
+probes = 50
+
+
 def find_similar(name):
     sample_index = next((i for i, v in enumerate(songs)
                          if v[0] == name and v[1] == 30), None)
@@ -110,10 +108,11 @@ def find_similar(name):
         print("Not found")
         return
 
-    query_object = table.construct_query_object()
-    query_object.set_num_probes(50)
+    #query_object = table.construct_query_object()
+    # query_object.set_num_probes(probes)
+    # print(probes)
 
-    results = query_object.find_k_nearest_neighbors(segments[sample_index], 3)
+    #results = query_object.find_k_nearest_neighbors(segments[sample_index], 3)
 
     dists = []
     low = 0
@@ -126,14 +125,12 @@ def find_similar(name):
             low_dist = dist
             low = i
 
-    print(songs[low])
-
-    print(low in results)
-
-    print(sum(dists) / len(songs))
-    print()
+    #print(str(low) + str(results))
 
     print(songs[low][0], songs[low][1], low_dist)
+    #print(songs[results[0]][0], songs[results[0]][1])
+    #print(songs[results[1]][0], songs[results[1]][1])
+    #print(songs[results[2]][0], songs[results[2]][1])
     print()
 
     # Save comparison file
@@ -142,7 +139,7 @@ def find_similar(name):
     y, sr = librosa.load('./' + folder + '/' + songs[low][0])
     sample1 = y[songs[low][1]*sr: (songs[low][1]+5)*sr]
     librosa.output.write_wav('random_samples/' + songs[sample_index][0] + '-' + str(
-        songs[sample_index][1]) + '_' + songs[low][0] + '-' + str(songs[low][1]) + '.wav', np.concatenate([sample, sample1]), sr)
+        songs[sample_index][1]) + '_' + songs[low][0] + '-' + str(songs[low][1]) + '-' + str(low_dist) + '.wav', np.concatenate([sample, sample1]), sr)
 
 
 for line in fileinput.input():
@@ -152,8 +149,12 @@ for line in fileinput.input():
         split = line.split(' ')
         weights = (int(split[0]), int(split[1]), int(split[2]))
 
+    if (line != "\n" and int(line) > 0):
+        probes = int(line)
+
     p = Pool(cpu_count())
     # only does sideeffects, but is easy async
     p.map(find_similar, filenames)
 
     p.close()
+"""

@@ -1,19 +1,19 @@
 import os
+import sys
 
-from bpm.bpm_extractor import get_song_id, get_song_bpm
+# Start of importing the utilities module
+sys.path.insert(0, os.path.abspath("utilities/"))
 
+# End of importing the utilities module
 
-def test_get_song_id():
-    assert get_song_id("8376-Demolition_Man_proud_music_preview.wav") == "8376"
+from bpm.bpm_extractor import get_song_bpm
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+
 
 def test_get_song_bpm():
-    dirname = os.path.dirname(__file__)
-    filename = os.path.join(
-        dirname, 
-        "test_bpm_extractor/8376-Demolition_Man_proud_music_preview.wav")
-    
-    song_id, bpm, confidence = get_song_bpm(filename)
+    song = get_MonoLoaded_Song("bpm/t/test_bpm_extractor/8376-1"
+                               + "-1_Demolition_Man_proud_music_preview.wav")
+    bpm, confidence = get_song_bpm(song)
 
-    assert song_id == "8376"
     assert round(bpm, 3) == 139.847
     assert round(confidence, 4) == 2.4134
