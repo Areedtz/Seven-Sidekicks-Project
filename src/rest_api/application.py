@@ -3,35 +3,22 @@ import os
 import json
 import _thread
 
-# Importing the BPM module
-sys.path.insert(0, os.path.abspath("../bpm/"))
-import bpm_extractor as bpm_extract
-
-# Importing the classification module
-sys.path.insert(0, os.path.abspath("../classification"))
-import api_helper as mood_extract
-
-sys.path.insert(0, os.path.abspath("../utilities"))
-from get_song_id import get_song_id
-
-
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, reqparse, fields
-from pathlib import PurePath
-from flask.json import JSONEncoder, JSONDecoder
+
+import bpm.bpm_extractor as bpm_extract
+import classification.api_helper as mood_extract
+from utilities.get_song_id import get_song_id
 
 app = Flask(__name__)
 api = Api(app)
 
-# We need to find the right way to set a custom json decoder
-# the proper way. That shit below is improper
-
 hostURL = "0.0.0.0"
 hostPort = 1337
 apiRoute = '/hello'
-
 output_directory_for_commands = "./"
+
 
 @api.route(apiRoute)
 class HelloWorld(Resource):
@@ -55,22 +42,29 @@ song_fields = api.model('SongModel', {
 
 @api.route('/analyze_song')
 class AnalyzeSong(Resource):
-    @api.doc(body=song_fields)
+    @api.expect(song_fields)
     def post(self):
         data = request.get_json()
-        song_id = '{}-{}-{}'.format(data["ID"]["Release"], data["ID"]["Side"], data["ID"]["Track"])
+        song_id = '{}-{}-{}'.format(
+            data["ID"]["Release"], data["ID"]["Side"],
+            data["ID"]["Track"]
+        )
         # ../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav
         song_path = data["SourcePath"]
         if not os.path.isfile(song_path):
-            api.abort(400, "The given filepath '{}' does not seem to exist".format(song_path))
+            api.abort(
+                400,
+                "The given filepath '{}' does not seem to exist"
+                .format(song_path)
+            )
 
         _thread.start_new_thread(
             mood_extract.process_data_and_extract_profiles,
-                (
+            (
                 song_id,
                 song_path,
                 output_directory_for_commands
-                )
+            )
         )
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 

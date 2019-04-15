@@ -1,11 +1,6 @@
 import os
 import sys
 
-# Start of importing the utilities module
-sys.path.insert(0, os.path.abspath("utilities/"))
-
-# End of importing the utilities module
-
 from bpm.bpm_extractor import get_song_bpm
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 

@@ -8,6 +8,8 @@ venv/
 *.pyc
 **/output/*
 *__pycache__*
+.DS_store
+*.csv
 
 ### Includes ###
 !*/.gitkeep

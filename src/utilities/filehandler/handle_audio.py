@@ -1,5 +1,9 @@
-from utilities.filehandler.handle_path import get_absolute_path
+import sys
+import os
+
 from essentia.standard import MonoLoader
+
+from utilities.filehandler.handle_path import get_absolute_path
 
 
 def get_MonoLoaded_Song(path):
