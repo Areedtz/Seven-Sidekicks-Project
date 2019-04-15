@@ -74,6 +74,21 @@ class AnalyzeSong(Resource):
         )
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 
+@api.route('/analyze_video')
+class AnalyzeSong(Resource):
+    @api.doc(body=song_fields)
+    def post(self):
+        data = request.get_json()
+        song_id = '{}-{}-{}'.format(data["ID"]["Release"], data["ID"]["Side"], data["ID"]["Track"])
+        # ../utilities/ressources/music/77245-1-1_Charles-Aznavour_Yesterday-when-i-was-young.wav
+        song_path = data["SourcePath"]
+        if not os.path.isfile(song_path):
+            api.abort(400, "The given filepath '{}' does not seem to exist".format(song_path))
+
+        _thread.start_new_thread(
+
+        )
+        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 
 @api.route('/shutdown')
 class Shutdown(Resource):
