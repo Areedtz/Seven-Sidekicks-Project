@@ -1,25 +1,25 @@
+#!/usr/local/bin/python3.6
+
 import os
 import sys
 import re
+from multiprocessing import Pool
 
-# Start of importing the utilities module
-sys.path.insert(0, os.path.abspath("../utilities/"))
-import get_song_id as s_id
-# End of importing the utilities module
-
-from extractor.low_level_data_extractor import make_low_level_data_file
-from classifier.profile_data_extractor import get_classifier_data
-
-from pprint import pprint
 from tabulate import tabulate
 
-from multiprocessing import Pool
+if __name__ == "__main__": 
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
+
+import utilities.get_song_id as s_id
+from extractor.low_level_data_extractor import make_low_level_data_file
+from classifier.profile_data_eextractor import get_classifier_data
 
 
 def process_data_and_extract_profiles(song_id, song_file, song_output_file):
     make_low_level_data_file(song_file, song_output_file)
 
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
+
     return song_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 if __name__ == "__main__":

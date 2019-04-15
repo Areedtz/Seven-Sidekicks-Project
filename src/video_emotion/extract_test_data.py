@@ -1,13 +1,16 @@
+#!/usr/local/bin/python3.6
+
 import sys
 import os
 from os import listdir
 from os.path import isfile, join
 
-sys.path.insert(0, os.path.abspath("../"))
-
 import cv2
-import numpy as np
 
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
+
+from video_emotion.extract_classifier import classify_video
 from video_emotion.extract_classifier import classify_video
 from video_emotion.facial_recognition.facial_recognition import analyze_video
 from video_emotion.emotionTagger.face_emotion_extraction import classify_faces

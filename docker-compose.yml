@@ -5,6 +5,8 @@ services:
     user: ${CURRENT_UID}
     build: .
     volumes:
-    - ./src:/code
-    command: tail -f /dev/null
+      - ./src:/code
+    ports:
+      - '127.0.0.1:80:1337'
+    command: ./__main__.py
     

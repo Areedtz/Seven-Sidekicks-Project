@@ -1,3 +1,5 @@
+#!/usr/local/bin/python3.6
+
 import os
 import sys
 import re
@@ -5,37 +7,41 @@ import csv
 import json
 import subprocess
 import tempfile
-
 from multiprocessing import Pool
+
 from essentia.standard import MonoWriter
 
-from bpm.bpm_extractor import get_song_bpm
-from classification.extractor.low_level_data_extractor import make_low_level_data_file
-from classification.classifier.profile_data_extractor import get_classifier_data
-from similarity.split_song import split_song
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
-from utilities.filehandler.handle_path import get_absolute_path
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
+
 from utilities.get_song_id import get_song_id
+from utilities.filehandler.handle_path import get_absolute_path
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from similarity.split_song import split_song
+from classification.classifier.profile_data_extractor import get_classifier_data
+from classification.extractor.low_level_data_extractor import make_low_level_data_file
+from bpm.bpm_extractor import get_song_bpm
 
 
 def process_data_and_extract_profiles(segment_id, song_file):
-    #creating the temporary files
+    # creating the temporary files
     temp_song = tempfile.NamedTemporaryFile(delete=True, suffix='.wav')
     temp_classifier = tempfile.NamedTemporaryFile(delete=True)
-    
+
     MonoWriter(filename=temp_song.name)(song_file)
 
     make_low_level_data_file(temp_song.name, temp_classifier.name)
 
-    #closing and effectively deleting the song tempfile
+    # closing and effectively deleting the song tempfile
     temp_song.close()
 
     bpm, beats_confidence = get_song_bpm(song_file)
     bpm_tuple = (bpm, beats_confidence)
 
-    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(temp_classifier.name)
+    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(
+        temp_classifier.name)
 
-    #closing and effectively deleting the classifier tempfile
+    # closing and effectively deleting the classifier tempfile
     temp_classifier.close()
 
     return segment_id, bpm_tuple, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
@@ -46,7 +52,7 @@ def segment_song_and_return_arguments(filename, song_file):
     argument_tuples = []
 
     song_id = get_song_id(song_file)
-    
+
     loaded_song = get_MonoLoaded_Song(song_file)
 
     split_song_list = split_song(loaded_song)
@@ -58,21 +64,24 @@ def segment_song_and_return_arguments(filename, song_file):
 
     return song_id, dirname, argument_tuples
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         exit()
 
     arg = sys.argv[1]
 
-    song_id, output_folder_path, argument_tuples = segment_song_and_return_arguments(__file__, arg)
+    song_id, output_folder_path, argument_tuples = segment_song_and_return_arguments(
+        __file__, arg)
 
     csv_output_file = "{}{}_segmented_output.csv".format(
-            output_folder_path, song_id)
+        output_folder_path, song_id)
 
     # CSV file header
     with open(csv_output_file, 'w') as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow([song_id, 'Segment ID', 'Timbre', 'Mood Relaxed', 'Mood Party', 'Mood Aggressive', 'Mood Happy', 'Mood Sad'])
+        writer.writerow([song_id, 'Segment ID', 'Timbre', 'Mood Relaxed',
+                         'Mood Party', 'Mood Aggressive', 'Mood Happy', 'Mood Sad'])
 
     csv_file.close()
 

@@ -16,13 +16,13 @@ OPENCV_MODEl = get_absolute_path("video_emotion/facial_recognition/res10_300x"
 # Load model from disk
 NET = cv2.dnn.readNetFromCaffe(OPENCV_PROTOTXT, OPENCV_MODEl)
 
-
 # Various numeral constants
 IMAGE_RESIZE = 300
 SIZE_CONSTANT = 1.0
 RED = 104.0
 GREEN = 177.0
 BLUE = 123.0
+
 
 def analyze_video(video_path, time_range=None):
     if time_range is not None:

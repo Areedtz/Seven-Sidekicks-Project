@@ -1,11 +1,8 @@
+#!/usr/local/bin/python3.6
+
 import sys
 import os
 from multiprocessing import Pool
-
-# Start of importing the utilities module
-# Needed due to the fact it imports a module that uses the utility module
-sys.path.insert(0, os.path.abspath("utilities/"))
-# End of importing the utilities module
 
 from bpm.bpm_extractor import get_song_bpm
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
@@ -14,6 +11,7 @@ from database.track_bpm import TrackBPM
 from database.track_party import TrackParty
 from database.track_relaxed import TrackRelaxed
 from database.track_timbre import TrackTimbre
+from rest_api.application import app, hostURL, hostPort
 
 
 def extract_and_save_data_from_song(filename):
@@ -58,17 +56,4 @@ def extract_and_save_data_from_songs_in_folder(folder_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        exit()
-
-    arg = sys.argv[1]
-
-    if os.path.isfile(arg):
-        extract_and_save_data_from_song(arg)
-
-    elif os.path.isdir(arg):
-        extract_and_save_data_from_songs_in_folder(arg)
-
-    else:
-        print("{} is not a folder or a path. Exiting...".format(arg))
-        exit()
+    app.run(host=hostURL, port=hostPort, debug=True)

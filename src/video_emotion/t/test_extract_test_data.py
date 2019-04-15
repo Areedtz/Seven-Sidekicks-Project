@@ -22,7 +22,9 @@ def test_generate_log_data_formats_as_expected():
 
 
 def test_generate_log_data_images_cutoff_exists():
-    test_filename = get_absolute_path("video_emotion/t/test_video_emotion/Fun_at_a_Fair.mp4")
-    imageTuples = generate_log_data_images_cutoff(test_filename, "name", "/test/")
+    test_filename = get_absolute_path(
+        "video_emotion/t/test_video_emotion/Fun_at_a_Fair.mp4")
+    imageTuples = generate_log_data_images_cutoff(
+        test_filename, "name", "/test/")
 
     assert len(imageTuples) != 0

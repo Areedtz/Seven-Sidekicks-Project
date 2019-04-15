@@ -1,11 +1,17 @@
+#!/usr/local/bin/python3.6
+
 import sys
 import os
 from multiprocessing import Pool
-from tabulate import tabulate
 
+from tabulate import tabulate
 from essentia.standard import RhythmExtractor2013
 
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
+
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+
 
 def get_song_bpm(audio):
     rhythm_extractor = RhythmExtractor2013()
@@ -23,11 +29,11 @@ if __name__ == "__main__":
     mono_files = []
     for file in files:
         mono_files.append(get_MonoLoaded_Song(file))
-    
+
     pool = Pool(8)
     res = pool.map(get_song_bpm, mono_files)
     pool.close()
 
     print(tabulate(res,
-                   headers=[ 'BPM', 'Confidence'],
+                   headers=['BPM', 'Confidence'],
                    tablefmt='orgtbl'))

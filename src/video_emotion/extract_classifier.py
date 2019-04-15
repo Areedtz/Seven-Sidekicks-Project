@@ -1,6 +1,10 @@
+#!/usr/local/bin/python3.6
+
 import sys
-import os
-sys.path.insert(0, os.path.abspath("../"))
+
+if __name__ == "__main__":
+    import os
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
 from video_emotion.facial_recognition.facial_recognition import analyze_video
 from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
