@@ -1,4 +1,9 @@
+#!/usr/local/bin/python3.6
+
 import sys
+
+if __name__ == "__main__":
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
 from video_emotion.extract_classifier import classify_video
 

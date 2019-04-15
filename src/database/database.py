@@ -1,5 +1,6 @@
-from pymongo import MongoClient
 import datetime
+
+from pymongo import MongoClient
 
 
 def _create_default_document(id):
@@ -14,7 +15,7 @@ def _augment_document(doc1, doc2):
 
 
 class Database:
-    def __init__(self, host="localhost", port=27017, 
+    def __init__(self, host="localhost", port=27017,
                  username=None, password=None):
         self._client = MongoClient(
             host, port, username=username, password=password)
@@ -28,8 +29,8 @@ class Database:
 
     def find(self, name, song_id):
         return self._db[name].find({'song_id': song_id}
-            ).sort([('last_updated', -1)]
-            ).limit(1)[0]
+                                   ).sort([('last_updated', -1)]
+                                          ).limit(1)[0]
 
     def find_all(self, name):
         results = []

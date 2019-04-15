@@ -15,8 +15,10 @@ def test_rest_server():
     number_of_tries = 0
     while number_of_tries < 10:
         try:
-            r = requests.get("http://" + rest.hostURL + ":" + str(rest.hostPort) + rest.apiRoute)
-            requests.get("http://" + rest.hostURL + ":" + str(rest.hostPort) + "/shutdown")
+            r = requests.get(
+                "http://" + rest.hostURL + ":" + str(rest.hostPort) + rest.apiRoute)
+            requests.get(
+                "http://" + rest.hostURL + ":" + str(rest.hostPort) + "/shutdown")
             break
         except requests.exceptions.ConnectionError:
             number_of_tries += 1

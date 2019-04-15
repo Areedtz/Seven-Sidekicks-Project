@@ -1,26 +1,25 @@
+#!/usr/local/bin/python3.6
+
 import os
 import sys
 import re
-
-from pprint import pprint
-from tabulate import tabulate
 from multiprocessing import Pool
+
+from tabulate import tabulate
+
+if __name__ == "__main__": 
+    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
 import utilities.get_song_id as s_id
 from extractor.low_level_data_extractor import make_low_level_data_file
-from classifier.profile_data_extractor import get_classifier_data
+from classifier.profile_data_eextractor import get_classifier_data
 
 
 def process_data_and_extract_profiles(song_id, song_file, song_output_file):
-    # Create temp
-
-    #use temp
     make_low_level_data_file(song_file, song_output_file)
 
-    #use temp
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(song_output_file)
 
-    # Save file in config directory
     return song_id, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 if __name__ == "__main__":
