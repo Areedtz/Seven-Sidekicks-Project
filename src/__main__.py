@@ -2,11 +2,13 @@
 
 import sys
 import os
+import json
 from multiprocessing import Pool
 
 from bpm.bpm_extractor import get_song_bpm
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
+from video_emotion.extract_classifier import classify_video
 from database.track_bpm import TrackBPM
 from database.track_party import TrackParty
 from database.track_relaxed import TrackRelaxed
@@ -41,8 +43,6 @@ def extract_and_save_data_from_song(filename):
     timbre_database_client.add(song_id, timbre[0], timbre[1])
     relaxed_database_client.add(song_id, relaxed[0], relaxed[1])
     party_database_client.add(song_id, party[0], party[1])
-
-
 
 def extract_and_save_data_from_songs_in_folder(folder_path):
     files = []
