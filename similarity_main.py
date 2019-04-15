@@ -3,6 +3,7 @@ from database.segment_features import SegmentFeatures
 from database.song_seg import SSegmentation
 from utilities.get_song_id import get_song_id
 from bson.objectid import ObjectId
+import numpy as np
 import librosa
 import os
 
@@ -54,6 +55,10 @@ for filename in filenames:
 
             f = sf.get(segment['_id'])
             print(f)
+
+            mfcc = np.reshape(np.frombuffer(f.mfcc), (20, 108))
+            chromagram = np.reshape(np.frombuffer(f.chromagram), (12, 108))
+            tempogram = np.reshape(np.frombuffer(f.tempogram), (16, 108))
 
 segments.close()
 sf.close()
