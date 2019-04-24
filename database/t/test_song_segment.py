@@ -1,20 +1,21 @@
-from database.song_seg import SSegmentation
+from database.song_segment import SongSegment
 from database.storinator import Storinator
 import datetime
 
 
 def test_implements_Storinator():
-    ss = SSegmentation()
+    ss = SongSegment()
     assert isinstance(ss, Storinator)
 
 
 def test_database_name():
-    ss = SSegmentation()
+    ss = SongSegment()
     assert ss._dbname == 'song_segmentation'
 
 
+# TODO: Add mfcc, chroma, tempogram
 def test_add_and_get():
-    ss = SSegmentation()
+    ss = SongSegment()
     ss.add(1, 0, 5000)
     seg = ss.get(1)
     assert seg['song_id'] == 1
@@ -23,7 +24,7 @@ def test_add_and_get():
 
 
 def test_get_all():
-    ss = SSegmentation()
+    ss = SongSegment()
     ss.add(1, 0, 5000)
     seg = ss.get_all()
     assert len(seg) > 0

@@ -1,6 +1,6 @@
-from similarity.similarity import process_segment
-from database.segment_features import SegmentFeatures
-from database.song_seg import SSegmentation
+from similarity.similarity import process_segment, create_feature, load_song, flatten
+from multiprocessing import Pool, Process, Queue, cpu_count, Manager
+from database.song_segment import SongSegment
 from utilities.get_song_id import get_song_id
 from bson.objectid import ObjectId
 import numpy as np
@@ -14,51 +14,20 @@ filenames = []
 for root, dirs, files in os.walk("./" + FOLDER):
     for filename in files:
         if filename.endswith('.wav'):
-            print(filename)
             filenames.append(filename)
 
+
+segments = []
 # Load features
-segments = SSegmentation()
-
-sf = SegmentFeatures()
-
 for filename in filenames:
     print(filename)
 
     song_id = get_song_id(filename)
 
-    segs = segments.get_all_with_id(song_id)
+    data = load_song((song_id, FOLDER + '/' + filename))
 
-    if (segs == []):
-        y, sr = librosa.load('./' + FOLDER + '/' + filename)
+    segments.append(data)
 
-        for i in range(0, y.shape[0]//sr//5 - 1):
-            _id = segments.add(song_id, i*5*1000, (i+1)*5*1000)
+segs = flatten(segments)
 
-            sample = y[(i * sr * 5):
-                       ((i + 1) * sr * 5)]
-
-            mfcc, chromagram, tempogram = process_segment(sample, sr)
-
-            print(mfcc.shape)
-            print(chromagram.shape)
-            print(tempogram.shape)
-
-            sf = SegmentFeatures()
-
-            sf.add(_id, mfcc.tobytes(),
-                   chromagram.tobytes(), tempogram.tobytes())
-    else:
-        for segment in segs:
-            print(segment)
-            print(segment['_id'])
-
-            f = sf.get(segment['_id'])
-            print(f)
-
-            mfcc = np.reshape(np.frombuffer(f.mfcc), (20, 108))
-            chromagram = np.reshape(np.frombuffer(f.chromagram), (12, 108))
-            tempogram = np.reshape(np.frombuffer(f.tempogram), (16, 108))
-
-segments.close()
-sf.close()
+print(segs)
