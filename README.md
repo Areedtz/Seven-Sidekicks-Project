@@ -9,7 +9,11 @@ Setting the user inside the container to fix any potential permission problems.
 
 ### Windows
 
-```docker-compose up -d```
+Build docker: ```docker-compose build```
+
+Setup containers: ```docker-compose up -d```
+
+Remove containers: ```docker-compose down```
 
 ## Getting bash access in a container
 
