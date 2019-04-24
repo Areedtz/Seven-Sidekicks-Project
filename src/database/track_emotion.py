@@ -3,8 +3,7 @@ from database.storinator import Storinator
 
 
 class TrackEmotion(Storinator):
-    def __init__(self, host="localhost", port=27017,
-                 username=None, password=None):
+    def __init__(self):
         self._dbname = 'track_emotion'
         self._db = Database()
 

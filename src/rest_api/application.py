@@ -9,16 +9,10 @@ from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
-<<<<<<< HEAD
 import classification.api_helper as mood_extract
-=======
-if __name__ == "__main__":
-    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
-
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as music_emotion_classifier
 import video_emotion.api_helper as video_emotion_classifier
->>>>>>> origin/master
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
 
@@ -148,6 +142,7 @@ class AnalyzeSong(Resource):
         )
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 
+
 @api.route('/shutdown')
 class Shutdown(Resource):
     def get(self):
@@ -156,6 +151,3 @@ class Shutdown(Resource):
             raise RuntimeError('Not running with the Werkzeug Server')
         func()
 
-
-if __name__ == '__main__':
-    app.run(host=hostURL, port=hostPort, debug=False)
