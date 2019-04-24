@@ -1,10 +1,10 @@
 from database.storinator import Storinator
 from database.video_emotion_database_no_song import VEDatabase
 
-
-class VideoEmotion2(Storinator):
+# VideoEmotionNS = video emotions no song
+class VideoEmotionNS(Storinator):
     def __init__(self):
-        self._dbname = 'video_emotion'
+        self._dbname = 'video_emotion_no_song'
         self._db = VEDatabase()
 
     def add(self,

@@ -16,7 +16,7 @@ def _create_default_document(id, id2):
 def _augment_document(doc1, doc2):
     return {**doc1, **doc2}
 
-a
+
 class VEDatabase:
     def __init__(self):
         cfg = load_config()
