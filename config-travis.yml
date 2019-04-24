@@ -2,3 +2,6 @@ mongo_host: localhost
 mongo_port: 27017
 mongo_user:
 mongo_pass:
+
+rest_api_url: 0.0.0.0
+rest_api_port: 1337

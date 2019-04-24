@@ -1,4 +1,7 @@
-mongo_host: mongodb # Docker container
+mongo_host: mongodb
 mongo_port: 27017
 mongo_user: root
 mongo_pass: pass
+
+rest_api_url: 0.0.0.0
+rest_api_port: 1337
