@@ -1,11 +1,13 @@
 from similarity.similarity import process_segment, create_feature, load_song, flatten, create_bucket, query, find_best
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
+from multiprocessing.pool import ThreadPool
 from database.song_segment import SongSegment
 from utilities.get_song_id import get_song_id
 from bson.objectid import ObjectId
 import numpy as np
 import librosa
 import os
+import time
 
 FOLDER = '../music'
 
@@ -17,24 +19,30 @@ for root, dirs, files in os.walk("./" + FOLDER):
             filenames.append(filename)
 
 
-segments = []
-# Load features
-for filename in filenames:
+def load(filename):
     print(filename)
 
     song_id = get_song_id(filename)
 
     data = load_song((song_id, FOLDER + '/' + filename))
 
-    segments.append(data)
+    return data
+
+
+p = ThreadPool(cpu_count())
+
+segments = p.map(load, filenames)
+
+p.close()
 
 segs = flatten(segments)
 
-BUCKET_SIZE = 60 * 15
+BUCKET_SIZE = 60 * 1000
 
 bucketSize = (len(segs) // BUCKET_SIZE) + 1
 
-print("Bucket size: " + str(bucketSize))
+print("Buckets: " + str(bucketSize))
+print("Segment amount:" + str(len(segs)))
 
 buckets = []
 for i in range(0, bucketSize):
@@ -47,16 +55,26 @@ for i in range(0, bucketSize):
     buckets.append(bucket)
 
 
-searchSegment = segs[0]
+def find_matches(searchSegment):
+    print()
+    s = time.time()
 
-matches = []
-for i in range(0, bucketSize):
-    x = query(buckets[i], np.array(searchSegment[3]))
+    matches = []
+    for i in range(0, bucketSize):
+        x = query(buckets[i], np.array(searchSegment[3]))
 
-    for j in x:
-        match = segs[i*BUCKET_SIZE+j]
-        matches.append(match)
+        for j in x:
+            match = segs[i*BUCKET_SIZE+j]
+            matches.append(match)
+    print(time.time() - s)
 
-for match in find_best(matches, searchSegment):
-    print(match[0])
-    print(match[1] + ": " + str(match[2]))
+    for match in find_best(matches, searchSegment):
+        print(match[0])
+        print(match[1] + ": " + str(match[2]))
+
+
+p = Pool(cpu_count())
+
+p.map(find_matches, segs)
+
+p.close()
