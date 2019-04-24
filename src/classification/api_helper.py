@@ -18,32 +18,32 @@ def process_data_and_extract_profiles(song_id, song_file_path, output_file_path)
     data = {}
     data['timbre'] = {
         'value': timbre[0],
-        'probability': timbre[1]
+        'confidence': timbre[1]
     }
 
     data['mood_relaxed'] = {
         'value': mood_relaxed[0],
-        'probability': mood_relaxed[1]
+        'confidence': mood_relaxed[1]
     }
 
     data['mood_party'] = {
         'value': mood_party[0],
-        'probability': mood_party[1]
+        'confidence': mood_party[1]
     }
 
     data['mood_aggressive'] = {
         'value': mood_aggressive[0],
-        'probability': mood_aggressive[1]
+        'confidence': mood_aggressive[1]
     }
 
     data['mood_happy'] = {
         'value': mood_happy[0],
-        'probability': mood_happy[1]
+        'confidence': mood_happy[1]
     }
 
     data['mood_sad'] = {
         'value': mood_sad[0],
-        'probability': mood_sad[1]
+        'confidence': mood_sad[1]
     }
 
     with open(output_file_path + '/' + song_id + '.json', 'w') as outfile:
