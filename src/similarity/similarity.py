@@ -7,7 +7,7 @@ import falconn
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 from database.song_segment import SongSegment
 
-matches = 3
+MATCHES = 3
 
 segments = SongSegment()
 
@@ -26,26 +26,6 @@ def process_segment(segment, sr):
     chromagram = librosa.feature.chroma_cqt(y=harmonic, sr=sr, hop_length=1024)
 
     return mfcc, chromagram, tempogram
-
-
-"""def process_file(filename):
-    print('Loading: ' + filename)
-    y, sr = librosa.load('./' + folder + '/' + filename)
-    songs = []
-
-    print('Processing: ' + filename)
-    for i in range(0, y.shape[0]//sr//5 - 1):
-        sample = y[(i * sr * 5):
-                   ((i + 1) * sr * 5)]
-
-        mfcc, chromagram, tempogram = process_segment(sample, sr)
-
-        songs.append(
-            (filename, 5*i, create_feature(mfcc, chromagram, tempogram)))
-
-    print('Done: ' + filename)
-    return songs
-"""
 
 
 def load_song(song):
@@ -70,11 +50,11 @@ def _load_song(song_id, filename, force):
             mfcc, chromagram, tempogram = process_segment(sample, sr)
 
             _id = segments.add(song_id, i*5*1000, (i+1)*5*1000, mfcc.tobytes(),
-                               chromagram.tobytes(), tempogram.tobytes())
+                               chromagram.tobytes(), tempogram.tobytes(), [])
 
             feature = create_feature(mfcc, chromagram, tempogram)
 
-            segment_data.append((song_id, i*5, feature))
+            segment_data.append((_id, song_id, i*5, feature))
 
     else:
         # There are segments in db, try to look for features
@@ -84,7 +64,7 @@ def _load_song(song_id, filename, force):
             feature = create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
                 segment['chroma']), np.frombuffer(segment['tempogram']))
 
-            segment_data.append((song_id, i*5, feature))
+            segment_data.append((segment['_id'], song_id, i*5, feature))
 
     return segment_data
 
@@ -102,7 +82,7 @@ def create_feature(mfcc, chroma, tempogram):
     return np.concatenate((fm, fc * 133, ft * 280))
 
 
-def prepare(segments):
+def create_bucket(segments):
     params_cp = falconn.LSHConstructionParameters()
     params_cp.dimension = len(segments[0])
     params_cp.lsh_family = falconn.LSHFamily.CrossPolytope
@@ -122,12 +102,11 @@ def prepare(segments):
 
 def query(data, segment):
     segments, table = data
-    segment_id, segment_data = segment
 
     query_object = table.construct_query_object()
     query_object.set_num_probes(50)
 
-    query_object.find_k_nearest_neighbors(segment_data, matches)
+    return query_object.find_k_nearest_neighbors(segment, MATCHES)
 
 
 def add_songs(songs):
@@ -136,6 +115,29 @@ def add_songs(songs):
     data = p.map(load_song, songs)
 
     return data
+
+
+def dist(seg1, seg2):
+    return distance.euclidean(seg1[3], seg2[3])
+
+
+def find_best(matches, segment):
+    lows = []
+    for i in range(0, len(matches)):
+        dist = distance.euclidean(
+            segment[3], matches[i][3])
+
+        if segment[0] != matches[i][0]:
+            if len(lows) < MATCHES:
+                lows.append((i, dist))
+            else:
+                for j in range(0, MATCHES):
+                    if lows[j][1] > dist:
+                        lows.insert(j, (i, dist))
+                        lows.pop()
+                        break
+
+    return list(map(lambda i: matches[i[0]], lows))
 
 
 """
@@ -208,10 +210,10 @@ def find_similar(name):
             songs[sample_index][2], songs[i][2])
 
         if i != sample_index and songs[sample_index][0] != songs[i][0]:
-            if len(lows) < matches:
+            if len(lows) < MATCHES:
                 lows.append((i, dist))
             else:
-                for j in range(0, matches):
+                for j in range(0, MATCHES):
                     if lows[j][1] > dist:
                         lows.insert(j, (i, dist))
                         lows.pop()
