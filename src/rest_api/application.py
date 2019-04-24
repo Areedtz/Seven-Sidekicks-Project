@@ -7,14 +7,9 @@ import _thread
 
 from flask import Flask
 from flask import request
-from flask_restplus import Resource, Api, reqparse, fields
+from flask_restplus import Resource, Api, fields
 
-if __name__ == "__main__":
-    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
-
-import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as mood_extract
-from utilities.get_song_id import get_song_id
 
 app = Flask(__name__)
 api = Api(app)
@@ -97,4 +92,4 @@ class Shutdown(Resource):
 
 
 if __name__ == '__main__':
-    app.run(host=hostURL, port=hostPort, debug=True)
+    app.run(host=hostURL, port=hostPort, debug=False)

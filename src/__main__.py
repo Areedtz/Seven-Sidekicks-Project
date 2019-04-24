@@ -56,4 +56,4 @@ def extract_and_save_data_from_songs_in_folder(folder_path):
 
 
 if __name__ == "__main__":
-    app.run(host=hostURL, port=hostPort, debug=True)
+    app.run(host=hostURL, port=hostPort, debug=False)

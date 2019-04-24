@@ -9,4 +9,3 @@ services:
     ports:
       - '127.0.0.1:80:1337'
     command: ./__main__.py
-    
