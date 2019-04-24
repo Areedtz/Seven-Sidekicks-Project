@@ -2,6 +2,8 @@ import datetime
 
 from pymongo import MongoClient
 
+from utilities.config_loader import load_config
+
 
 def _create_default_document(id):
     return {
@@ -15,10 +17,12 @@ def _augment_document(doc1, doc2):
 
 
 class Database:
-    def __init__(self, host="localhost", port=27017,
-                 username=None, password=None):
+    def __init__(self):
+        cfg = load_config()
+
         self._client = MongoClient(
-            host, port, username=username, password=password)
+            cfg['mongo_host'], cfg['mongo_port'],
+            username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client['dr']
 
     def insert(self, name, song_id, doc):

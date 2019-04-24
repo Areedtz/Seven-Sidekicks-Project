@@ -4,43 +4,12 @@ from database.storinator import Storinator
 
 class TrackEmotion(Storinator):
     def __init__(self, host="localhost", port=27017,
-                username=None, password=None):
-        self._dbname = 'track_information'
-        self._db = Database(host, port, username, password)
+                 username=None, password=None):
+        self._dbname = 'track_emotion'
+        self._db = Database()
 
     def add(self, song_id, data):
-        return self._db.insert(self._dbname, song_id,
-            {
-                {
-                    "bpm": data['bpm']['value'],
-                    "confidence": data['bpm']['confidence']
-                },
-                {
-                    "timbre": data['timbre']['value'],
-                    "confidence": data['timbre']['confidence']
-                },
-                {
-                    "relaxed": data['relaxed']['value'],
-                    "confidence": data['relaxed']['confidence']
-                },
-                {
-                    "party": data['party']['value'],
-                    "confidence": data['party']['confidence']
-                },
-                {
-                    "aggressive": data['aggressive']['value'],
-                    "confidence": data['aggressive']['confidence']
-                },
-                {
-                    "happy": data['happy']['value'],
-                    "confidence": data['happy']['confidence']
-                },
-                {
-                    "sad": data['sad']['value'],
-                    "confidence": data['sad']['confidence']
-                }
-            }
-        )
+        return self._db.insert(self._dbname, song_id, data)
 
     def get(self, song_id):
         return self._db.find(self._dbname, song_id)

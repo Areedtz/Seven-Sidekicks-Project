@@ -10,17 +10,20 @@ from flask import request
 from flask_restplus import Resource, Api, fields
 
 import classification.api_helper as mood_extract
+from utilities.get_song_id import get_song_id
+from utilities.config_loader import load_config
+
+cfg = load_config()
 
 app = Flask(__name__)
 api = Api(app)
 
-hostURL = "0.0.0.0"
-hostPort = 1337
-apiRoute = '/hello'
+hostURL = cfg['rest_api_url']
+hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
 
-@api.route(apiRoute)
+@api.route('/hello')
 class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}

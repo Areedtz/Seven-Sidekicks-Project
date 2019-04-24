@@ -2,15 +2,15 @@ from database.database import Database
 from database.storinator import Storinator
 
 
-class SSegmentation(Storinator):
+class TrackBPM(Storinator):
     def __init__(self):
-        self._dbname = 'song_segmentation'
+        self._dbname = 'track_bpm'
         self._db = Database()
 
-    def add(self, song_id, time_from, time_to):
+    def add(self, song_id, bpm, confidence):
         return self._db.insert(self._dbname, song_id, {
-            "time_from": time_from,
-            "time_to": time_to
+            "bpm": bpm,
+            "confidence": confidence
         })
 
     def get(self, song_id):
