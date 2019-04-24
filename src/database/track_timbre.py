@@ -3,10 +3,9 @@ from database.storinator import Storinator
 
 
 class TrackTimbre(Storinator):
-    def __init__(self, host="localhost", port=27017,
-                 username=None, password=None):
+    def __init__(self):
         self._dbname = 'track_timbre'
-        self._db = Database(host, port, username, password)
+        self._db = Database()
 
     def add(self, song_id, timbre, confidence):
         return self._db.insert(self._dbname, song_id, {

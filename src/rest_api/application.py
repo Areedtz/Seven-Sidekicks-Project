@@ -16,17 +16,19 @@ import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as music_emotion_classifier
 import video_emotion.api_helper as video_emotion_classifier
 from utilities.get_song_id import get_song_id
+from utilities.config_loader import load_config
+
+cfg = load_config()
 
 app = Flask(__name__)
 api = Api(app)
 
-hostURL = "0.0.0.0"
-hostPort = 1337
-apiRoute = '/hello'
+hostURL = cfg['rest_api_url']
+hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
 
-@api.route(apiRoute)
+@api.route('/hello')
 class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
