@@ -3,10 +3,9 @@ from database.video_emotion_database import VEDatabase
 
 
 class VideoEmotion(Storinator):
-    def __init__(self, host="localhost", port=27017,
-                 username=None, password=None):
+    def __init__(self):
         self._dbname = 'video_emotion'
-        self._db = VEDatabase(host, port, username, password)
+        self._db = VEDatabase()
 
     def add(self, song_id,
             video_id, emotions):

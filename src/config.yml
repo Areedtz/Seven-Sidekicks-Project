@@ -1,0 +1,4 @@
+mongo_host: mongodb # Docker container
+mongo_port: 27017
+mongo_user: root
+mongo_pass: pass

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # Install apt dependencies
 echo "Installing apt dependencies..."
 sudo apt-get update
@@ -63,3 +62,4 @@ fi
 echo "All dependencies successfully installed. Going to tests..."
 
 cd $TRAVIS_BUILD_DIR
+mv config-travis.yml src/config.yml
