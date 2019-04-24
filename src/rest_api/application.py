@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as music_emotion_classifier
-import video_emotion.api_helper as video_emotion_classifier
+from video_emotion.api_helper import process_data_and_extract_emotions
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
 
@@ -32,6 +32,7 @@ output_directory_for_commands = "./"
 class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
+
 
 # Model is nested inside the song_fields model
 id_model = api.model('IdModel', {
@@ -59,7 +60,6 @@ song_fields = api.model('SongModel', {
         required=True),
 })
 
-
 timerange_model = api.model('TimeRange_Model', {
     'From': fields.Integer(
         description='The beginning time of the video to analyze',
@@ -68,7 +68,6 @@ timerange_model = api.model('TimeRange_Model', {
         description='The end time of the video to analyze',
         required=True),
 })
-
 
 video_fields = api.model('VideoModel', {
     'ID': fields.String(
@@ -101,7 +100,7 @@ class AnalyzeSong(Resource):
             api.abort(
                 400,
                 "The given filepath '{}' does not seem to exist"
-                .format(song_path)
+                    .format(song_path)
             )
 
         _thread.start_new_thread(
@@ -124,25 +123,22 @@ class AnalyzeSong(Resource):
         video_id = data['ID']
         video_path = data['SourcePath']
         video_time_range = data['TimeRange']
-        
+
         if not os.path.isfile(video_path):
             api.abort(
                 400,
                 "The given filepath '{}' does not seem to exist"
-                .format(video_path)
+                    .format(video_path)
             )
 
+        process_data_and_extract_emotions(
+            video_id,
+            video_path,
+            video_time_range,
+            output_directory_for_commands)
 
-        _thread.start_new_thread(
-            video_emotion_classifier.process_data_and_extract_emotions,
-            (
-                video_id,
-                video_path,
-                video_time_range,
-                output_directory_for_commands
-            )
-        )
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+
 
 @api.route('/shutdown')
 class Shutdown(Resource):

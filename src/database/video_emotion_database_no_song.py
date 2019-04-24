@@ -5,10 +5,9 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id, id2):
+def _create_default_document(id):
     return {
-        "song_id": id,
-        "video_id": id2,
+        "video_id": id,
         "last_updated": datetime.datetime.utcnow(),
     }
 
@@ -16,7 +15,7 @@ def _create_default_document(id, id2):
 def _augment_document(doc1, doc2):
     return {**doc1, **doc2}
 
-a
+
 class VEDatabase:
     def __init__(self):
         cfg = load_config()
@@ -27,16 +26,16 @@ class VEDatabase:
         self._db = self._client['dr']
 
     def insert(self, name,
-               song_id, video_id, doc):
+               video_id, doc):
         collection = self._db[name]
-        ins = _augment_document(_create_default_document(song_id,
+        ins = _augment_document(_create_default_document(
                                                          video_id), doc)
         id = collection.insert_one(ins).inserted_id
         return id
 
     def find(self, name,
-             song_id, video_id):
-        return self._db[name].find({'song_id': song_id, 'video_id': video_id}
+             video_id):
+        return self._db[name].find({'video_id': video_id}
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 

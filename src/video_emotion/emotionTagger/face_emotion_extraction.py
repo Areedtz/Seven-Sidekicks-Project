@@ -1,6 +1,7 @@
 import cv2
 import numpy
 from keras.models import load_model
+from keras import backend as K
 
 from utilities.filehandler.handle_path import get_absolute_path
 
@@ -37,5 +38,6 @@ def classify_faces(faces):
 
     emotion_prediction = emotion_classifier.predict(numpy.
                                                     asarray(processed_faces))
+    K.clear_session()
 
     return emotion_prediction
