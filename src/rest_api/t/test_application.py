@@ -16,7 +16,7 @@ def test_rest_server():
     while number_of_tries < 10:
         try:
             r = requests.get(
-                "http://" + rest.hostURL + ":" + str(rest.hostPort) + rest.apiRoute)
+                "http://" + rest.hostURL + ":" + str(rest.hostPort) + "/hello")
             requests.get(
                 "http://" + rest.hostURL + ":" + str(rest.hostPort) + "/shutdown")
             break

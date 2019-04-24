@@ -35,4 +35,5 @@ COPY requirements.txt /requirements.txt
 RUN pip3.6 install -r /requirements.txt && pip3.6 install essentia
 
 RUN mkdir /code && chown 1000:1000 /code
+
 WORKDIR /code

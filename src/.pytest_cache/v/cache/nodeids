@@ -1,0 +1,13 @@
+[
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_angry_face",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_happy_1",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_happy_2",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_happy_3",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_neutral_1",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_get_labels_valid_input",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_preprocess_input",
+  "video_emotion/emotionTagger/t/test_face_emotion_extraction.py::test_Many_Faces",
+  "video_emotion/facial_recognition/t/test_facial_recognition.py::test_facial_recognition_of_at_least_one_face",
+  "video_emotion/t/test_extract_test_data.py::test_generate_log_data_formats_as_expected",
+  "video_emotion/t/test_extract_test_data.py::test_generate_log_data_images_cutoff_exists"
+]
