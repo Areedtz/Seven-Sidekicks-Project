@@ -106,8 +106,7 @@ class AnalyzeSong(Resource):
             music_emotion_classifier.process_data_and_extract_profiles,
             (
                 song_id,
-                song_path,
-                output_directory_for_commands
+                song_path
             )
         )
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
