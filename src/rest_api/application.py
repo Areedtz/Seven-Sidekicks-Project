@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as music_emotion_classifier
-from video_emotion.api_helper import process_data_and_extract_emotions
+from video_emotion.api_helper import process_data_and_extract_emotions,process_data_and_extract_emotions_with_song
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
 
@@ -68,7 +68,23 @@ timerange_model = api.model('TimeRange_Model', {
         description='The end time of the video to analyze',
         required=True),
 })
-
+video_fields_with_song = api.model('VideoModelWithSong', {
+    'ID': fields.String(
+        description='The ID of the video to analyze',
+        required=True),
+    'SongID': fields.String(
+        description='The ID of the song in the video',
+        required=True),
+    'TimeRange': fields.Nested(
+        timerange_model,
+        description='The model for the time range analyzed by the program'),
+    'SourcePath': fields.String(
+        description='The path of the video to analyze',
+        required=True),
+    'User': fields.String(
+        description='The requesting user',
+        required=True),
+})
 video_fields = api.model('VideoModel', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -115,7 +131,7 @@ class AnalyzeSong(Resource):
 
 
 @api.route('/analyze_video')
-class AnalyzeSong(Resource):
+class AnalyzeVideo(Resource):
     @api.expect(video_fields)
     def post(self):
         data = request.get_json()
@@ -131,11 +147,45 @@ class AnalyzeSong(Resource):
                     .format(video_path)
             )
 
-        process_data_and_extract_emotions(
-            video_id,
-            video_path,
-            video_time_range,
-            output_directory_for_commands)
+        _thread.start_new_thread(
+            process_data_and_extract_emotions,
+            (
+                video_id,
+                video_path,
+                video_time_range
+            )
+        )
+
+        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+
+
+@api.route('/analyze_video_with_song')
+class AnalyzeVideoWithSong(Resource):
+    @api.expect(video_fields_with_song)
+    def post(self):
+        data = request.get_json()
+
+        video_id = data['ID']
+        song_id = data['SongID']
+        video_path = data['SourcePath']
+        video_time_range = data['TimeRange']
+
+        if not os.path.isfile(video_path):
+            api.abort(
+                400,
+                "The given filepath '{}' does not seem to exist"
+                    .format(video_path)
+            )
+
+        _thread.start_new_thread(
+            process_data_and_extract_emotions_with_song,
+            (
+                video_id,
+                video_path,
+                video_time_range,
+                song_id
+            )
+        )
 
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 
