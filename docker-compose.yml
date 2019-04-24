@@ -9,4 +9,11 @@ services:
     ports:
       - '127.0.0.1:80:1337'
     command: ./__main__.py
-    
+
+  # Out comment this container if on production envrionment
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
