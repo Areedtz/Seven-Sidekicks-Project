@@ -1,6 +1,7 @@
+import datetime
 from database.track_emotion import TrackEmotion
 from database.storinator import Storinator
-import datetime
+
 
 
 def test_implements_Storinator():
