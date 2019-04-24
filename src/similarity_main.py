@@ -1,6 +1,5 @@
 from similarity.similarity import process_segment, create_feature, load_song, flatten, create_bucket, query, find_best
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
-from multiprocessing.pool import ThreadPool
 from database.song_segment import SongSegment
 from utilities.get_song_id import get_song_id
 from bson.objectid import ObjectId
@@ -9,7 +8,7 @@ import librosa
 import os
 import time
 
-FOLDER = '../music'
+FOLDER = '../music_medium'
 
 filenames = []
 
@@ -17,6 +16,13 @@ for root, dirs, files in os.walk("./" + FOLDER):
     for filename in files:
         if filename.endswith('.wav'):
             filenames.append(filename)
+
+
+def load_files(filenames):
+    segments = []
+    for filename in filenames:
+        segments.append(load(filename))
+    return flatten(segments)
 
 
 def load(filename):
@@ -29,9 +35,15 @@ def load(filename):
     return data
 
 
-p = ThreadPool(cpu_count())
+fileChunks = []
 
-segments = p.map(load, filenames)
+x = len(filenames) // cpu_count() + 1
+for i in range(0, cpu_count()):
+    fileChunks.append(filenames[i * x: (i+1) * x])
+
+p = Pool(cpu_count())
+
+segments = p.map(load_files, fileChunks)
 
 p.close()
 

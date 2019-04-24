@@ -9,8 +9,6 @@ from database.song_segment import SongSegment
 
 MATCHES = 10
 
-segments = SongSegment()
-
 
 def flatten(l): return [item for sublist in l for item in sublist]
 
@@ -28,12 +26,20 @@ def process_segment(segment, sr):
     return mfcc, chromagram, tempogram
 
 
+def load_songs(songs):
+    segments = SongSegment()
+    for song in songs:
+        song_id, filename = song
+        _load_song(song_id, filename, segments, False)
+
+
 def load_song(song):
     song_id, filename = song
-    return _load_song(song_id, filename, False)
+    segments = SongSegment()
+    return _load_song(song_id, filename, segments, False)
 
 
-def _load_song(song_id, filename, force):
+def _load_song(song_id, filename, segments, force):
     segs = segments.get_all_with_id(song_id)
 
     segment_data = []
