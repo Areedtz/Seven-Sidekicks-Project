@@ -7,11 +7,9 @@ import _thread
 
 from flask import Flask
 from flask import request
-from flask_restplus import Resource, Api, reqparse, fields
+from flask_restplus import Resource, Api, fields
 
-if __name__ == "__main__":
-    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
-
+import classification.api_helper as mood_extract
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as music_emotion_classifier
 from video_emotion.api_helper import process_data_and_extract_emotions,process_data_and_extract_emotions_with_song
@@ -198,6 +196,3 @@ class Shutdown(Resource):
             raise RuntimeError('Not running with the Werkzeug Server')
         func()
 
-
-if __name__ == '__main__':
-    app.run(host=hostURL, port=hostPort, debug=True)

@@ -3,8 +3,12 @@ import rest_api.application as rest
 import threading
 import time
 
+
+testPort = 6969
+
+
 def start_rest():
-    rest.app.run(host=rest.hostURL, port=rest.hostPort, debug=False)
+    rest.app.run(host=rest.hostURL, port=testPort, debug=False)
 
 
 def test_rest_server():
@@ -16,9 +20,9 @@ def test_rest_server():
     while number_of_tries < 10:
         try:
             r = requests.get(
-                "http://" + rest.hostURL + ":" + str(rest.hostPort) + "/hello")
+                "http://" + rest.hostURL + ":" + str(testPort) + "/hello")
             requests.get(
-                "http://" + rest.hostURL + ":" + str(rest.hostPort) + "/shutdown")
+                "http://" + rest.hostURL + ":" + str(testPort) + "/shutdown")
             break
         except requests.exceptions.ConnectionError:
             number_of_tries += 1
