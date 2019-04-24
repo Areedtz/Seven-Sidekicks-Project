@@ -1,0 +1,12 @@
+version: '3'
+services:
+  codebase:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    volumes:
+      - ./src:/code
+    ports:
+      - '127.0.0.1:80:1337'
+    command: ./__main__.py
+    

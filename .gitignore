@@ -11,6 +11,8 @@ random_samples/
 .DS_Store
 **/output/*
 *__pycache__*
+.DS_store
+*.csv
 
 ### Includes ###
 !*/.gitkeep
