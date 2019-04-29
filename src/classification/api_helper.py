@@ -1,11 +1,13 @@
 import json
 from tempfile import NamedTemporaryFile
 
+from bpm.bpm_extractor import get_song_bpm
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
-from bpm.bpm_extractor import get_song_bpm
+from database.track_emotion import TrackEmotion
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
-def process_data_and_extract_profiles(song_id, song_file_path, output_file_path):
+def process_data_and_extract_profiles(song_id, song_file_path):
     temp_file = NamedTemporaryFile(delete=True)
 
     make_low_level_data_file(song_file_path, temp_file.name)
@@ -14,9 +16,10 @@ def process_data_and_extract_profiles(song_id, song_file_path, output_file_path)
 
     temp_file.close()
 
-    bpm_info = get_song_bpm(song_file_path)
+    mono_loaded_song = get_MonoLoaded_Song(song_file_path)
 
-    # Save file in config directory
+    bpm_info = get_song_bpm(mono_loaded_song)
+
     data = {}
     data['bpm'] = {
         'value': bpm_info[0],
@@ -53,7 +56,7 @@ def process_data_and_extract_profiles(song_id, song_file_path, output_file_path)
         'confidence': sad[1]
     }
 
-    with open(output_file_path + '/' + song_id + '.json', 'w') as outfile:
-        json.dump(data, outfile)
+    DBConnecter = TrackEmotion()
+    DBConnecter.add(song_id, data)
 
     return False

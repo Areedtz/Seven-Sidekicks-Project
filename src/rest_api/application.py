@@ -122,8 +122,7 @@ class AnalyzeSong(Resource):
             music_emotion_classifier.process_data_and_extract_profiles,
             (
                 song_id,
-                song_path,
-                output_directory_for_commands
+                song_path
             )
         )
 

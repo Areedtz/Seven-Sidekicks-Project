@@ -4,9 +4,6 @@ import sys
 import subprocess
 import os
 
-if __name__ == "__main__":
-    sys.path.insert(0, os.path.abspath(__file__ + "../../../../"))
-
 import utilities.filehandler.handle_path as path_handler
 
 
