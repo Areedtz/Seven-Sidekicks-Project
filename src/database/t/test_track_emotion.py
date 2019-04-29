@@ -11,12 +11,12 @@ def test_implements_Storinator():
 
 def test_database_name():
     temo = TrackEmotion()
-    assert temo._dbname == 'track_emotion'
+    assert temo._col == 'track_emotion'
 
 
 def test_add_and_get():
     temo = TrackEmotion()
-    temo.add(1,
+    temo.add("1",
                 {
                     'bpm':
                     {
@@ -55,8 +55,8 @@ def test_add_and_get():
                     }
                 }
             )
-    track = temo.get(1)
-    assert track['song_id'] == 1
+    track = temo.get("1")
+    assert track['song_id'] == "1"
     assert track['bpm']['value'] == 100.0
     assert track['bpm']['confidence'] == 3.0
     assert track['timbre']['value'] == 'bright'
@@ -74,7 +74,7 @@ def test_add_and_get():
 
 def test_get_all():
     temo = TrackEmotion()
-    temo.add(1,
+    temo.add("1",
                 {
                     'bpm':
                     {

@@ -29,19 +29,21 @@ class VEDatabase:
     def insert(self, name,
                song_id, video_id, time, emotion):
         collection = self._db[name]
+
         ins = _augment_document(_create_default_document(song_id,
                                                          video_id), time, emotion)
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, name,
+    def find(self, col,
              song_id, video_id):
-        return self._db[name].find({'song_id': song_id, 'video_id': video_id}
+        return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    def find_all(self, name):
+    def find_all(self, col):
         results = []
-        for track_bpm in self._db[name].find():
-            results.append(track_bpm)
+        for r in self._db[col].find():
+            results.append(r)
+
         return results

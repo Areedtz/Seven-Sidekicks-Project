@@ -4,7 +4,7 @@ from database.video_music_emotion_database import VMEDatabase
 
 class VideoMusicEmotion(Storinator):
     def __init__(self):
-        self._dbname = 'video_music_emotion'
+        self._col = 'video_music_emotion'
         self._db = VMEDatabase()
 
     # Calling it from1 and to1 since "from" is a keyword for import.
@@ -15,7 +15,7 @@ class VideoMusicEmotion(Storinator):
                                relaxed, time, emotions)
 
     def get(self, song_id, video_id):
-        return self._db.find(self._dbname, song_id, video_id)
+        return self._db.find(self._col, song_id, video_id)
 
     def get_all(self):
-        return self._db.find_all(self._dbname)
+        return self._db.find_all(self._col)

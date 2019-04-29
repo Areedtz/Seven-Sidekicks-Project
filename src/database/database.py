@@ -25,19 +25,23 @@ class Database:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client['dr']
 
-    def insert(self, name, song_id, doc):
-        collection = self._db[name]
+    def insert(self, col, song_id, doc):
+        collection = self._db[col]
         ins = _augment_document(_create_default_document(song_id), doc)
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, name, song_id):
-        return self._db[name].find({'song_id': song_id}
-                                   ).sort([('last_updated', -1)]
-                                          ).limit(1)[0]
+    def find(self, col, song_id):
+        if (self._db[col].count({'song_id': song_id}) > 0):
+            res = self._db[col].find({'song_id': song_id}
+                                      ).sort([('last_updated', -1)]
+                                             ).limit(1)
+            return res[0]
 
-    def find_all(self, name):
+        return None
+
+    def find_all(self, col):
         results = []
-        for track_bpm in self._db[name].find():
-            results.append(track_bpm)
+        for r in self._db[col].find():
+            results.append(r)
         return results
