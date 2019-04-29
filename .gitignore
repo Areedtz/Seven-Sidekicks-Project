@@ -8,6 +8,7 @@ venv/
 *.pyc
 **/output/*
 *__pycache__*
+.pytest_cache
 .DS_store
 *.csv
 
