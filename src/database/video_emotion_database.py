@@ -41,6 +41,13 @@ class VEDatabase:
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
+    def find_all_same_id(self, name, song_id):
+        results = []
+        data =  self._db[name].find({'song_id': song_id})
+        for i in data:
+            results.append(i)
+        return results
+
     def find_all(self, col):
         results = []
         for r in self._db[col].find():
