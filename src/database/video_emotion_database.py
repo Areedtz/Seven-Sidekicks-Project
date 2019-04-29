@@ -45,6 +45,8 @@ class VEDatabase:
         results = []
         data =  self._db[name].find({'song_id': song_id})
         for i in data:
+            del i['_id']
+            i['last_updated'] = i['last_updated'].isoformat()
             results.append(i)
         return results
 
