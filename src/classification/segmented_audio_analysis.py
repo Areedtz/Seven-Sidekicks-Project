@@ -1,26 +1,27 @@
 #!/usr/local/bin/python3.6
 
-import os
-import sys
-import re
 import csv
 import json
+import os
+import re
 import subprocess
+import sys
 import tempfile
 from multiprocessing import Pool
-
-from essentia.standard import MonoWriter
 
 if __name__ == "__main__":
     sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
-from utilities.get_song_id import get_song_id
-from utilities.filehandler.handle_path import get_absolute_path
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
-from similarity.split_song import split_song
-from classification.classifier.profile_data_extractor import get_classifier_data
-from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from bpm.bpm_extractor import get_song_bpm
+from classification.classifier.profile_data_extractor import \
+    get_classifier_data
+from classification.extractor.low_level_data_extractor import \
+    make_low_level_data_file
+from essentia.standard import MonoWriter
+from similarity.split_song import split_song
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.handle_path import get_absolute_path
+from utilities.get_song_id import get_song_id
 
 
 def process_data_and_extract_profiles(segment_id, song_file):
@@ -47,7 +48,7 @@ def process_data_and_extract_profiles(segment_id, song_file):
     return segment_id, bpm_tuple, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 
-def segment_song_and_return_arguments(filename, song_file):
+def segment_song_and_return_arguments(filename: str, song_file):
     dirname = os.path.abspath(os.path.dirname(filename))
     argument_tuples = []
 
