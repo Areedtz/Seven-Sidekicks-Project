@@ -10,7 +10,7 @@ class VideoMusicEmotion(Storinator):
     # Calling it from1 and to1 since "from" is a keyword for import.
     def add(self, song_id, video_id,
             bpm, timbre, party, relaxed, time, emotions):
-        return self._db.insert(self._dbname, song_id, video_id,
+        return self._db.insert(self._col, song_id, video_id,
                                bpm, timbre, party,
                                relaxed, time, emotions)
 
