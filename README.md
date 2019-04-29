@@ -15,7 +15,7 @@ Setup containers: ```docker-compose up -d```
 
 Remove containers: ```docker-compose down```
 
-See which containers are currently running ```docker-compose ps```
+See which containers are currently running: ```docker-compose ps```
 
 ## Getting bash access in a container
 
