@@ -8,7 +8,7 @@ import utilities.filehandler.handle_path as path_handler
 
 
 def make_low_level_data_file(filename, output_file_path):
-    extractor_path = "./utilities/ressources/extractors/streaming_extractor_music"
+    extractor_path = "utilities/ressources/extractors/streaming_extractor_music"
 
     command = '{} {} {}'.format(extractor_path, filename, output_file_path)
 
