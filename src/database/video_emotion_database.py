@@ -13,8 +13,8 @@ def _create_default_document(id, id2):
     }
 
 
-def _augment_document(doc1, doc2):
-    return {**doc1, **doc2}
+def _augment_document(id1, time, emotion):
+    return {**id1, **time, **emotion}
 
 
 class VEDatabase:
@@ -27,10 +27,10 @@ class VEDatabase:
         self._db = self._client['dr']
 
     def insert(self, name,
-               song_id, video_id, doc):
+               song_id, video_id, time, emotion):
         collection = self._db[name]
         ins = _augment_document(_create_default_document(song_id,
-                                                         video_id), doc)
+                                                         video_id), time, emotion)
         id = collection.insert_one(ins).inserted_id
         return id
 

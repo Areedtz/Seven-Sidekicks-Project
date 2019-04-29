@@ -8,11 +8,14 @@ class VideoEmotionNS(Storinator):
         self._db = VEDatabase()
 
     def add(self,
-            video_id, emotions):
-        return self._db.insert(self._dbname, video_id, emotions)
+            video_id, time, emotions):
+        return self._db.insert(self._dbname, video_id, time, emotions)
 
     def get(self, video_id):
         return self._db.find(self._dbname, video_id)
+
+    def get_all_same_id(self, video_id):
+        return self._db.find_all_same_id(self._dbname, video_id)
 
     def get_all(self):
         return self._db.find_all(self._dbname)

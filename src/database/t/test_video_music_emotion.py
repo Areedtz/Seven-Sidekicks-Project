@@ -17,6 +17,12 @@ def test_database_name():
 
 def test_add_and_get():
     vet = VideoMusicEmotion()
+
+    time = {
+        'from1' : 3000,
+        'to1' : 4000
+    }
+    
     bpm = {
         'bpm': 180,
         'bpm_confidence': 3
@@ -47,10 +53,12 @@ def test_add_and_get():
         "neutral": 0.99
     }
 
-    vet.add(1, 2, bpm, timbre, party, relaxed, emo)
+    vet.add(1, 2, bpm, timbre, party, relaxed, time, emo)
     ve = vet.get(1, 2)
     assert ve['song_id'] == 1
     assert ve['video_id'] == 2
+    assert ve['from1'] == 3000
+    assert ve['to1'] == 4000
     assert ve['angry'] == 0.98
     assert ve['disgust'] == 0.70
     assert ve['fear'] == 0.3
