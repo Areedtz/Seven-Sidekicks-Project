@@ -63,3 +63,5 @@ echo "All dependencies successfully installed. Going to tests..."
 
 cd $TRAVIS_BUILD_DIR
 mv config-travis.yml src/config.yml
+
+cd src
