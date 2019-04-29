@@ -10,7 +10,7 @@ def test_implements_Storinator():
 
 def test_database_name():
     ss = SSegmentation()
-    assert ss._dbname == 'song_segmentation'
+    assert ss._col == 'song_segmentation'
 
 
 def test_add_and_get():

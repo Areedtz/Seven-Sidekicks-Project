@@ -9,12 +9,13 @@ from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
-import classification.api_helper as mood_extract
 import bpm.bpm_extractor as bpm_extract
+import classification.api_helper as mood_extract
 import classification.api_helper as music_emotion_classifier
 import video_emotion.api_helper as video_emotion_classifier
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
+from database.track_emotion import TrackEmotion
 
 cfg = load_config()
 
@@ -110,11 +111,27 @@ class AnalyzeSong(Resource):
                 output_directory_for_commands
             )
         )
+
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 
 
+@api.route('/get_analyzed_song/<string:diskotek_nr>')
+class GetAnalyzeSong(Resource):
+    def get(self, diskotek_nr):
+        db = TrackEmotion()
+
+        r = db.get(diskotek_nr)
+
+        if r is None: api.abort(404)
+
+        del r['_id']
+        r['last_updated'] = r['last_updated'].isoformat()
+
+        return r
+
+
 @api.route('/analyze_video')
-class AnalyzeSong(Resource):
+class AnalyzeVideo(Resource):
     @api.expect(video_fields)
     def post(self):
         data = request.get_json()
@@ -130,7 +147,6 @@ class AnalyzeSong(Resource):
                 .format(video_path)
             )
 
-
         _thread.start_new_thread(
             video_emotion_classifier.process_data_and_extract_emotions,
             (
@@ -140,6 +156,7 @@ class AnalyzeSong(Resource):
                 output_directory_for_commands
             )
         )
+
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
 
 
@@ -147,7 +164,9 @@ class AnalyzeSong(Resource):
 class Shutdown(Resource):
     def get(self):
         func = request.environ.get('werkzeug.server.shutdown')
+
         if func is None:
             raise RuntimeError('Not running with the Werkzeug Server')
+
         func()
 
