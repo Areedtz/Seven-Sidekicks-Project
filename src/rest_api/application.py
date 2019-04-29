@@ -214,4 +214,3 @@ class Shutdown(Resource):
             raise RuntimeError('Not running with the Werkzeug Server')
 
         func()
-
