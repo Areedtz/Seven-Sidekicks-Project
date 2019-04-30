@@ -1,52 +1,62 @@
 import json
 from tempfile import NamedTemporaryFile
 
+from bpm.bpm_extractor import get_song_bpm
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from classification.classifier.profile_data_extractor import get_classifier_data
+from database.track_emotion import TrackEmotion
+from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
-
-def process_data_and_extract_profiles(song_id, song_file_path, output_file_path):
+def process_data_and_extract_profiles(song_id, song_file_path):
     temp_file = NamedTemporaryFile(delete=True)
 
     make_low_level_data_file(song_file_path, temp_file.name)
 
-    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(temp_file.name)
+    timbre, relaxed, party, aggressive, happy, sad = get_classifier_data(temp_file.name)
 
     temp_file.close()
 
-    # Save file in config directory
+    mono_loaded_song = get_MonoLoaded_Song(song_file_path)
+
+    bpm_info = get_song_bpm(mono_loaded_song)
+
     data = {}
+    data['bpm'] = {
+        'value': bpm_info[0],
+        'confidence': bpm_info[1]
+    }
+
     data['timbre'] = {
         'value': timbre[0],
-        'probability': timbre[1]
+        'confidence': timbre[1]
     }
 
-    data['mood_relaxed'] = {
-        'value': mood_relaxed[0],
-        'probability': mood_relaxed[1]
+    data['relaxed'] = {
+        'value': relaxed[0],
+        'confidence': relaxed[1]
     }
 
-    data['mood_party'] = {
-        'value': mood_party[0],
-        'probability': mood_party[1]
+    data['party'] = {
+        'value': party[0],
+        'confidence': party[1]
     }
 
-    data['mood_aggressive'] = {
-        'value': mood_aggressive[0],
-        'probability': mood_aggressive[1]
+    data['aggressive'] = {
+        'value': aggressive[0],
+        'confidence': aggressive[1]
     }
 
-    data['mood_happy'] = {
-        'value': mood_happy[0],
-        'probability': mood_happy[1]
+    data['happy'] = {
+        'value': happy[0],
+        'confidence': happy[1]
     }
 
-    data['mood_sad'] = {
-        'value': mood_sad[0],
-        'probability': mood_sad[1]
+    data['sad'] = {
+        'value': sad[0],
+        'confidence': sad[1]
     }
 
-    with open(output_file_path + '/' + song_id + '.json', 'w') as outfile:
-        json.dump(data, outfile)
+    DBConnecter = TrackEmotion()
+    DBConnecter.add(song_id, data)
 
     return False

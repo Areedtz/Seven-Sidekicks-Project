@@ -1,7 +1,7 @@
-# Placeholder dependencies
 pytest==4.2.1
 pymongo==3.5.1
-tabulate
+pyyaml==5.1
+tabulate==0.8.3
 # Similarity
 falconn
 librosa
@@ -11,7 +11,7 @@ h5py==2.9.0
 opencv-python==4.0.0.21
 tensorflow==1.13.1
 numpy==1.16.2
-keras
+keras==2.2.4
 # Rest API
 flask-restplus==0.12.1
-requests
+requests==2.21.0

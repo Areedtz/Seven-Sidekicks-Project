@@ -2,6 +2,8 @@ import datetime
 
 from pymongo import MongoClient
 
+from utilities.config_loader import load_config
+
 
 def _create_default_document(id):
     return {
@@ -22,24 +24,26 @@ def _augment_document(doc1, doc2):
 
 
 class Database:
-    def __init__(self, host="localhost", port=27017,
-                 username=None, password=None):
+    def __init__(self):
+        cfg = load_config()
+
         self._client = MongoClient(
-            host, port, username=username, password=password)
+            cfg['mongo_host'], cfg['mongo_port'],
+            username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client['dr']
 
-    def insert(self, name, song_id, doc):
-        collection = self._db[name]
+    def insert(self, col, song_id, doc):
+        collection = self._db[col]
         ins = _augment_document(_create_default_document(song_id), doc)
         _id = collection.insert_one(ins).inserted_id
         return _id
 
     # Gets the newest entry, the other option would be to overwrite it in the insert method
-    def find(self, name, song_id):
-        if (self._db[name].count({'song_id': song_id}) > 0):
-            res = self._db[name].find({'song_id': song_id}
-                                      ).sort([('last_updated', -1)]
-                                             ).limit(1)
+    def find(self, col, song_id):
+        if (self._db[col].count({'song_id': song_id}) > 0):
+            res = self._db[col].find({'song_id': song_id}
+                                     ).sort([('last_updated', -1)]
+                                            ).limit(1)
             return res[0]
 
         return None
@@ -50,10 +54,10 @@ class Database:
             results.append(res)
         return results
 
-    def find_all(self, name):
+    def find_all(self, col):
         results = []
-        for res in self._db[name].find():
-            results.append(res)
+        for r in self._db[col].find():
+            results.append(r)
         return results
 
     def close(self):

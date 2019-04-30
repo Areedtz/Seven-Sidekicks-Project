@@ -2,10 +2,11 @@ import os
 import sys
 import csv
 
+import utilities.get_song_id as s_id
+
 from multiprocessing import Pool
 
 from classification.segmented_audio_analysis import process_data_and_extract_profiles
-import utilities.get_song_id as s_id
 from similarity.split_song import split_song
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
@@ -15,9 +16,7 @@ from pprint import pprint
 def test_profile_song_data():
     dirname = os.path.abspath(os.path.dirname(__file__))
     output_folder_path = os.path.join(dirname, "")
-    filename = os.path.join(
-        dirname,
-        "test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
+    filename = "classification/t/test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav"
 
     song_id = s_id.get_song_id(filename)
     

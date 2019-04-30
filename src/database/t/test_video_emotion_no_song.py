@@ -1,22 +1,22 @@
 import datetime
 
 from database.storinator import Storinator
-from database.video_emotion import VideoEmotion
+from database.video_emotion_no_song import VideoEmotionNS
 
 # vet = Video Emotion Test
 
 def test_implements_Storinator():
-    vet = VideoEmotion()
+    vet = VideoEmotionNS()
     assert isinstance(vet, Storinator)
 
 
 def test_database_name():
-    vet = VideoEmotion()
-    assert vet._col == 'video_emotion'
+    vet = VideoEmotionNS()
+    assert vet._dbname == 'video_emotion_no_song'
 
 
 def test_add_and_get():
-    vet = VideoEmotion()
+    vet = VideoEmotionNS()
     d = {
         "angry": 0.98,
         "disgust": 0.70,
@@ -26,10 +26,9 @@ def test_add_and_get():
         "surprise": 0.7,
         "neutral": 0.99
     }
-    vet.add(1, 2, d)
-    ve = vet.get(1, 2)
-    assert ve['song_id'] == 1
-    assert ve['video_id'] == 2
+    vet.add(1, d)
+    ve = vet.get(1)
+    assert ve['video_id'] == 1
     assert ve['angry'] == 0.98
     assert ve['disgust'] == 0.70
     assert ve['fear'] == 0.3
@@ -41,7 +40,7 @@ def test_add_and_get():
 
 
 def test_get_all():
-    vet = VideoEmotion()
+    vet = VideoEmotionNS()
     d1 = {
         "angry": 0.98,
         "disgust": 0.70,
@@ -60,22 +59,20 @@ def test_get_all():
         "surprise": 0.234,
         "neutral": 0.43
     }
-    vet.add(1, 2, d1)
-    vet.add(2, 3, d2)
+    vet.add(1, d1)
+    vet.add(2, d2)
 
-    vet1 = vet.get(1,2)
-    vet2 = vet.get(2,3)
+    vet1 = vet.get(1)
+    vet2 = vet.get(2)
     vets = vet.get_all()
 
     assert len(vets) > 0
 
-    assert vet1['song_id'] == 1
-    assert vet1['video_id'] == 2
+    assert vet1['video_id'] == 1
     assert vet1['angry'] == 0.98
     assert vet1['disgust'] == 0.70
 
-    assert vet2['song_id'] == 2
-    assert vet2['video_id'] == 3
+    assert vet2['video_id'] == 2
     assert vet2['sad'] == 0.1
     assert vet2['surprise'] == 0.234
     assert vet2['neutral'] == 0.43

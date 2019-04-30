@@ -2,6 +2,8 @@ import datetime
 
 from pymongo import MongoClient
 
+from utilities.config_loader import load_config
+
 
 def _create_default_document(id, id2):
     return {
@@ -17,30 +19,32 @@ def _augment_document(vme_id, bpm, timbre,
 
 
 class VMEDatabase:
-    def __init__(self, host="localhost", port=27017,
-                 username=None, password=None):
+    def __init__(self):
+        cfg = load_config()
+
         self._client = MongoClient(
-            host, port, username=username, password=password)
+            cfg['mongo_host'], cfg['mongo_port'],
+            username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client['dr']
 
-    def insert(self, name, song_id, video_id,
+    def insert(self, col, song_id, video_id,
                bpm, timbre, party, relaxed, emotions):
-        collection = self._db[name]
+        collection = self._db[col]
         ins = _augment_document(_create_default_document(song_id, video_id),
                                 bpm, timbre, party, relaxed, emotions)
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, name,
+    def find(self, col,
              song_id, video_id):
-        return self._db[name].find({'song_id': song_id, 'video_id': video_id}
+        return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    def find_all(self, name):
+    def find_all(self, col):
         results = []
-        for track_bpm in self._db[name].find():
-            results.append(track_bpm)
+        for r in self._db[col].find():
+            results.append(r)
         return results
 
     def close(self):
