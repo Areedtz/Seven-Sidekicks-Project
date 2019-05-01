@@ -223,15 +223,3 @@ class AnalyzeVideoWithSongGet(Resource):
         if result is None: api.abort(404)
 
         return result
-
-
-@api.route('/shutdown')
-class Shutdown(Resource):
-    def get(self):
-        func = request.environ.get('werkzeug.server.shutdown')
-
-        if func is None:
-            raise RuntimeError('Not running with the Werkzeug Server')
-
-        func()
-

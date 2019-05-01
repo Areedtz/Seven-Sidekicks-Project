@@ -48,7 +48,7 @@ def test_add_and_get():
     assert ve['surprise'] == 0.7
     assert ve['neutral'] == 0.99
 
-def test_all_same_id():
+def test_by_song_id():
     vet = VideoEmotion()
 
     timerange1 = {
