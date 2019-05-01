@@ -24,7 +24,7 @@ class VEDatabase:
         self._client = MongoClient(
             cfg['mongo_host'], cfg['mongo_port'],
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
-        self._db = self._client['dr']
+        self._db = self._client[cfg['mongo_db']]
 
     def insert(self, name,
                song_id, video_id, time, emotion):
@@ -38,8 +38,8 @@ class VEDatabase:
     def find(self, col,
              song_id, video_id):
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
-                                   ).sort([('last_updated', -1)]
-                                          ).limit(1)[0]
+                                  ).sort([('last_updated', -1)]
+                                         ).limit(1)[0]
 
     def find_all_same_id(self, name, song_id):
         results = []

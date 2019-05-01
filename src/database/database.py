@@ -23,7 +23,7 @@ class Database:
         self._client = MongoClient(
             cfg['mongo_host'], cfg['mongo_port'],
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
-        self._db = self._client['dr']
+        self._db = self._client[cfg['mongo_db']]
 
     def insert(self, col, song_id, doc):
         collection = self._db[col]
@@ -34,8 +34,8 @@ class Database:
     def find(self, col, song_id):
         if (self._db[col].count({'song_id': song_id}) > 0):
             res = self._db[col].find({'song_id': song_id}
-                                      ).sort([('last_updated', -1)]
-                                             ).limit(1)
+                                     ).sort([('last_updated', -1)]
+                                            ).limit(1)
             return res[0]
 
         return None
