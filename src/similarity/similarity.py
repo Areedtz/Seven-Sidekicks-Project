@@ -27,6 +27,16 @@ def process_segment(segment, sr):
     return mfcc, chromagram, tempogram
 
 
+def load_songs(songs):
+    seg_db = SongSegment()
+    segments = []
+    for song in songs:
+        song_id, filename = song
+        segments.append(_load_song(song_id, filename, seg_db, False))
+    seg_db.close()
+    return flatten(segments)
+
+
 def load_song(song):
     song_id, filename = song
     segments = SongSegment()
@@ -109,14 +119,6 @@ def create_bucket(segments):
     return (segments, table)
 
 
-def add_songs(songs):
-    p = Pool(min(len(songs), cpu_count()))
-
-    data = p.map(load_song, songs)
-
-    return data
-
-
 def dist(seg1, seg2):
     return distance.euclidean(seg1[3], seg2[3])
 
@@ -165,18 +167,11 @@ def query_similar(song_id, from_time, to_time):
         'song_id': x['song_id'],
         'from_time': x['time_from'],
         'to_time': x['time_to'],
-        'dist': x['dist'],
     }), similar))
 
     seg_db.close()
 
     return x
-
-def load_files(songs):
-    segments = []
-    for song in songs:
-        segments.append(load_song(song))
-    return flatten(segments)
 
 
 def find_matches(s):
@@ -186,17 +181,13 @@ def find_matches(s):
 
 
 def analyze_songs(songs):
-
     fileChunks = []
-
     x = len(songs) // cpu_count() + 1
     for i in range(0, cpu_count()):
         fileChunks.append(songs[i * x: (i+1) * x])
 
     p = Pool(cpu_count())
-
-    segments = p.map(load_files, fileChunks)
-
+    segments = p.map(load_songs, fileChunks)
     p.close()
 
     segs = flatten(segments)
@@ -242,5 +233,5 @@ def analyze_songs(songs):
             }))
 
         ss.update_similar(segs[i][0], formatted)
-    
+
     ss.close()
