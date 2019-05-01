@@ -8,6 +8,7 @@ from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 from database.song_segment import SongSegment
 
 MATCHES = 10
+BUCKET_SIZE = 60 * 100
 
 
 def flatten(l): return [item for sublist in l for item in sublist]
@@ -63,7 +64,7 @@ def _load_song(song_id, filename, segments, force):
             segment_data.append((_id, song_id, i*5, feature))
 
     else:
-        # There are segments in db, try to look for features
+        # There are segments in db, look for features
         for i in range(0, len(segs)):
             segment = segs[i]
 
@@ -73,6 +74,13 @@ def _load_song(song_id, filename, segments, force):
             segment_data.append((segment['_id'], song_id, i*5, feature))
 
     return segment_data
+
+
+def process_db_segment(segment):
+    feature = create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
+        segment['chroma']), np.frombuffer(segment['tempogram']))
+
+    return (segment['_id'], segment['song_id'], segment['time_from'] // 1000, feature)
 
 
 def create_feature(mfcc, chroma, tempogram):
@@ -106,15 +114,6 @@ def create_bucket(segments):
     return (segments, table)
 
 
-def query(data, segment):
-    segments, table = data
-
-    query_object = table.construct_query_pool()
-    query_object.set_num_probes(25)
-
-    return query_object.find_k_nearest_neighbors(segment, MATCHES)
-
-
 def add_songs(songs):
     p = Pool(min(len(songs), cpu_count()))
 
@@ -130,17 +129,119 @@ def dist(seg1, seg2):
 def find_best(matches, segment):
     lows = []
     for i in range(0, len(matches)):
-        dist = distance.euclidean(
-            segment[3], matches[i][3])
+        distance = dist(
+            segment, matches[i])
 
-        if segment[0] != matches[i][0]:
+        if segment[1] != matches[i][1]:
             if len(lows) < MATCHES:
-                lows.append((i, dist))
+                lows.append((i, distance))
             else:
                 for j in range(0, MATCHES):
-                    if lows[j][1] > dist:
-                        lows.insert(j, (i, dist))
+                    if lows[j][1] > distance:
+                        lows.insert(j, (i, distance))
                         lows.pop()
                         break
 
-    return list(map(lambda i: matches[i[0]], lows))
+    return list(map(lambda i: (matches[i[0]], i[1]), lows))
+
+
+def query_similar(song_id, from_time, to_time):
+    seg_db = SongSegment()
+    segments = seg_db.get_all_with_id(song_id)
+
+    best = None
+    for segment in segments:
+        localdist = from_time - segment['time_from']
+        if best == None or localdist < best[0]:
+            best = (localdist, segment)
+
+    if best == None or 'similar' not in best[1]:
+        return None
+
+    segment = best[1]
+
+    similar = segment['similar']
+
+    similar_ids = list(map(lambda sim: sim['id'], similar))
+
+    ss = SongSegment()
+    similar = ss.get_with_ids(similar_ids)
+
+    return list(map(lambda x: dict({
+        'song_id': x['song_id'],
+        'from_time': x['time_from'],
+        'to_time': x['time_to'],
+        'dist': x['dist'],
+    }), similar))
+
+# TMP
+def load_files(songs):
+    segments = []
+    for song in songs:
+        segments.append(load_song(song))
+    return flatten(segments)
+
+
+def find_matches(s):
+    searchSegment, query_object = s
+
+    return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
+
+
+def analyze_songs(songs):
+
+    fileChunks = []
+
+    x = len(songs) // cpu_count() + 1
+    for i in range(0, cpu_count()):
+        fileChunks.append(songs[i * x: (i+1) * x])
+
+    p = Pool(cpu_count())
+
+    segments = p.map(load_files, fileChunks)
+
+    p.close()
+
+    segs = flatten(segments)
+
+    ss = SongSegment()
+
+    count = ss.count()
+
+    # TODO: Rename
+    m = list(map(lambda x: [], segs))
+
+    for i in range(0, count // BUCKET_SIZE + 1):
+        established_segments = list(
+            map(process_db_segment, ss.get_all_in_range(i*BUCKET_SIZE, (i+1)*BUCKET_SIZE)))
+
+        data = np.array(list(map(lambda x: x[3], established_segments)))
+
+        bucket = create_bucket(data)
+
+        query_object = bucket[1].construct_query_pool()
+        query_object.set_num_probes(25)
+
+        p = Pool(cpu_count())
+
+        matches = list(map(find_matches, list(
+            map(lambda seg: (seg, query_object), segs))))
+
+        for j in range(0, len(matches)):
+
+            m[j].append(
+                list(map(lambda x: established_segments[x], matches[j])))
+
+        p.close()
+
+    for i in range(0, len(segs)):
+        best = find_best(flatten(m[i]), segs[i])
+
+        formatted = []
+        for match in best:
+            formatted.append(dict({
+                'id': match[0][0],
+                'distance': match[1]
+            }))
+
+        ss.update_similar(segs[i][0], formatted)

@@ -4,6 +4,7 @@ import sys
 import os
 import json
 import _thread
+from bson.json_util import dumps
 
 from flask import Flask
 from flask import request
@@ -12,10 +13,11 @@ from flask_restplus import Resource, Api, fields
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as mood_extract
 import classification.api_helper as music_emotion_classifier
-from video_emotion.api_helper import process_data_and_extract_emotions,process_data_and_extract_emotions_with_song
+from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
 from database.track_emotion import TrackEmotion
+from similarity.similarity import analyze_songs, query_similar
 
 cfg = load_config()
 
@@ -61,12 +63,13 @@ song_fields = api.model('SongModel', {
 
 timerange_model = api.model('TimeRange_Model', {
     'From': fields.Integer(
-        description='The beginning time of the video to analyze',
+        description='The beginning time of the content to analyze',
         required=True),
     'To': fields.Integer(
-        description='The end time of the video to analyze',
+        description='The end time of the content to analyze',
         required=True),
 })
+
 video_fields_with_song = api.model('VideoModelWithSong', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -84,6 +87,7 @@ video_fields_with_song = api.model('VideoModelWithSong', {
         description='The requesting user',
         required=True),
 })
+
 video_fields = api.model('VideoModel', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -98,6 +102,19 @@ video_fields = api.model('VideoModel', {
         description='The requesting user',
         required=True),
 })
+
+song_model = api.model('SongModel', {
+    'ID': fields.Nested(
+        id_model,
+        description='ID model of the song to analyze',
+        required=True),
+    'Filepath': fields.String(
+        description='Filepath of the requested resource',
+        required=True),
+})
+
+similarity_analysis_model = api.model('SimilarityAnalysisModel', {
+                                      'songs': fields.List(fields.Nested(song_model))})
 
 
 @api.route('/analyze_song')
@@ -115,7 +132,7 @@ class AnalyzeSong(Resource):
             api.abort(
                 400,
                 "The given filepath '{}' does not seem to exist"
-                    .format(song_path)
+                .format(song_path)
             )
 
         _thread.start_new_thread(
@@ -136,7 +153,8 @@ class GetAnalyzeSong(Resource):
 
         r = db.get(diskotek_nr)
 
-        if r is None: api.abort(404)
+        if r is None:
+            api.abort(404)
 
         del r['_id']
         r['last_updated'] = r['last_updated'].isoformat()
@@ -158,7 +176,7 @@ class AnalyzeVideo(Resource):
             api.abort(
                 400,
                 "The given filepath '{}' does not seem to exist"
-                    .format(video_path)
+                .format(video_path)
             )
 
         _thread.start_new_thread(
@@ -188,7 +206,7 @@ class AnalyzeVideoWithSong(Resource):
             api.abort(
                 400,
                 "The given filepath '{}' does not seem to exist"
-                    .format(video_path)
+                .format(video_path)
             )
 
         _thread.start_new_thread(
@@ -202,6 +220,38 @@ class AnalyzeVideoWithSong(Resource):
         )
 
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+
+
+@api.route('/analyze_similarity')
+class AnalyzeSimilarity(Resource):
+    @api.expect(similarity_analysis_model)
+    def post(self):
+
+        data = request.get_json()
+
+        transformed = list(map(lambda a: ('{}-{}-{}'.format(
+            a["ID"]["Release"], a["ID"]["Side"],
+            a["ID"]["Track"]
+        ), a['Filepath']), data['songs']))
+
+        _thread.start_new_thread(analyze_songs, (transformed, ))
+
+        return {'message': 'Updating similarity with new songs'}
+
+
+@api.route('/similar/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
+class Similar(Resource):
+    @api.expect(timerange_model)
+    def get(self, diskotek_nr, from_time, to_time):
+        similar = query_similar(diskotek_nr, from_time, to_time)
+
+        if similar == None:
+            # Should be 404, but restplus inserts additional text
+            api.abort(400, 'No similar songs found')
+
+
+
+        return similar
 
 
 @api.route('/shutdown')
