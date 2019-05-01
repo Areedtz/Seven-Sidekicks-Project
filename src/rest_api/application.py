@@ -132,7 +132,8 @@ class AnalyzeSong(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request has been sent and'
+                            ' should be updated in Splunk as soon as it is done.'}
 
 
 @api.route('/get_analyzed_song/<string:diskotek_nr>')
@@ -176,9 +177,10 @@ class AnalyzeVideo(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request has been sent and should be'
+                            ' updated in Splunk as soon as it is done.'}
 @api.route('/analyze_video/<string:video_id>')
-class AnalyzeVideoWithSongGet(Resource):
+class AnalyzeVideoGet(Resource):
     def get(self, video_id):
         db = VideoEmotionNS()
         result = db.get_all_same_id(video_id)
@@ -216,7 +218,8 @@ class AnalyzeVideoWithSong(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request has been sent and should be'
+                            ' updated in Splunk as soon as it is done.'}
 @api.route('/analyze_video_with_song/<string:song_id>')
 class AnalyzeVideoWithSongGet(Resource):
     def get(self, song_id):
