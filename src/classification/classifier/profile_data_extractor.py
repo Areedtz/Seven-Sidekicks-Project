@@ -70,9 +70,12 @@ def get_classifier_data(
     mood_sad_probability = highlevel['mood_sad']['probability']
 
     # list for beautifying code
-    t = [(timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability),
-         (mood_party, mood_party_probability), (mood_aggressive, mood_aggressive_probability),
-         (mood_happy, mood_happy_probability), (mood_sad, mood_sad_probability)
+    t = [(timbre, timbre_probability), 
+         (mood_relaxed, mood_relaxed_probability),
+         (mood_party, mood_party_probability), 
+         (mood_aggressive, mood_aggressive_probability),
+         (mood_happy, mood_happy_probability), 
+         (mood_sad, mood_sad_probability)
          ]
 
     return t[0], t[1], t[2], t[3], t[4], t[5]
