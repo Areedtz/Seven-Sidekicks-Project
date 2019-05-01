@@ -5,6 +5,7 @@ import os
 import subprocess
 import json
 
+from typing import Tuple
 from tempfile import NamedTemporaryFile
 
 if __name__ == "__main__":
@@ -13,7 +14,23 @@ if __name__ == "__main__":
 from utilities.filehandler.handle_path import get_absolute_path
 
 
-def get_classifier_data(data_file_name):
+def get_classifier_data(
+    data_file_name: str) -> Tuple[
+        Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
+    """Extracts the highlevel 
+       mood classification from a given song file
+
+    Parameters
+    ----------
+    data_file_name
+        single song file path
+
+    Returns
+    -------
+    Tuple[Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]
+        A tuple of tuples describing all moods and their probability
+    """
+
     dirname = os.path.abspath(os.path.dirname(__file__))
 
     profile_file = get_absolute_path("utilities/ressources/"
@@ -53,10 +70,12 @@ def get_classifier_data(data_file_name):
     mood_sad_probability = highlevel['mood_sad']['probability']
 
     # list for beautifying code
-    t = [(timbre, timbre_probability), (mood_relaxed, mood_relaxed_probability),
-         (mood_party, mood_party_probability), (mood_aggressive,
-                                                mood_aggressive_probability),
-         (mood_happy, mood_happy_probability), (mood_sad, mood_sad_probability)
+    t = [(timbre, timbre_probability), 
+         (mood_relaxed, mood_relaxed_probability),
+         (mood_party, mood_party_probability), 
+         (mood_aggressive, mood_aggressive_probability),
+         (mood_happy, mood_happy_probability), 
+         (mood_sad, mood_sad_probability)
          ]
 
     return t[0], t[1], t[2], t[3], t[4], t[5]
