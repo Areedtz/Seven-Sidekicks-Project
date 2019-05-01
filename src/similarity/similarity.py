@@ -27,17 +27,12 @@ def process_segment(segment, sr):
     return mfcc, chromagram, tempogram
 
 
-def load_songs(songs):
-    segments = SongSegment()
-    for song in songs:
-        song_id, filename = song
-        _load_song(song_id, filename, segments, False)
-
-
 def load_song(song):
     song_id, filename = song
     segments = SongSegment()
-    return _load_song(song_id, filename, segments, False)
+    returned = _load_song(song_id, filename, segments, False)
+    segments.close()
+    return returned
 
 
 def _load_song(song_id, filename, segments, force):
@@ -164,17 +159,19 @@ def query_similar(song_id, from_time, to_time):
 
     similar_ids = list(map(lambda sim: sim['id'], similar))
 
-    ss = SongSegment()
-    similar = ss.get_with_ids(similar_ids)
+    similar = seg_db.get_with_ids(similar_ids)
 
-    return list(map(lambda x: dict({
+    x = list(map(lambda x: dict({
         'song_id': x['song_id'],
         'from_time': x['time_from'],
         'to_time': x['time_to'],
         'dist': x['dist'],
     }), similar))
 
-# TMP
+    seg_db.close()
+
+    return x
+
 def load_files(songs):
     segments = []
     for song in songs:
@@ -245,3 +242,5 @@ def analyze_songs(songs):
             }))
 
         ss.update_similar(segs[i][0], formatted)
+    
+    ss.close()
