@@ -16,6 +16,8 @@ from video_emotion.api_helper import process_data_and_extract_emotions,process_d
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
 from database.track_emotion import TrackEmotion
+from database.video_emotion import VideoEmotion
+from database.video_emotion_no_song import VideoEmotionNS
 
 cfg = load_config()
 
@@ -92,7 +94,11 @@ video_fields = api.model('VideoModel', {
         description='The requesting user',
         required=True),
 })
-
+song_id_field = api.model('SongIdField', {
+    'SongID': fields.String(
+        description='The ID of the song in the video',
+        required=True),
+})
 
 @api.route('/analyze_song')
 class AnalyzeSong(Resource):
@@ -120,7 +126,8 @@ class AnalyzeSong(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request has been sent and'
+                            ' should be updated in Splunk as soon as it is done.'}
 
 
 @api.route('/get_analyzed_song/<string:diskotek_nr>')
@@ -164,7 +171,17 @@ class AnalyzeVideo(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request has been sent and should be'
+                            ' updated in Splunk as soon as it is done.'}
+@api.route('/analyze_video/<string:video_id>')
+class AnalyzeVideoGet(Resource):
+    def get(self, video_id):
+        db = VideoEmotionNS()
+        result = db.get_all_same_id(video_id)
+
+        if result is None: api.abort(404)
+
+        return result
 
 
 @api.route('/analyze_video_with_song')
@@ -195,4 +212,14 @@ class AnalyzeVideoWithSong(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request has been sent and should be'
+                            ' updated in Splunk as soon as it is done.'}
+@api.route('/analyze_video_with_song/<string:song_id>')
+class AnalyzeVideoWithSongGet(Resource):
+    def get(self, song_id):
+        db = VideoEmotion()
+        result = db.get_all_same_id(song_id)
+
+        if result is None: api.abort(404)
+
+        return result
