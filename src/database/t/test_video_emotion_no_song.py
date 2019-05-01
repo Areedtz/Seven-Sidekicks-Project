@@ -1,10 +1,11 @@
 import datetime
 
+
 from database.storinator import Storinator
 from database.video_emotion_no_song import VideoEmotionNS
 
-# vet = Video Emotion Test
 
+# vet = Video Emotion Test
 def test_implements_Storinator():
     vet = VideoEmotionNS()
     assert isinstance(vet, Storinator)
@@ -81,7 +82,7 @@ def test_all_same_id():
     vet.add(1000, timerange1, emotions1)
     vet.add(1000, timerange2, emotions2)
 
-    all_id_1 = vet.get_all_same_id(1000)
+    all_id_1 = vet.get_by_video_id(1000)
     assert len(all_id_1) > 0
 
 

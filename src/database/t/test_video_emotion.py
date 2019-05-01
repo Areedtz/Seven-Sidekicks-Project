@@ -83,7 +83,7 @@ def test_all_same_id():
     vet.add(1000, 2, d11, d12)
     vet.add(1000, 2, d21, d22)
 
-    all_id_1 = vet.get_all_same_id(1000)
+    all_id_1 = vet.get_by_song_id(1000)
     assert len(all_id_1) > 0
 
 def test_get_all():
