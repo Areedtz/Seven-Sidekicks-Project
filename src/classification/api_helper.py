@@ -10,8 +10,10 @@ from database.track_emotion import TrackEmotion
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
 
-def process_data_and_extract_profiles(song_id: str, song_file_path: str):
-    """Extracts BPM, moods from a song and puts it into the database
+def process_data_and_extract_profiles(
+    song_id: str, song_file_path: str):
+    """Extracts BPM, moods from a song 
+    and puts it into the database
 
     Parameters
     ----------

@@ -14,8 +14,11 @@ if __name__ == "__main__":
 from utilities.filehandler.handle_path import get_absolute_path
 
 
-def get_classifier_data(data_file_name: str) -> Tuple[Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
-    """Extracts the highlevel mood classification from a given song file
+def get_classifier_data(
+    data_file_name: str) -> Tuple[
+        Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
+    """Extracts the highlevel 
+       mood classification from a given song file
 
     Parameters
     ----------

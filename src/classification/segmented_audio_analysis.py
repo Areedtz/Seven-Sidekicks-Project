@@ -7,8 +7,8 @@ import re
 import subprocess
 import sys
 import tempfile
-
 from multiprocessing import Pool
+
 from typing import Tuple
 from essentia.standard import MonoWriter
 
@@ -26,7 +26,9 @@ from utilities.filehandler.handle_path import get_absolute_path
 from utilities.get_song_id import get_song_id
 
 
-def process_data_and_extract_profiles(segment_id: int, song_file) -> Tuple[int, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
+def process_data_and_extract_profiles(
+    segment_id: int, song_file) -> Tuple[
+        int, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
     """Extracts BPM, timbre and moods from a segmented songfile
 
     Parameters
@@ -41,6 +43,7 @@ def process_data_and_extract_profiles(segment_id: int, song_file) -> Tuple[int, 
     Tuple[int, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]
         A tuple of the segment_id and tuples describing BPM, timbre and all moods
     """
+
     # creating the temporary files
     temp_song = tempfile.NamedTemporaryFile(delete=True, suffix='.wav')
     temp_classifier = tempfile.NamedTemporaryFile(delete=True)
@@ -64,7 +67,8 @@ def process_data_and_extract_profiles(segment_id: int, song_file) -> Tuple[int, 
     return segment_id, bpm_tuple, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
 
 
-def segment_song_and_return_arguments(filename: str, song_file: str) -> Tuple[str, str, list]:
+def segment_song_and_return_arguments(
+    filename: str, song_file: str) -> Tuple[str, str, list]:
     """Splits a song and adds the segments and segment ids to a list
 
     Parameters

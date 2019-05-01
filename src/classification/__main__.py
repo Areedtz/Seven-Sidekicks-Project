@@ -3,9 +3,9 @@
 import os
 import re
 import sys
+from multiprocessing import Pool
 
 from typing import Tuple
-from multiprocessing import Pool
 from tabulate import tabulate
 
 if __name__ == "__main__":
@@ -16,8 +16,12 @@ from classifier.profile_data_eextractor import get_classifier_data
 from extractor.low_level_data_extractor import make_low_level_data_file
 
 
-def process_data_and_extract_profiles(song_id: str, song_file: str, song_output_file: str) -> Tuple[str, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
-    """Gets lowlevel datafile and uses this to find define moods and returns a tuple with them
+def process_data_and_extract_profiles(
+    song_id: str, song_file: str, song_output_file: str) -> Tuple[
+        str, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
+    """Gets lowlevel datafile 
+    and uses this to find define moods 
+    and returns a tuple with them
 
     Parameters
     ----------
@@ -33,6 +37,7 @@ def process_data_and_extract_profiles(song_id: str, song_file: str, song_output_
     Tuple[str, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]
         A tuple of the song_id and tuples describing all moods and their probability
     """
+
     make_low_level_data_file(song_file, song_output_file)
 
     timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(
