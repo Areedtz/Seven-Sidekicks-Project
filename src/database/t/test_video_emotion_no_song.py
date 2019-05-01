@@ -18,12 +18,12 @@ def test_database_name():
 def test_add_and_get():
     vet = VideoEmotionNS()
 
-    d1 = {
+    timerange = {
         "from1" : 3000,
         "to1" : 4000,
     }
 
-    d2 = {
+    emotions = {
         "angry": 0.98,
         "disgust": 0.70,
         "fear": 0.3,
@@ -32,7 +32,7 @@ def test_add_and_get():
         "surprise": 0.7,
         "neutral": 0.99
     }
-    vet.add(1, d1, d2)
+    vet.add(1, timerange, emotions)
 
     ve = vet.get(1)
     assert ve['video_id'] == 1
@@ -49,12 +49,12 @@ def test_add_and_get():
 def test_all_same_id():
     vet = VideoEmotionNS()
 
-    d11 = {
+    timerange1 = {
         "from1" : 3000,
         "to1" : 4000,
     }
     
-    d12 = {
+    emotions1 = {
         "angry": 0.98,
         "disgust": 0.70,
         "fear": 0.3,
@@ -64,12 +64,12 @@ def test_all_same_id():
         "neutral": 0.99
     }
 
-    d21 = {
+    timerange2 = {
         "from1" : 4000,
         "to1" : 5000,
     }
 
-    d22 = {
+    emotions2 = {
         "angry": 0.3,
         "disgust": 0.20,
         "fear": 0.6,
@@ -78,8 +78,8 @@ def test_all_same_id():
         "surprise": 0.234,
         "neutral": 0.43
     }
-    vet.add(1000, d11, d12)
-    vet.add(1000, d21, d22)
+    vet.add(1000, timerange1, emotions1)
+    vet.add(1000, timerange2, emotions2)
 
     all_id_1 = vet.get_all_same_id(1000)
     assert len(all_id_1) > 0
@@ -88,12 +88,12 @@ def test_all_same_id():
 def test_get_all():
     vet = VideoEmotionNS()
 
-    d11 = {
+    timerange1 = {
         "from1" : 3000,
         "to1" : 4000,
     }
     
-    d12 = {
+    emotions1 = {
         "angry": 0.98,
         "disgust": 0.70,
         "fear": 0.3,
@@ -103,12 +103,12 @@ def test_get_all():
         "neutral": 0.99
     }
 
-    d21 = {
+    timerange2 = {
         "from1" : 3000,
         "to1" : 4000,
     }
 
-    d22 = {
+    emotions2 = {
         "angry": 0.3,
         "disgust": 0.20,
         "fear": 0.6,
@@ -117,8 +117,8 @@ def test_get_all():
         "surprise": 0.234,
         "neutral": 0.43
     }
-    vet.add(1, d11, d12)
-    vet.add(2, d21, d22)
+    vet.add(1, timerange1, emotions1)
+    vet.add(2, timerange2, emotions2)
 
     vet1 = vet.get(1)
     vet2 = vet.get(2)
