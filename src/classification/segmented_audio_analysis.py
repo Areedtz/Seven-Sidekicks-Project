@@ -9,6 +9,8 @@ import sys
 import tempfile
 from multiprocessing import Pool
 
+from essentia.standard import MonoWriter
+
 if __name__ == "__main__":
     sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
@@ -17,7 +19,6 @@ from classification.classifier.profile_data_extractor import \
     get_classifier_data
 from classification.extractor.low_level_data_extractor import \
     make_low_level_data_file
-from essentia.standard import MonoWriter
 from similarity.split_song import split_song
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 from utilities.filehandler.handle_path import get_absolute_path
