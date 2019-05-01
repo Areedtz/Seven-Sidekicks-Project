@@ -31,7 +31,7 @@ class Database:
             cfg['mongo_host'], cfg['mongo_port'],
             username=cfg['mongo_user'] if 'mongo_user' in cfg else None,
             password=cfg['mongo_pass'] if 'mongo_pass' in cfg else None)
-        self._db = self._client['dr']
+        self._db = self._client[cfg['mongo_db']]
 
     def insert(self, col, song_id, doc):
         collection = self._db[col]

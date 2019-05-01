@@ -2,17 +2,21 @@ import json
 from tempfile import NamedTemporaryFile
 
 from bpm.bpm_extractor import get_song_bpm
-from classification.extractor.low_level_data_extractor import make_low_level_data_file
-from classification.classifier.profile_data_extractor import get_classifier_data
+from classification.classifier.profile_data_extractor import \
+    get_classifier_data
+from classification.extractor.low_level_data_extractor import \
+    make_low_level_data_file
 from database.track_emotion import TrackEmotion
 from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
-def process_data_and_extract_profiles(song_id, song_file_path):
+
+def process_data_and_extract_profiles(song_id: str, song_file_path: str):
     temp_file = NamedTemporaryFile(delete=True)
 
     make_low_level_data_file(song_file_path, temp_file.name)
 
-    timbre, relaxed, party, aggressive, happy, sad = get_classifier_data(temp_file.name)
+    timbre, relaxed, party, aggressive, happy, sad = get_classifier_data(
+        temp_file.name)
 
     temp_file.close()
 
@@ -58,5 +62,3 @@ def process_data_and_extract_profiles(song_id, song_file_path):
 
     DBConnecter = TrackEmotion()
     DBConnecter.add(song_id, data)
-
-    return False
