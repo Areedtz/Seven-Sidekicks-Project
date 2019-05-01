@@ -14,8 +14,8 @@ class VideoEmotionNS(Storinator):
     def get(self, video_id):
         return self._db.find(self._dbcol, video_id)
 
-    def get_all_same_id(self, video_id):
-        return self._db.find_all_same_id(self._dbcol, video_id)
+    def get_by_video_id(self, video_id):
+        return self._db.find_by_video_id(self._dbcol, video_id)
 
     def get_all(self):
         return self._db.find_all(self._dbcol)

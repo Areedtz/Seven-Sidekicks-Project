@@ -41,7 +41,7 @@ class VEDatabase:
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
 
-    def find_all_same_id(self, col, song_id):
+    def find_by_song_id(self, col, song_id):
         results = []
         data =  self._db[col].find({'song_id': song_id})
         for i in data:

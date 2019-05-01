@@ -11,10 +11,8 @@ def _create_default_document(id):
         "last_updated": datetime.datetime.utcnow(),
     }
 
-
 def _augment_document(id1, time, emotion):
     return {**id1, **time, **emotion}
-
 
 class VEDatabase:
     def __init__(self):
@@ -39,7 +37,7 @@ class VEDatabase:
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    def find_all_same_id(self, col, video_id):
+    def find_by_video_id(self, col, video_id):
         results = []
         data =  self._db[col].find({'video_id': video_id})
         for i in data:
@@ -48,7 +46,6 @@ class VEDatabase:
             results.append(i)
         return results
             
-
     def find_all(self, col):
         results = []
         for track_bpm in self._db[col].find():
