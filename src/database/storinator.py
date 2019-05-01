@@ -1,7 +1,9 @@
 import abc
 
-
+# Interface for database classes
 class Storinator(abc.ABC):
+
+    # Generic methods for the database classes
     @abc.abstractmethod
     def add(self, name, song_id):
         pass

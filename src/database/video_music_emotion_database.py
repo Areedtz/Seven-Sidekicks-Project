@@ -5,6 +5,8 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
+# Mandatory for all entities
+# Gives entity an id and a timestamp
 def _create_default_document(id, id2):
     return {
         "song_id": id,
@@ -13,11 +15,14 @@ def _create_default_document(id, id2):
     }
 
 
+# Combines parameters into a larger dictionary
 def _augment_document(vme_id, bpm, timbre,
                       party, relaxed, emotions):
     return {**vme_id, **bpm, **timbre, **party, **relaxed, **emotions}
 
 
+# Generic class for making functions implementable
+# for lower level classes of music analysis
 class VMEDatabase:
     def __init__(self):
         cfg = load_config()

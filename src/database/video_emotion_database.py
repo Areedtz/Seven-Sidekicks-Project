@@ -5,6 +5,8 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
+# Mandatory for all entities
+# Gives entity an id and a timestamp
 def _create_default_document(id, id2):
     return {
         "song_id": id,
@@ -13,10 +15,13 @@ def _create_default_document(id, id2):
     }
 
 
+# Combines parameters into a larger dictionary
 def _augment_document(doc1, doc2):
     return {**doc1, **doc2}
 
 
+# Generic class for making functions implementable
+# for lower level classes of music analysis
 class VEDatabase:
     def __init__(self):
         cfg = load_config()
@@ -26,6 +31,7 @@ class VEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
+    # Insert data into the collection
     def insert(self, col,
                song_id, video_id, doc):
         collection = self._db[col]
@@ -34,12 +40,14 @@ class VEDatabase:
         id = collection.insert_one(ins).inserted_id
         return id
 
+    # Find one instance of the data requested
     def find(self, col,
              song_id, video_id):
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
 
+    # Find all instances of the data requested in the collection
     def find_all(self, col):
         results = []
         for r in self._db[col].find():
