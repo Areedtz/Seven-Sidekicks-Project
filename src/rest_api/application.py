@@ -29,12 +29,6 @@ hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
 
-@api.route('/hello')
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello': 'world'}
-
-
 # Model is nested inside the song_fields model
 id_model = api.model('IdModel', {
     'Release': fields.Integer(
@@ -264,3 +258,4 @@ class Shutdown(Resource):
             raise RuntimeError('Not running with the Werkzeug Server')
 
         func()
+

@@ -26,9 +26,9 @@ class VEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, name,
+    def insert(self, col,
                song_id, video_id, time, emotion):
-        collection = self._db[name]
+        collection = self._db[col]
 
         ins = _augment_document(_create_default_document(song_id,
                                                          video_id), time, emotion)
@@ -41,9 +41,9 @@ class VEDatabase:
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
 
-    def find_all_same_id(self, name, song_id):
+    def find_by_song_id(self, col, song_id):
         results = []
-        data =  self._db[name].find({'song_id': song_id})
+        data =  self._db[col].find({'song_id': song_id})
         for i in data:
             del i['_id']
             i['last_updated'] = i['last_updated'].isoformat()
