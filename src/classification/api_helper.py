@@ -11,6 +11,16 @@ from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
 
 def process_data_and_extract_profiles(song_id: str, song_file_path: str):
+    """Extracts BPM, moods from a song and puts it into the database
+
+    Parameters
+    ----------
+    song_id
+        id of the given song
+    song_file_path
+        the filepath of the given song
+    """
+
     temp_file = NamedTemporaryFile(delete=True)
 
     make_low_level_data_file(song_file_path, temp_file.name)
