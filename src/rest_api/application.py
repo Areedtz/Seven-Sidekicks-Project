@@ -204,7 +204,7 @@ class AnalyzeVideoGet(Resource):
         return result
 
 
-@api.route('/analyzed_video_with_song')
+@api.route('/video_with_audio')
 class AnalyzeVideoWithSong(Resource):
     @api.expect(video_fields_with_song)
     def post(self):
@@ -240,7 +240,7 @@ class AnalyzeVideoWithSong(Resource):
 
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}, 201
-@api.route('/analyzed_video_with_song/<string:song_id>')
+@api.route('/video_with_audio/<string:song_id>')
 class AnalyzeVideoWithSongGet(Resource):
     def get(self, song_id):
         db = VideoEmotion()
