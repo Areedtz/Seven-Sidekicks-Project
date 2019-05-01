@@ -27,12 +27,6 @@ hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
 
-@api.route('/hello')
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello': 'world'}
-
-
 # Model is nested inside the song_fields model
 id_model = api.model('IdModel', {
     'Release': fields.Integer(
@@ -202,14 +196,3 @@ class AnalyzeVideoWithSong(Resource):
         )
 
         return {'Response': 'The request has been sent and should be updated in Splunk as soon as it is done.'}
-
-
-@api.route('/shutdown')
-class Shutdown(Resource):
-    def get(self):
-        func = request.environ.get('werkzeug.server.shutdown')
-
-        if func is None:
-            raise RuntimeError('Not running with the Werkzeug Server')
-
-        func()
