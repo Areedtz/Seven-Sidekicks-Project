@@ -25,6 +25,7 @@ class VEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
+    # Insert data into the collection
     def insert(self, name,
                video_id, doc):
         collection = self._db[name]
@@ -33,12 +34,14 @@ class VEDatabase:
         id = collection.insert_one(ins).inserted_id
         return id
 
+    # Find one instance of the data requested
     def find(self, name,
              video_id):
         return self._db[name].find({'video_id': video_id}
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
+    # Find all instances of the data requested in the collection
     def find_all(self, name):
         results = []
         for track_bpm in self._db[name].find():

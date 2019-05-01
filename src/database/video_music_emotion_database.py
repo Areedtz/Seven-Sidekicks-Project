@@ -27,6 +27,7 @@ class VMEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
+    # Insert data into the collection
     def insert(self, col, song_id, video_id,
                bpm, timbre, party, relaxed, emotions):
         collection = self._db[col]
@@ -35,12 +36,14 @@ class VMEDatabase:
         id = collection.insert_one(ins).inserted_id
         return id
 
+    # Find one instance of the data requested
     def find(self, col,
              song_id, video_id):
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
 
+    # Find all instances of the data requested in the collection
     def find_all(self, col):
         results = []
         for r in self._db[col].find():
