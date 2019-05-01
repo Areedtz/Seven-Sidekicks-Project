@@ -3,11 +3,28 @@ import rest_api.application as rest
 import threading
 import time
 
+from flask_restplus import Resource
+from flask import request
+
 
 testPort = 6969
 
 
 def start_rest():
+    @rest.api.route('/hello')
+    class HelloWorld(Resource):
+        def get(self):
+            return {'hello': 'world'}
+
+    @rest.api.route('/shutdown')
+    class Shutdown(Resource):
+        def get(self):
+            func = request.environ.get('werkzeug.server.shutdown')
+
+            if func is None:
+                raise RuntimeError('Not running with the Werkzeug Server')
+
+            func()
     rest.app.run(host=rest.hostURL, port=testPort, debug=False)
 
 
