@@ -23,13 +23,13 @@ class VEDatabase:
         self._client = MongoClient(
             cfg['mongo_host'], cfg['mongo_port'],
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
-        self._db = self._client['dr']
+        self._db = self._client[cfg['mongo_db']]
 
     def insert(self, name,
                video_id, doc):
         collection = self._db[name]
         ins = _augment_document(_create_default_document(
-                                                         video_id), doc)
+            video_id), doc)
         id = collection.insert_one(ins).inserted_id
         return id
 

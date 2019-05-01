@@ -1,18 +1,26 @@
 #!/usr/local/bin/python3.6
+from typing import Tuple
 
-import sys
-import os
 from multiprocessing import Pool
 
-from tabulate import tabulate
 from essentia.standard import RhythmExtractor2013
 
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
 
+def get_song_bpm(audio) -> Tuple[float, float]:
+    """Extracts the BPM for the given audio
 
-def get_song_bpm(audio):
+    Parameters
+    ----------
+    audio
+        Raw audio to be analyzed
+
+    Returns
+    -------
+    Tuple[float, float]
+        A tuple of the BPM and a confidence of that BPM
+    """
+
     rhythm_extractor = RhythmExtractor2013()
     bpm, _, beats_confidence, _, _ = rhythm_extractor(audio)
 
     return bpm, beats_confidence
-
