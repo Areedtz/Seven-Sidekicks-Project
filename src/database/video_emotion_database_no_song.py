@@ -11,8 +11,10 @@ def _create_default_document(id):
         "last_updated": datetime.datetime.utcnow(),
     }
 
+
 def _augment_document(id1, time, emotion):
     return {**id1, **time, **emotion}
+
 
 class VEDatabase:
     def __init__(self):
