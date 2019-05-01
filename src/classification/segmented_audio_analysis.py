@@ -83,6 +83,7 @@ def segment_song_and_return_arguments(
     Tuple[str, str, list]
         A tuple of the song_id, directory path and a list with the segments and their ids
     """
+    
     dirname = os.path.abspath(os.path.dirname(filename))
     argument_tuples = []
 
