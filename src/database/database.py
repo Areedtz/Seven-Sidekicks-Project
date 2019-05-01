@@ -1,4 +1,5 @@
 import datetime
+import typing
 
 from pymongo import MongoClient
 
@@ -7,7 +8,7 @@ from utilities.config_loader import load_config
 
 # Mandatory for all entities
 # Gives entity an id and a timestamp
-def _create_default_document(id):
+def _create_default_document(id: int) -> dict: 
     return {
         "song_id": id,
         "last_updated": datetime.datetime.utcnow(),
@@ -15,7 +16,7 @@ def _create_default_document(id):
  
 
 # Combines parameters into a larger dictionary
-def _augment_document(doc1, doc2):
+def _augment_document(doc1: dict, doc2: dict) -> dict:
     return {**doc1, **doc2}
 
 
