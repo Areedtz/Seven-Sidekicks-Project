@@ -12,7 +12,7 @@ def test_implements_Storinator():
 
 def test_database_name():
     vet = VideoEmotionNS()
-    assert vet._dbname == 'video_emotion_no_song'
+    assert vet._dbcol == 'video_emotion_no_song'
 
 
 def test_add_and_get():
