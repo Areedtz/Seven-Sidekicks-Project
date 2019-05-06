@@ -86,7 +86,7 @@ def test_all_same_id():
     assert len(all_id_1) > 0
 
 
-def test_get_all():
+def test_find_by_video_id():
     vet = VideoEmotionNS()
 
     timerange1 = {
