@@ -37,14 +37,6 @@ def load_songs(songs):
     return flatten(segments)
 
 
-def load_song(song):
-    song_id, filename = song
-    segments = SongSegment()
-    returned = _load_song(song_id, filename, segments, False)
-    segments.close()
-    return returned
-
-
 def _load_song(song_id, filename, segments, force):
     segs = segments.get_all_with_id(song_id)
 
