@@ -8,9 +8,11 @@ import falconn
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
 from database.song_segment import SongSegment
+from utilities.config_loader import load_config
 
-MATCHES = 10
-BUCKET_SIZE = 60 * 30
+cfg = load_config()
+MATCHES = cfg['similarity_matches']
+BUCKET_SIZE = cfg['similarity_bucket_size']
 
 
 def flatten(l): return [item for sublist in l for item in sublist]
