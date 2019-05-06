@@ -2,7 +2,7 @@ import datetime
 
 
 from typing import Dict
-from pymongo import MongoClients
+from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
