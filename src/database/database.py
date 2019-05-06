@@ -1,7 +1,7 @@
 import datetime
+import typing
 
 
-from typing import Dict
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
@@ -45,16 +45,29 @@ def _augment_document(doc1: dict, doc2: dict) -> Dict:
 # Generic class for making functions implementable
 # for lower level classes of music analysis
 class Database:
-    def __init__(self):
-        """Creates the individual collection in the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-            
-        """
+    """
+    A database class used to communicate with a database
 
+    Methods
+    -------
+    def insert(self, col, song_id: int, doc: dict) -> int
+        inserts data into the collection in the database
+
+    def find(self, col, song_id: int):
+        finds one entity given an id
+
+    def find_all_by_id(self, name, song_id: int):
+        finds all entities given an id
+
+    def find_all(self, col):
+        finds all entities in the database
+
+    def close(self):
+        closes the database
+    
+    """
+
+    def __init__(self):
         cfg = load_config()
 
         self._client = MongoClient(
@@ -114,7 +127,7 @@ class Database:
 
         return None
 
-    def find_all_by_id(self, name, song_id):
+    def find_all_by_id(self, name, song_id: int):
         """Find all instances of the data requested in the collection by song_id
     
         Parameters
@@ -158,12 +171,6 @@ class Database:
             results.append(r)
         return results
 
-    """closes the connection to the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-        """
     def close(self):
+        """closes the connection to the database"""
         self._client.close()

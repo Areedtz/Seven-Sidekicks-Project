@@ -1,7 +1,7 @@
 import datetime
+import typing
 
 
-from typing import Dict
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
@@ -52,6 +52,34 @@ def _augment_document(id1: dict, time: dict, emotion: dict) -> Dict:
 # Generic class for making functions implementable
 # for lower level classes of music analysis
 class VEDatabase:
+    """
+    A database class used to communicate with a database
+
+    Methods
+    -------
+    def __init__(self)
+        Creates the individual collection in the database
+        
+    def insert(self, col,
+               song_id: int, video_id: int, 
+               time: dict, emotion: dict) -> int:
+        inserts data into the collection in the database
+
+    def find(self, col,
+             song_id: int, video_id: int):
+        finds one entity given an id
+
+    def find_by_song_id(self, col, song_id: int):
+        finds all entities given an id
+
+    def find_all(self, col):
+        finds all entities in the database
+
+    def close(self):
+        closes the database
+    
+    """
+
     def __init__(self):
         """Creates the individual collection in the database
     
@@ -70,7 +98,8 @@ class VEDatabase:
         self._db = self._client[cfg['mongo_db']]
 
     def insert(self, col,
-               song_id: int, video_id: int, time: dict, emotion: dict) -> int:
+               song_id: int, video_id: int, 
+               time: dict, emotion: dict) -> int:
         """Insert data into the collection
     
         Parameters
@@ -94,8 +123,9 @@ class VEDatabase:
 
         collection = self._db[col]
 
-        ins = _augment_document(_create_default_document(song_id,
-                                                         video_id), time, emotion)
+        ins = _augment_document(
+            _create_default_document(song_id,video_id),
+             time, emotion)
         id = collection.insert_one(ins).inserted_id
         return id
 

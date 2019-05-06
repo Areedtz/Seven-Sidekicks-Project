@@ -1,7 +1,7 @@
 import datetime
+impor rtyping
 
-
-from typing import Dict
+1
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
