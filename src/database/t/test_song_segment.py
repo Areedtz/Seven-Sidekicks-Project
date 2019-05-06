@@ -13,7 +13,6 @@ def test_database_name():
     assert ss._dbcol == 'song_segmentation'
 
 
-# TODO: Add mfcc, chroma, tempogram
 def test_add_and_get():
     ss = SongSegment()
     ss.add(1, 0, 5000, None, None, None, None)

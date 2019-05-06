@@ -195,8 +195,7 @@ def analyze_songs(songs):
 
     count = ss.count()
 
-    # TODO: Rename
-    m = list(map(lambda x: [], segs))
+    allMatches = list(map(lambda x: [], segs))
 
     for i in range(0, count // BUCKET_SIZE + 1):
         established_segments = list(
@@ -216,13 +215,13 @@ def analyze_songs(songs):
 
         for j in range(0, len(matches)):
 
-            m[j].append(
+            allMatches[j].append(
                 list(map(lambda x: established_segments[x], matches[j])))
 
         p.close()
 
     for i in range(0, len(segs)):
-        best = find_best_matches(flatten(m[i]), segs[i])
+        best = find_best_matches(flatten(allMatches[i]), segs[i])
 
         matches = ss.get_by_ids(list(map(lambda match: match[0][0], best)))
         matches = list(
@@ -233,11 +232,11 @@ def analyze_songs(songs):
                 'id': segs[i][0],
                 'distance': best[j][1],
             }))
-            
+
             match_ids = list(set(map(lambda x: x['id'], matches[j][1])))
             innerMatches = list(map(lambda match_id: next(
                 x for x in matches[j][1] if x['id'] == match_id), match_ids))
-            innerMatches.sort(key = lambda m: m['distance'])
+            innerMatches.sort(key=lambda m: m['distance'])
             ss.update_similar(matches[j][0], innerMatches[:10])
 
         formatted = []
