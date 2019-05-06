@@ -2,6 +2,8 @@ from database.storinator import Storinator
 from database.video_emotion_database_no_song import VEDatabase
 
 # VideoEmotionNS = video emotions no song
+
+
 class VideoEmotionNS(Storinator):
     def __init__(self):
         self._dbcol = 'video_emotion_no_song'
@@ -19,3 +21,6 @@ class VideoEmotionNS(Storinator):
 
     def get_all(self):
         return self._db.find_all(self._dbcol)
+
+    def close(self):
+        self._db.close()

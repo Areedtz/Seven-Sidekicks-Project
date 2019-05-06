@@ -19,3 +19,6 @@ class VideoEmotion(Storinator):
 
     def get_all(self):
         return self._db.find_all(self._col)
+
+    def close(self):
+        self._db.close()

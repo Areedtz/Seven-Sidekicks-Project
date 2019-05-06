@@ -4,6 +4,7 @@ import sys
 import os
 import json
 import _thread
+from bson.json_util import dumps
 
 from flask import Flask
 from flask import request
@@ -16,6 +17,7 @@ from video_emotion.api_helper import process_data_and_extract_emotions, process_
 from utilities.get_song_id import get_song_id
 from utilities.config_loader import load_config
 from database.track_emotion import TrackEmotion
+from similarity.similarity import analyze_songs, query_similar
 from database.video_emotion import VideoEmotion
 from database.video_emotion_no_song import VideoEmotionNS
 
@@ -58,10 +60,10 @@ song_fields = api.model('SongModel', {
 
 timerange_model = api.model('TimeRange_Model', {
     'From': fields.Integer(
-        description='The beginning time of the video to analyze',
+        description='The beginning time of the content to analyze',
         required=True),
     'To': fields.Integer(
-        description='The end time of the video to analyze',
+        description='The end time of the content to analyze',
         required=True),
 })
 
@@ -97,6 +99,19 @@ video_fields = api.model('VideoModel', {
         description='The requesting user',
         required=True),
 })
+
+song_model = api.model('SongModel', {
+    'ID': fields.Nested(
+        id_model,
+        description='ID model of the song to analyze',
+        required=True),
+    'Filepath': fields.String(
+        description='Filepath of the requested resource',
+        required=True),
+})
+
+similarity_analysis_model = api.model('SimilarityAnalysisModel', {
+                                      'songs': fields.List(fields.Nested(song_model))})
 
 song_id_field = api.model('SongIdField', {
     'SongID': fields.String(
@@ -242,7 +257,37 @@ class AnalyzeVideoWithSong(Resource):
         )
 
         return {'Response': 'The request has been sent and should be'
-                            ' updated in Splunk as soon as it is done.'}, 201
+                            ' updated in Splunk as soon as it is done.'}
+
+
+@api.route('/similarity')
+class AnalyzeSimilarity(Resource):
+    @api.expect(similarity_analysis_model)
+    def post(self):
+
+        data = request.get_json()
+
+        transformed = list(map(lambda a: ('{}-{}-{}'.format(
+            a["ID"]["Release"], a["ID"]["Side"],
+            a["ID"]["Track"]
+        ), a['Filepath']), data['songs']))
+
+        _thread.start_new_thread(analyze_songs, (transformed, ))
+
+        return {'message': 'Updating similarity with new songs'}
+
+
+@api.route('/similar/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
+class Similar(Resource):
+    @api.expect(timerange_model)
+    def get(self, diskotek_nr, from_time, to_time):
+        similar = query_similar(diskotek_nr, from_time, to_time)
+
+        if similar == None:
+            # Should be 404, but restplus inserts additional text
+            api.abort(400, 'No similar songs found')
+
+        return similar
 
 
 @api.route('/video_with_audio/<string:song_id>')

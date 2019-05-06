@@ -56,3 +56,6 @@ class VEDatabase:
             results.append(r)
 
         return results
+
+    def close(self):
+        self._db.close()
