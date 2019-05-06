@@ -21,6 +21,7 @@ from similarity.similarity import analyze_songs, query_similar
 from database.video_emotion import VideoEmotion
 from database.video_emotion_no_song import VideoEmotionNS
 
+
 cfg = load_config()
 
 app = Flask(__name__)
@@ -119,7 +120,7 @@ song_id_field = api.model('SongIdField', {
 })
 
 
-@api.route('/analyze_song')
+@api.route('/audio')
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
     def post(self):
@@ -146,18 +147,22 @@ class AnalyzeSong(Resource):
         )
 
         return {'Response': 'The request has been sent and'
-                            ' should be updated in Splunk as soon as it is done.'}
+                            ' should be updated in Splunk as soon as it is done.'}, 201
 
 
-@api.route('/get_analyzed_song/<string:diskotek_nr>')
-class GetAnalyzeSong(Resource):
+@api.route('/audio/<string:diskotek_nr>')
+class AnalyzeSongGet(Resource):
     def get(self, diskotek_nr):
         db = TrackEmotion()
 
         r = db.get(diskotek_nr)
 
         if r is None:
-            api.abort(404)
+            api.abort(
+                400,
+                "The given no. '{}' does not seem to exist"
+                .format(diskotek_nr)
+            )
 
         del r['_id']
         r['last_updated'] = r['last_updated'].isoformat()
@@ -165,7 +170,7 @@ class GetAnalyzeSong(Resource):
         return r
 
 
-@api.route('/analyze_video')
+@api.route('/video')
 class AnalyzeVideo(Resource):
     @api.expect(video_fields)
     def post(self):
@@ -174,6 +179,12 @@ class AnalyzeVideo(Resource):
         video_id = data['ID']
         video_path = data['SourcePath']
         video_time_range = data['TimeRange']
+
+        if video_time_range["From"] == video_time_range["To"]:
+            api.abort(
+                400,
+                "From and to can not be equal"
+            )
 
         if not os.path.isfile(video_path):
             api.abort(
@@ -192,22 +203,26 @@ class AnalyzeVideo(Resource):
         )
 
         return {'Response': 'The request has been sent and should be'
-                            ' updated in Splunk as soon as it is done.'}
+                            ' updated in Splunk as soon as it is done.'}, 201
 
 
-@api.route('/analyze_video/<string:video_id>')
+@api.route('/video/<string:video_id>')
 class AnalyzeVideoGet(Resource):
     def get(self, video_id):
         db = VideoEmotionNS()
-        result = db.get_all_same_id(video_id)
+        result = db.get_by_video_id(video_id)
 
         if result is None:
-            api.abort(404)
+            api.abort(
+                400,
+                "The given no. '{}' does not seem to exist"
+                .format(video_id)
+            )
 
         return result
 
 
-@api.route('/analyze_video_with_song')
+@api.route('/video_with_audio')
 class AnalyzeVideoWithSong(Resource):
     @api.expect(video_fields_with_song)
     def post(self):
@@ -217,6 +232,12 @@ class AnalyzeVideoWithSong(Resource):
         song_id = data['SongID']
         video_path = data['SourcePath']
         video_time_range = data['TimeRange']
+
+        if video_time_range["From"] == video_time_range["To"]:
+            api.abort(
+                400,
+                "From and to can not be equal"
+            )
 
         if not os.path.isfile(video_path):
             api.abort(
@@ -269,13 +290,17 @@ class Similar(Resource):
         return similar
 
 
-@api.route('/analyze_video_with_song/<string:song_id>')
+@api.route('/video_with_audio/<string:song_id>')
 class AnalyzeVideoWithSongGet(Resource):
     def get(self, song_id):
         db = VideoEmotion()
-        result = db.get_all_same_id(song_id)
+        result = db.get_by_song_id(song_id)
 
         if result is None:
-            api.abort(404)
+            api.abort(
+                400,
+                "The given no. '{}' does not seem to exist"
+                .format(song_id)
+            )
 
         return result
