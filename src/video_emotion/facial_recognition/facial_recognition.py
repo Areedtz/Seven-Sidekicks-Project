@@ -86,7 +86,7 @@ def analyze_frame(frame) -> [[int, int]]:
     Returns
     -------
     [[int, int]]
-        A facetuple that describes the placement of a 
+        A list of facetuples that describe the placement of a face in the frame
     """
     # Get width and height of frame
     (h, w) = frame.shape[:2]
