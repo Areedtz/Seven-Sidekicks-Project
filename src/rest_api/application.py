@@ -31,8 +31,9 @@ hostURL = cfg['rest_api_url']
 hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
-
-# Model is nested inside the song_fields model
+"""
+    Models the id of a piece of music
+"""
 id_model = api.model('IdModel', {
     'Release': fields.Integer(
         description='The release ID of the song',
@@ -45,6 +46,9 @@ id_model = api.model('IdModel', {
         required=True),
 })
 
+"""
+    Models an analysis request for a piece of music including its location and the user requesting the analysis
+"""
 song_fields = api.model('SongModel', {
     'ID': fields.Nested(
         id_model,
@@ -58,6 +62,9 @@ song_fields = api.model('SongModel', {
         required=True),
 })
 
+"""
+    Models the time-range of a video input
+"""
 timerange_model = api.model('TimeRange_Model', {
     'From': fields.Integer(
         description='The beginning time of the content to analyze',
@@ -67,6 +74,9 @@ timerange_model = api.model('TimeRange_Model', {
         required=True),
 })
 
+"""
+    Models a request for analyzing a video and song in conjunction so that their data can be collated
+"""
 video_fields_with_song = api.model('VideoModelWithSong', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -85,6 +95,9 @@ video_fields_with_song = api.model('VideoModelWithSong', {
         required=True),
 })
 
+"""
+    Models a request for analyzing a video
+"""
 video_fields = api.model('VideoModel', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -122,6 +135,12 @@ song_id_field = api.model('SongIdField', {
 
 @api.route('/audio')
 class AnalyzeSong(Resource):
+    """Analyzes a song and outputs the data to the database
+        Parameters
+        ----------
+        song_fields
+            The song request model that AnalyzeSong should be called with
+    """
     @api.expect(song_fields)
     def post(self):
         data = request.get_json()
@@ -153,6 +172,15 @@ class AnalyzeSong(Resource):
 @api.route('/audio/<string:diskotek_nr>')
 class AnalyzeSongGet(Resource):
     def get(self, diskotek_nr):
+        """Retrieves a previously analyzed songs data from the database
+            Parameters
+            ----------
+            diskotek_nr
+                The ID of the the song to retrieve
+            Returns
+            -------
+            Object
+        """
         db = TrackEmotion()
 
         r = db.get(diskotek_nr)
@@ -172,6 +200,12 @@ class AnalyzeSongGet(Resource):
 
 @api.route('/video')
 class AnalyzeVideo(Resource):
+    """Analyzes a video and outputs the data to the database
+        Parameters
+        ----------
+        video_fields
+            The video request model that AnalyzeVideo should be called with
+    """
     @api.expect(video_fields)
     def post(self):
         data = request.get_json()
@@ -224,6 +258,12 @@ class AnalyzeVideoGet(Resource):
 
 @api.route('/video_with_audio')
 class AnalyzeVideoWithSong(Resource):
+    """Analyzes a video together with a song and outputs the data to the database
+        Parameters
+        ----------
+        video_fields_with_song
+            The video with song request model that AnalyzeVideoWithSong should be called with
+    """
     @api.expect(video_fields_with_song)
     def post(self):
         data = request.get_json()
