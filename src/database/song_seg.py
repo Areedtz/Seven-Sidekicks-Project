@@ -32,7 +32,8 @@ class SSegmentation(Storinator):
             
         Returns
         -------
-        the insert method from the database class with inputs
+        int
+            an int of the id
         """
 
         return self._db.insert(self._col, song_id, {
@@ -50,9 +51,8 @@ class SSegmentation(Storinator):
         song_id
             the id of the song
             
-        Returns
-        -------
-        the find method with inputs
+        Object
+            either a None Object or the Object from the database
         """
 
         return self._db.find(self._col, song_id)
@@ -67,7 +67,18 @@ class SSegmentation(Storinator):
             
         Returns
         -------
-        the find_all method with inputs
+        Object list
+            a list of the Objects in the database
         """
-        
         return self._db.find_all(self._col)
+
+    def close(self):
+        """closes the connection to the database
+
+        Parameters
+        ----------
+        self
+            the entity itself
+        """
+
+        self._client.close()

@@ -162,3 +162,14 @@ class VEDatabase:
             results.append(r)
         return results
             
+
+    def close(self):
+        """closes the connection to the database
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+        """
+
+        self._client.close()

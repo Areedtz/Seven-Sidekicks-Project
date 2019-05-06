@@ -3,6 +3,8 @@ from database.video_emotion_database_no_song import VEDatabase
 
 
 # VideoEmotionNS = video emotions no song
+
+
 class VideoEmotionNS(Storinator):
     def __init__(self):
         """initialises the database
@@ -89,3 +91,13 @@ class VideoEmotionNS(Storinator):
 
         return self._db.find_all(self._dbcol)
 
+    def close(self):
+        """closes the connection to the database
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+        """
+        
+        self._db.close()

@@ -29,7 +29,8 @@ class TrackEmotion(Storinator):
             
         Returns
         -------
-        the insert method from the database class with inputs
+        int
+            an int of the id
         """
 
         return self._db.insert(self._col, song_id, data)
@@ -63,7 +64,20 @@ class TrackEmotion(Storinator):
             
         Returns
         -------
-        a pass
+        Object list
+            a list of the Objects in the database 
         """
-        
+
         return self._db.find_all(self._col)
+
+    def close(self):
+        """closes the connection to the database
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+        """
+
+        self._db.close()
+

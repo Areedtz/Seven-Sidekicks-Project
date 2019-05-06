@@ -165,9 +165,20 @@ class VEDatabase:
         Object list
             a list of the Objects in the database
         """
-        
+
         results = []
         for r in self._db[col].find():
             results.append(r)
 
         return results
+
+    def close(self):
+        """closes the connection to the database
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+        """
+
+        self._client.close()
