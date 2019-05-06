@@ -9,11 +9,11 @@ class VideoEmotionNS(Storinator):
         self
             the entity itself
         """
-        self._dbname = 'video_emotion_no_song'
+        self._dbcol = 'video_emotion_no_song'
         self._db = VEDatabase()
 
     def add(self,
-            video_id: int, emotions: dict):
+            video_id: int, time: int, emotions: dict):
         """adds entity to database
     
         self
@@ -27,7 +27,7 @@ class VideoEmotionNS(Storinator):
         -------
         the insert method from the database class with inputs
         """
-        return self._db.insert(self._dbname, video_id, emotions)
+        return self._db.insert(self._dbcol, video_id, time, emotions)
 
     def get(self, video_id: int):
         """gets an entity from the database
@@ -41,7 +41,7 @@ class VideoEmotionNS(Storinator):
         -------
         the find method with inputs
         """
-        return self._db.find(self._dbname, video_id)
+        return self._db.find(self._dbcol, video_id)
 
     def get_by_video_id(self, video_id: int):
         """gets all entities from the database by video_id
@@ -67,5 +67,5 @@ class VideoEmotionNS(Storinator):
         -------
         the find_all method with inputs
         """
-        return self._db.find_all(self._dbname)
+        return self._db.find_all(self._dbcol)
 
