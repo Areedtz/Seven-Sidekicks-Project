@@ -13,8 +13,8 @@ def _create_default_document(id, id2):
     }
 
 
-def _augment_document(doc1, doc2):
-    return {**doc1, **doc2}
+def _augment_document(id1, time, emotion):
+    return {**id1, **time, **emotion}
 
 
 class VEDatabase:
@@ -27,10 +27,11 @@ class VEDatabase:
         self._db = self._client[cfg['mongo_db']]
 
     def insert(self, col,
-               song_id, video_id, doc):
+               song_id, video_id, time, emotion):
         collection = self._db[col]
+
         ins = _augment_document(_create_default_document(song_id,
-                                                         video_id), doc)
+                                                         video_id), time, emotion)
         id = collection.insert_one(ins).inserted_id
         return id
 
@@ -39,6 +40,15 @@ class VEDatabase:
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
+
+    def find_by_song_id(self, col, song_id):
+        results = []
+        data =  self._db[col].find({'song_id': song_id})
+        for i in data:
+            del i['_id']
+            i['last_updated'] = i['last_updated'].isoformat()
+            results.append(i)
+        return results
 
     def find_all(self, col):
         results = []
