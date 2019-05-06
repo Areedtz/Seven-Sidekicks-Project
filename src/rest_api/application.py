@@ -260,7 +260,7 @@ class AnalyzeVideoWithSong(Resource):
                             ' updated in Splunk as soon as it is done.'}
 
 
-@api.route('/analyze_similarity')
+@api.route('/similarity')
 class AnalyzeSimilarity(Resource):
     @api.expect(similarity_analysis_model)
     def post(self):
