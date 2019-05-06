@@ -27,7 +27,7 @@ class SongSegment(Storinator):
         return results
 
     def get_all_by_song_id(self, song_id):
-        return self._db.find_all_with_id(self._dbcol, song_id)
+        return self._db.find_all_by_id(self._dbcol, song_id)
 
     def get_all(self):
         return self._db.find_all(self._dbcol)

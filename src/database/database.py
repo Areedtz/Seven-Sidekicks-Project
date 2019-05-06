@@ -49,7 +49,7 @@ class Database:
 
         return None
 
-    def find_all_with_id(self, name, song_id):
+    def find_all_by_id(self, name, song_id):
         results = []
         for res in self._db[name].find({'song_id': song_id}):
             results.append(res)
