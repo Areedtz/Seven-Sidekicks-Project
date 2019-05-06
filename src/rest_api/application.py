@@ -118,6 +118,7 @@ song_id_field = api.model('SongIdField', {
         required=True),
 })
 
+
 @api.route('/analyze_song')
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
@@ -192,13 +193,16 @@ class AnalyzeVideo(Resource):
 
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}
+
+
 @api.route('/analyze_video/<string:video_id>')
 class AnalyzeVideoGet(Resource):
     def get(self, video_id):
         db = VideoEmotionNS()
         result = db.get_all_same_id(video_id)
 
-        if result is None: api.abort(404)
+        if result is None:
+            api.abort(404)
 
         return result
 
@@ -262,9 +266,8 @@ class Similar(Resource):
             # Should be 404, but restplus inserts additional text
             api.abort(400, 'No similar songs found')
 
-
-
         return similar
+
 
 @api.route('/analyze_video_with_song/<string:song_id>')
 class AnalyzeVideoWithSongGet(Resource):
@@ -272,6 +275,7 @@ class AnalyzeVideoWithSongGet(Resource):
         db = VideoEmotion()
         result = db.get_all_same_id(song_id)
 
-        if result is None: api.abort(404)
+        if result is None:
+            api.abort(404)
 
         return result

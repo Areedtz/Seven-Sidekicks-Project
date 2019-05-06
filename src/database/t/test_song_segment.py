@@ -10,7 +10,7 @@ def test_implements_Storinator():
 
 def test_database_name():
     ss = SongSegment()
-    assert ss._dbname == 'song_segmentation'
+    assert ss._dbcol == 'song_segmentation'
 
 
 # TODO: Add mfcc, chroma, tempogram

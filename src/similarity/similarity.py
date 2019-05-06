@@ -1,14 +1,16 @@
-import librosa
+import os
 import fileinput
+
+import librosa
 from scipy.spatial import distance
 import numpy as np
-import os
 import falconn
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
+
 from database.song_segment import SongSegment
 
 MATCHES = 10
-BUCKET_SIZE = 60 * 100
+BUCKET_SIZE = 60 * 30
 
 
 def flatten(l): return [item for sublist in l for item in sublist]
@@ -32,17 +34,17 @@ def load_songs(songs):
     segments = []
     for song in songs:
         song_id, filename = song
-        segments.append(_load_song(song_id, filename, seg_db, False))
+        segments.append(_load_song(song_id, filename, seg_db))
     seg_db.close()
     return flatten(segments)
 
 
-def _load_song(song_id, filename, segments, force):
-    segs = segments.get_all_with_id(song_id)
+def _load_song(song_id, filename, segments):
+    segs = segments.get_all_by_song_id(song_id)
 
     segment_data = []
 
-    if (force or segs == []):
+    if (segs == []):
         # No segments in db, which means no features in db
         y, sr = librosa.load(filename)
 
@@ -64,6 +66,9 @@ def _load_song(song_id, filename, segments, force):
         # There are segments in db, look for features
         for i in range(0, len(segs)):
             segment = segs[i]
+
+            if segment['mfcc'] == None or segment['chroma'] == None or segment['tempogram'] == None:
+                break
 
             feature = create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
                 segment['chroma']), np.frombuffer(segment['tempogram']))
@@ -115,7 +120,7 @@ def dist(seg1, seg2):
     return distance.euclidean(seg1[3], seg2[3])
 
 
-def find_best(matches, segment):
+def find_best_matches(matches, segment):
     lows = []
     for i in range(0, len(matches)):
         distance = dist(
@@ -136,7 +141,7 @@ def find_best(matches, segment):
 
 def query_similar(song_id, from_time, to_time):
     seg_db = SongSegment()
-    segments = seg_db.get_all_with_id(song_id)
+    segments = seg_db.get_all_by_song_id(song_id)
 
     best = None
     for segment in segments:
@@ -153,7 +158,7 @@ def query_similar(song_id, from_time, to_time):
 
     similar_ids = list(map(lambda sim: sim['id'], similar))
 
-    similar = seg_db.get_with_ids(similar_ids)
+    similar = seg_db.get_by_ids(similar_ids)
 
     x = list(map(lambda x: dict({
         'song_id': x['song_id'],
@@ -166,8 +171,8 @@ def query_similar(song_id, from_time, to_time):
     return x
 
 
-def find_matches(s):
-    searchSegment, query_object = s
+def find_matches(searchContext):
+    searchSegment, query_object = searchContext
 
     return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
 
@@ -215,7 +220,23 @@ def analyze_songs(songs):
         p.close()
 
     for i in range(0, len(segs)):
-        best = find_best(flatten(m[i]), segs[i])
+        best = find_best_matches(flatten(m[i]), segs[i])
+
+        matches = ss.get_by_ids(list(map(lambda match: match[0][0], best)))
+        matches = list(
+            map(lambda match: (match['_id'], match['similar']), matches))
+
+        for j in range(0, len(matches)):
+            matches[j][1].append(dict({
+                'id': segs[i][0],
+                'distance': best[j][1],
+            }))
+            
+            match_ids = list(set(map(lambda x: x['id'], matches[j][1])))
+            innerMatches = list(map(lambda match_id: next(
+                x for x in matches[j][1] if x['id'] == match_id), match_ids))
+            innerMatches.sort(key = lambda m: m['distance'])
+            ss.update_similar(matches[j][0], innerMatches[:10])
 
         formatted = []
         for match in best:
