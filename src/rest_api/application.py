@@ -118,7 +118,7 @@ class AnalyzeSong(Resource):
             The song request model that AnalyzeSong should be called with
     """
     @api.expect(song_fields)
-    def post(self):
+    def post(self) -> str:
         data = request.get_json()
         song_id = '{}-{}-{}'.format(
             data["ID"]["Release"], data["ID"]["Side"],
@@ -146,15 +146,17 @@ class AnalyzeSong(Resource):
 
 @api.route('/get_analyzed_song/<string:diskotek_nr>')
 class GetAnalyzeSong(Resource):
-    def get(self, diskotek_nr):
+    def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed songs data from the database
-            Parameters
-            ----------
-            diskotek_nr
-                The ID of the the song to retrieve
-            Returns
-            -------
-            Object
+        Parameters
+        ----------
+        diskotek_nr
+            The ID of the the song to retrieve
+
+        Returns
+        -------
+        object
+
         """
         db = TrackEmotion()
 
@@ -170,14 +172,20 @@ class GetAnalyzeSong(Resource):
 
 @api.route('/analyze_video')
 class AnalyzeVideo(Resource):
-    """Analyzes a video and outputs the data to the database
+    @api.expect(video_fields)
+    def post(self) -> object:
+        """Analyzes a video and outputs the data to the database
         Parameters
         ----------
         video_fields
             The video request model that AnalyzeVideo should be called with
-    """
-    @api.expect(video_fields)
-    def post(self):
+
+        Returns
+        -------
+        object
+            A dummy json response to confirm that the analysis has begun
+        """
+
         data = request.get_json()
 
         video_id = data['ID']
@@ -205,14 +213,15 @@ class AnalyzeVideo(Resource):
 
 @api.route('/analyze_video_with_song')
 class AnalyzeVideoWithSong(Resource):
-    """Analyzes a video together with a song and outputs the data to the database
+    @api.expect(video_fields_with_song)
+    def post(self):
+        """Analyzes a video together with a song and outputs the data to the database
         Parameters
         ----------
         video_fields_with_song
             The video with song request model that AnalyzeVideoWithSong should be called with
-    """
-    @api.expect(video_fields_with_song)
-    def post(self):
+        """
+
         data = request.get_json()
 
         video_id = data['ID']
