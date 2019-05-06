@@ -43,6 +43,20 @@ class VideoEmotionNS(Storinator):
         """
         return self._db.find(self._dbname, video_id)
 
+    def get_by_video_id(self, video_id: int):
+        """gets all entities from the database by video_id
+    
+        self
+            the entity itself
+        video_id
+            the id of the video
+            
+        Returns
+        -------
+        the find_by_video_id method with inputs
+        """
+        return self._db.find_by_video_id(self._dbcol, video_id)
+
     def get_all(self):
         """gets all entities from the database
     
@@ -54,3 +68,4 @@ class VideoEmotionNS(Storinator):
         the find_all method with inputs
         """
         return self._db.find_all(self._dbname)
+

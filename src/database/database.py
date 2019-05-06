@@ -116,7 +116,7 @@ class Database:
             
         Returns
         -------
-        all a list of Objects
+        a list of Objects
         """
         results = []
         for r in self._db[col].find():

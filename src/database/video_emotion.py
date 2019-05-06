@@ -13,7 +13,7 @@ class VideoEmotion(Storinator):
         self._db = VEDatabase()
 
     def add(self, song_id: int,
-            video_id: int, emotions: dict):
+            video_id: int, time: int, emotions: dict):
         """adds entity to database
 
         self
@@ -29,7 +29,8 @@ class VideoEmotion(Storinator):
         -------
         the insert method from the database class with inputs
         """
-        return self._db.insert(self._col, song_id, video_id, emotions)
+        return self._db.insert(self._col, song_id, video_id, time, emotions)
+
 
     def get(self, song_id: int, video_id: int):
         """gets an entity from the database
@@ -46,6 +47,20 @@ class VideoEmotion(Storinator):
         the find method with inputs
         """
         return self._db.find(self._col, song_id, video_id)
+
+    def get_by_song_id(self, song_id: int):
+        """gets all entities from the database by song_id
+    
+        self
+            the entity itself
+        song_id
+            the id of the song
+            
+        Returns
+        -------
+        the find_all method with inputs
+        """
+        return self._db.find_by_song_id(self._col, song_id)
 
     def get_all(self):
         """gets all entities from the database

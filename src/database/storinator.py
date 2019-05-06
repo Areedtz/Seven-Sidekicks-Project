@@ -1,10 +1,10 @@
 import abc
 
 
-# Interface for database classes
+# Interface for different databases
 class Storinator(abc.ABC):
 
-    # Generic methods for the database classes
+    # Abstract methods
     @abc.abstractmethod
     def add(self, col, id: int):
         """Adds entity to database
