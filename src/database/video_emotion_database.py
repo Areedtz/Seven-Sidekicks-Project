@@ -18,15 +18,17 @@ def _create_default_document(id: int, id2: int) -> Dict:
         
     Returns
     -------
-    id and timestamp
+    Dict
+        containing id and timestamp
     """
+
     return {
         "song_id": id,
         "video_id": id2,
         "last_updated": datetime.datetime.utcnow(),
     }
 
-def _augment_document(id1: int, time: dict, emotion: dict) -> Dict:
+def _augment_document(id1: dict, time: dict, emotion: dict) -> Dict:
     """Combines parameters into a larger dictionary
     
     Parameters
@@ -40,8 +42,10 @@ def _augment_document(id1: int, time: dict, emotion: dict) -> Dict:
         
     Returns
     -------
-    data
+    Dict
+        dictionary combining id, time interval and emotion data
     """
+
     return {**id1, **time, **emotion}
 
 
@@ -84,8 +88,10 @@ class VEDatabase:
             
         Returns
         -------
-        id of the entity
+        int
+            an int of the id
         """
+
         collection = self._db[col]
 
         ins = _augment_document(_create_default_document(song_id,
@@ -97,6 +103,8 @@ class VEDatabase:
              song_id: int, video_id: int):
         """Find one instance of the data requested
     
+        Parameters
+        ----------
         self
             the entity itself
         col
@@ -108,8 +116,10 @@ class VEDatabase:
             
         Returns
         -------
-        an Object
+        Object
+            either a None Object or the Object from the database
         """
+
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
@@ -117,6 +127,8 @@ class VEDatabase:
     def find_by_song_id(self, col, song_id: int):
         """Find all instances of the data requested in the collection by song_id
     
+        Parameters
+        ----------
         self
             the entity itself
         col
@@ -126,8 +138,10 @@ class VEDatabase:
             
         Returns
         -------
-        a list of Objects
+        Object list
+            a list of the Objects in the database from a given song_id
         """
+
         results = []
         data =  self._db[col].find({'song_id': song_id})
         for i in data:
@@ -139,6 +153,8 @@ class VEDatabase:
     def find_all(self, col):
         """Find all instances of the data requested in the collection
     
+        Parameters
+        ----------
         self
             the entity itself
         col
@@ -146,8 +162,10 @@ class VEDatabase:
             
         Returns
         -------
-        a list of Objects
+        Object list
+            a list of the Objects in the database
         """
+        
         results = []
         for r in self._db[col].find():
             results.append(r)

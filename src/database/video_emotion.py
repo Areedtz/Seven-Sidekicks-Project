@@ -6,9 +6,12 @@ class VideoEmotion(Storinator):
     def __init__(self):
         """initialises the database
     
+        Parameters
+        ----------
         self
             the entity itself
         """
+
         self._col = 'video_emotion'
         self._db = VEDatabase()
 
@@ -16,6 +19,8 @@ class VideoEmotion(Storinator):
             video_id: int, time: int, emotions: dict):
         """adds entity to database
 
+        Parameters
+        ----------
         self
             the entity itself
         song_id
@@ -27,14 +32,18 @@ class VideoEmotion(Storinator):
             
         Returns
         -------
-        the insert method from the database class with inputs
+        int
+            an int of the id
         """
+
         return self._db.insert(self._col, song_id, video_id, time, emotions)
 
 
     def get(self, song_id: int, video_id: int):
         """gets an entity from the database
     
+        Parameters
+        ----------
         self
             the entity itself
         song_id
@@ -44,13 +53,17 @@ class VideoEmotion(Storinator):
             
         Returns
         -------
-        the find method with inputs
+        Object
+            either a None Object or the Object from the database
         """
+
         return self._db.find(self._col, song_id, video_id)
 
     def get_by_song_id(self, song_id: int):
         """gets all entities from the database by song_id
     
+        Parameters
+        ----------
         self
             the entity itself
         song_id
@@ -58,18 +71,24 @@ class VideoEmotion(Storinator):
             
         Returns
         -------
-        the find_all method with inputs
+        Object list
+            a list of the Objects in the database from a given video_id
         """
+
         return self._db.find_by_song_id(self._col, song_id)
 
     def get_all(self):
         """gets all entities from the database
     
+        Parameters
+        ----------
         self
             the entity itself
             
         Returns
         -------
-        the find_all method with inputs
+        Object list
+            a list of the Objects in the database
         """
+
         return self._db.find_all(self._col)

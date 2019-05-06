@@ -16,14 +16,15 @@ def _create_default_document(id: int) -> Dict:
         
     Returns
     -------
-    id and timestamp
+    Dict
+        containing id and timestamp
     """
+
     return {
         "song_id": id,
         "last_updated": datetime.datetime.utcnow(),
     }
  
-
 def _augment_document(doc1: dict, doc2: dict) -> Dict:
     """Combines parameters into a larger dictionary
     
@@ -36,15 +37,16 @@ def _augment_document(doc1: dict, doc2: dict) -> Dict:
         
     Returns
     -------
-    data
+    Dict
+        dictionary combining two dictionaries
     """
+
     return {**doc1, **doc2}
 
 
 # Generic class for making functions implementable
 # for lower level classes of music analysis
 class Database:
-
     def __init__(self):
         """Creates the individual collection in the database
     
@@ -54,6 +56,7 @@ class Database:
             the entity itself
             
         """
+
         cfg = load_config()
 
         self._client = MongoClient(
@@ -77,8 +80,10 @@ class Database:
             
         Returns
         -------
-        id of the entity
+        int
+            an int of the id
         """
+
         collection = self._db[col]
         ins = _augment_document(_create_default_document(song_id), doc)
         id = collection.insert_one(ins).inserted_id
@@ -87,6 +92,8 @@ class Database:
     def find(self, col, song_id: int):
         """Find one instance of the data requested
     
+        Parameters
+        ----------
         self
             the entity itself
         col
@@ -96,8 +103,10 @@ class Database:
             
         Returns
         -------
-        an Object
+        Object
+            either a None Object or the Object from the database
         """
+
         if (self._db[col].count({'song_id': song_id}) > 0):
             res = self._db[col].find({'song_id': song_id}
                                       ).sort([('last_updated', -1)]
@@ -109,6 +118,8 @@ class Database:
     def find_all(self, col):
         """Find all instances of the data requested in the collection
     
+        Parameters
+        ----------
         self
             the entity itself
         col
@@ -116,8 +127,10 @@ class Database:
             
         Returns
         -------
-        a list of Objects
+        Object list
+            a list of the Objects in the database
         """
+
         results = []
         for r in self._db[col].find():
             results.append(r)

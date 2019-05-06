@@ -7,15 +7,20 @@ class SSegmentation(Storinator):
     def __init__(self):
         """initialises the database
     
+        Parameters
+        ----------
         self
             the entity itself
         """
+
         self._col = 'song_segmentation'
         self._db = Database()
 
     def add(self, song_id: int, time_from: int, time_to: int):
         """adds entity to database
     
+        Parameters
+        ----------
         self
             the entity itself
         song_id
@@ -29,6 +34,7 @@ class SSegmentation(Storinator):
         -------
         the insert method from the database class with inputs
         """
+
         return self._db.insert(self._col, song_id, {
             "time_from": time_from,
             "time_to": time_to
@@ -37,6 +43,8 @@ class SSegmentation(Storinator):
     def get(self, song_id: int):
         """gets an entity from the database
     
+        Parameters
+        ----------
         self
             the entity itself
         song_id
@@ -46,11 +54,14 @@ class SSegmentation(Storinator):
         -------
         the find method with inputs
         """
+
         return self._db.find(self._col, song_id)
 
     def get_all(self):
         """gets all entities from the database
     
+        Parameters
+        ----------
         self
             the entity itself
             
@@ -58,4 +69,5 @@ class SSegmentation(Storinator):
         -------
         the find_all method with inputs
         """
+        
         return self._db.find_all(self._col)
