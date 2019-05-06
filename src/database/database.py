@@ -1,22 +1,43 @@
 import datetime
-import typing
 
-from pymongo import MongoClient
 
+from typing import Dict
+from pymongo import MongoClients
 from utilities.config_loader import load_config
 
 
-# Mandatory for all entities
-# Gives entity an id and a timestamp
-def _create_default_document(id: int) -> dict: 
+def _create_default_document(id: int) -> Dict:
+    """Gives a database entity an id and a timestamp
+    
+    Parameters
+    ----------
+    id
+        id of the entity to be created
+        
+    Returns
+    -------
+    id and timestamp
+    """
     return {
         "song_id": id,
         "last_updated": datetime.datetime.utcnow(),
     }
  
 
-# Combines parameters into a larger dictionary
-def _augment_document(doc1: dict, doc2: dict) -> dict:
+def _augment_document(doc1: dict, doc2: dict) -> Dict:
+    """Combines parameters into a larger dictionary
+    
+    Parameters
+    ----------
+    doc1
+        first dictionary
+    doc2
+        second dictionary
+        
+    Returns
+    -------
+    data
+    """
     return {**doc1, **doc2}
 
 
@@ -24,8 +45,15 @@ def _augment_document(doc1: dict, doc2: dict) -> dict:
 # for lower level classes of music analysis
 class Database:
 
-    # Creates the individual collection in the database
     def __init__(self):
+        """Creates the individual collection in the database
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+            
+        """
         cfg = load_config()
 
         self._client = MongoClient(
@@ -33,15 +61,43 @@ class Database:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client['dr']
 
-    # Insert data into the collection
-    def insert(self, col, song_id, doc):
+    def insert(self, col, song_id: int, doc: dict) -> int:
+        """Insert data into the collection
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+        col
+            the collection to be added to
+        song_id
+            id of the song
+        doc
+            dictionary with data
+            
+        Returns
+        -------
+        id of the entity
+        """
         collection = self._db[col]
         ins = _augment_document(_create_default_document(song_id), doc)
         id = collection.insert_one(ins).inserted_id
         return id
 
-    # Find one instance of the data requested
-    def find(self, col, song_id):
+    def find(self, col, song_id: int):
+        """Find one instance of the data requested
+    
+        self
+            the entity itself
+        col
+            the collection to be added to
+        song_id
+            id of the song
+            
+        Returns
+        -------
+        an Object
+        """
         if (self._db[col].count({'song_id': song_id}) > 0):
             res = self._db[col].find({'song_id': song_id}
                                       ).sort([('last_updated', -1)]
@@ -50,8 +106,18 @@ class Database:
 
         return None
 
-    # Find all instances of the data requested in the collection
     def find_all(self, col):
+        """Find all instances of the data requested in the collection
+    
+        self
+            the entity itself
+        col
+            the collection to be added to
+            
+        Returns
+        -------
+        all a list of Objects
+        """
         results = []
         for r in self._db[col].find():
             results.append(r)

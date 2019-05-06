@@ -1,21 +1,42 @@
 import datetime
 
-from pymongo import MongoClient
 
+from typing import Dict
+from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-# Mandatory for all entities
-# Gives entity an id and a timestamp
-def _create_default_document(id):
+def _create_default_document(id: int) -> Dict:
+    """Gives a database entity an id and a timestamp
+    
+    Parameters
+    ----------
+    id
+        id of the entity to be created
+        
+    Returns
+    -------
+    id and timestamp
+    """
     return {
         "video_id": id,
         "last_updated": datetime.datetime.utcnow(),
     }
 
-
-# Combines parameters into a larger dictionary
-def _augment_document(doc1, doc2):
+def _augment_document(doc1: dict, doc2: dict) -> Dict:
+    """Combines parameters into a larger dictionary
+    
+    Parameters
+    ----------
+    doc1
+        first dictionary
+    doc2
+        second dictionary
+        
+    Returns
+    -------
+    data
+    """
     return {**doc1, **doc2}
 
 
@@ -23,6 +44,14 @@ def _augment_document(doc1, doc2):
 # for lower level classes of music analysis
 class VEDatabase:
     def __init__(self):
+        """Creates the individual collection in the database
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+            
+        """
         cfg = load_config()
 
         self._client = MongoClient(
@@ -30,25 +59,63 @@ class VEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    # Insert data into the collection
-    def insert(self, name,
-               video_id, doc):
-        collection = self._db[name]
+    def insert(self, col,
+               video_id: int, doc: dict) -> int:
+        """Insert data into the collection
+    
+        Parameters
+        ----------
+        self
+            the entity itself
+        col
+            the collection to be added to
+        video_id
+            id of the video
+        doc
+            dictionary with data
+            
+        Returns
+        -------
+        id of the entity
+        """
+        collection = self._db[col]
         ins = _augment_document(_create_default_document(
             video_id), doc)
         id = collection.insert_one(ins).inserted_id
         return id
 
-    # Find one instance of the data requested
-    def find(self, name,
-             video_id):
-        return self._db[name].find({'video_id': video_id}
+    def find(self, col,
+             video_id: int):
+        """Find one instance of the data requested
+    
+        self
+            the entity itself
+        col
+            the collection to be added to
+        video_id
+            id of the video
+            
+        Returns
+        -------
+        an Object
+        """
+        return self._db[col].find({'video_id': video_id}
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    # Find all instances of the data requested in the collection
-    def find_all(self, name):
+    def find_all(self, col):
+        """Find all instances of the data requested in the collection
+    
+        self
+            the entity itself
+        col
+            the collection to be added to
+            
+        Returns
+        -------
+        all a list of Objects
+        """
         results = []
-        for track_bpm in self._db[name].find():
-            results.append(track_bpm)
+        for r in self._db[col].find():
+            results.append(r)
         return results
