@@ -1,5 +1,7 @@
 import datetime
-import typing
+
+
+from typing import Dict
 
 
 from pymongo import MongoClient
