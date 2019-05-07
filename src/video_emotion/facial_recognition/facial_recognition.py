@@ -1,9 +1,8 @@
 import os
+from typing import Dict
 
 import numpy as np
 import cv2
-
-from typing import Dict
 
 from utilities.filehandler.handle_path import get_absolute_path
 
@@ -26,14 +25,14 @@ GREEN = 177.0
 BLUE = 123.0
 
 
-def analyze_video(video_path, time_range=None) -> Dict:
+def analyze_video(video_path : str, time_range=None) -> Dict:
     """Analyses video finding faces, given videopath and a timerange
 
     Parameters
     ----------
-    video_path
+    video_path : str
         the path of the video
-    time_range
+    time_range : optional
         the time range in the video you want analyzed
         Given none the entire video will be analyzed
 
@@ -88,6 +87,7 @@ def analyze_frame(frame) -> [[int, int]]:
     [[int, int]]
         A list of facetuples that describe the placement of a face in the frame
     """
+    
     # Get width and height of frame
     (h, w) = frame.shape[:2]
 
