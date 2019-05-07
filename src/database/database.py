@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int):
+def _create_default_document(id):
     """Gives a database entity an id and a timestamp
     
     Parameters
@@ -24,7 +24,7 @@ def _create_default_document(id: int):
         "last_updated": datetime.datetime.utcnow(),
     }
  
-def _augment_document(doc1: dict, doc2: dict):
+def _augment_document(doc1, doc2):
     """Combines parameters into a larger dictionary
     
     Parameters
@@ -72,7 +72,7 @@ class Database:
             password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, col, song_id: int, doc: dict) -> int:
+    def insert(self, col, song_id, doc):
         """Insert data into the collection
     
         Parameters
@@ -96,7 +96,7 @@ class Database:
         return _id
 
 # Gets the newest entry, the other option would be to overwrite it in the insert method
-    def find(self, col, song_id: int):
+    def find(self, col, song_id):
         """Find one instance of the data requested
     
         Parameters
@@ -119,7 +119,7 @@ class Database:
 
         return None
 
-    def find_all_by_id(self, name, song_id: int):
+    def find_all_by_id(self, name, song_id):
         """Find all instances of the data requested in the collection by song_id
     
         Parameters
