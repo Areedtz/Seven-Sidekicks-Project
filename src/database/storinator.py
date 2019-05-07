@@ -13,7 +13,7 @@ class Storinator(abc.ABC):
 
     def get(self, col, id: int):
         Finds one entity from the database
-        
+
     def get_all(self, col):
         Finds all entities in the database
     
@@ -27,12 +27,10 @@ class Storinator(abc.ABC):
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         id
-            the id of the the entity
+            The id of the the entity
         pass
         """
 
@@ -43,12 +41,10 @@ class Storinator(abc.ABC):
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         id
-            the id of the the entity
+            The id of the the entity
         """
 
         pass
@@ -59,10 +55,8 @@ class Storinator(abc.ABC):
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         """
 
         pass
@@ -75,14 +69,42 @@ class Storinator(abc.ABC):
 class SegmentStorinator(abc.ABC):
     @abc.abstractmethod
     def add(self, name, segment_id):
+        """Adds entity to database
+    
+        Parameters
+        ----------
+        col
+            The collection to be added to
+        id
+            The id of the the entity
+        """
+
         pass
 
     @abc.abstractmethod
     def get(self, name, segment_id):
+        """Finds one entity from the database
+    
+        Parameters
+        ----------
+        col
+            The collection to be added to
+        id
+            The id of the the entity
+        """
+
         pass
 
     @abc.abstractmethod
     def get_all(self, name):
+        """Finds all entities in the database
+    
+        Parameters
+        ----------
+        col
+            The collection to be added to
+        """
+
         pass
 
     @abc.abstractmethod

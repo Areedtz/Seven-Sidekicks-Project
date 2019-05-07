@@ -19,7 +19,7 @@ def _create_default_document(id: int, id2: int) -> Dict:
     Returns
     -------
     Dict
-        containing id and timestamp
+        Containing id and timestamp
     """
 
     return {
@@ -43,7 +43,7 @@ def _augment_document(id1: dict, time: dict, emotion: dict) -> Dict:
     Returns
     -------
     Dict
-        dictionary combining id, time interval and emotion data
+        Dictionary combining id, time interval and emotion data
     """
 
     return {**id1, **time, **emotion}
@@ -63,33 +63,25 @@ class VEDatabase:
     def insert(self, col,
                song_id: int, video_id: int, 
                time: dict, emotion: dict) -> int:
-        inserts data into the collection in the database
+        Inserts data into the collection in the database
 
     def find(self, col,
              song_id: int, video_id: int):
-        finds one entity given an id
+        Finds one entity given an id
 
     def find_by_song_id(self, col, song_id: int):
-        finds all entities given an id
+        Finds all entities given an id
 
     def find_all(self, col):
-        finds all entities in the database
+        Finds all entities in the database
 
     def close(self):
-        closes the database
+        Closes the database
     
     """
 
     def __init__(self):
-        """Creates the individual collection in the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-            
-        """
-        
+
         cfg = load_config()
 
         self._client = MongoClient(
@@ -104,21 +96,19 @@ class VEDatabase:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         song_id
             id of the song
         video_id
             id of the video
         doc
-            dictionary with data
+            Dictionary with data
             
         Returns
         -------
         int
-            an int of the id
+            An int of the id
         """
 
         collection = self._db[col]
@@ -135,10 +125,8 @@ class VEDatabase:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         song_id
             id of the song
         video_id
@@ -147,7 +135,7 @@ class VEDatabase:
         Returns
         -------
         Object
-            either a None Object or the Object from the database
+            Either a None Object or the Object from the database
         """
 
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
@@ -159,17 +147,15 @@ class VEDatabase:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         song_id
             id of the song
             
         Returns
         -------
         Object list
-            a list of the Objects in the database from a given song_id
+            A list of the Objects in the database from a given song_id
         """
 
         results = []
@@ -185,15 +171,13 @@ class VEDatabase:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
             
         Returns
         -------
         Object list
-            a list of the Objects in the database
+            A list of the Objects in the database
         """
 
         results = []
@@ -203,12 +187,5 @@ class VEDatabase:
         return results
 
     def close(self):
-        """closes the connection to the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-        """
 
         self._client.close()

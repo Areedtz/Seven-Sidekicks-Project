@@ -10,13 +10,13 @@ class TrackEmotion(Storinator):
     Methods
     -------
     def add(self, song_id: int, data: dict):
-        inserts data into the collection in the database
+        Inserts data into the collection in the database
 
     def get(self, song_id: int):
-        finds one entity given an id
+        Finds one entity given an id
 
     def get_all(self):
-        finds all entities in the database
+        Finds all entities in the database
     
     """
 
@@ -26,38 +26,34 @@ class TrackEmotion(Storinator):
         self._db = Database()
 
     def add(self, song_id: int, data: dict):
-        """adds entity to database
+        """Adds entity to database
     
         Parameters
         ----------
-        self
-            the entity itself
         song_id
-            the id of the song
+            The id of the song
         data
-            the data of the entity
+            The data of the entity
             
         Returns
         -------
         int
-            an int of the id
+            An int of the id
         """
 
         return self._db.insert(self._col, song_id, data)
 
     def get(self, song_id: int):
-        """gets an entity from the database
+        """Gets an entity from the database
     
         Parameters
         ----------
-        self
-            the entity itself
         song_id
-            the id of the song
+            The id of the song
             
         Returns
         -------
-        the find method with inputs
+            The find method with inputs
         """
 
         return self._db.find(self._col, song_id)
@@ -67,27 +63,18 @@ class TrackEmotion(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
             
         Returns
         -------
         Object list
-            a list of the Objects in the database 
+            A list of the Objects in the database 
         """
 
         return self._db.find_all(self._col)
 
     def close(self):
-        """closes the connection to the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-        """
 
         self._db.close()
 

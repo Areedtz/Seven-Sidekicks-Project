@@ -17,7 +17,7 @@ def _create_default_document(id: int) -> Dict:
     Returns
     -------
     Dict
-        containing id and timestamp
+        Containing id and timestamp
     """
 
     return {
@@ -31,14 +31,14 @@ def _augment_document(doc1: dict, doc2: dict) -> Dict:
     Parameters
     ----------
     doc1
-        first dictionary
+        First dictionary
     doc2
-        second dictionary
+        Second dictionary
         
     Returns
     -------
     Dict
-        dictionary combining two dictionaries
+        Dictionary combining two dictionaries
     """
 
 
@@ -51,16 +51,16 @@ class Database:
     Methods
     -------
     def insert(self, col, song_id: int, doc: dict) -> int
-        inserts data into the collection in the database
+        Inserts data into the collection in the database
 
     def find(self, col, song_id: int):
-        finds one entity given an id
+        Finds one entity given an id
 
     def find_all_by_id(self, name, song_id: int):
-        finds all entities given an id
+        Finds all entities given an id
 
     def find_all(self, col):
-        finds all entities in the database
+        Finds all entities in the database
     
     """
 
@@ -78,19 +78,17 @@ class Database:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         song_id
             id of the song
         doc
-            dictionary with data
+            Dictionary with data
             
         Returns
         -------
         int
-            an int of the id
+            An int of the id
         """
 
         collection = self._db[col]
@@ -104,17 +102,15 @@ class Database:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         song_id
             id of the song
             
         Returns
         -------
         Object
-            either a None Object or the Object from the database
+            Either a None Object or the Object from the database
         """
         if (self._db[col].count({'song_id': song_id}) > 0):
             res = self._db[col].find({'song_id': song_id}
@@ -129,17 +125,15 @@ class Database:
     
         Parameters
         ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
         song_id
             id of the song
             
         Returns
         -------
         Object list
-            a list of the Objects in the database from a given song_id
+            A list of the Objects in the database from a given song_id
         """
 
         results = []
@@ -151,16 +145,13 @@ class Database:
         """Find all instances of the data requested in the collection
     
         Parameters
-        ----------
-        self
-            the entity itself
         col
-            the collection to be added to
+            The collection to be added to
             
         Returns
         -------
         Object list
-            a list of the Objects in the database
+            A list of the Objects in the database
         """
 
         results = []
@@ -169,5 +160,5 @@ class Database:
         return results
 
     def close(self):
-        """closes the connection to the database"""
+
         self._client.close()

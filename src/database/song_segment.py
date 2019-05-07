@@ -7,15 +7,8 @@ from database.storinator import Storinator
 
 class SongSegment(Storinator):
 
-    
+
     def __init__(self):
-        """initialises the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-        """
 
         self._dbcol = 'song_segmentation'
         self._db = Database()
@@ -25,8 +18,6 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
         song_id
             the id of the song
         time_from
@@ -53,8 +44,6 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
         song_id
             the id of the song
             
@@ -70,8 +59,6 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
         ids
             
         Returns
@@ -90,8 +77,6 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
         song_id
             the id of the song
             
@@ -105,12 +90,7 @@ class SongSegment(Storinator):
 
     def get_all(self):
         """gets all entities from the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-            
+
         Returns
         -------
         Object list
@@ -124,8 +104,7 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
+
         from_count
             ???
         to_count
@@ -147,8 +126,6 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        self
-            the entity itself
         id
             id of the entity
         similar
@@ -167,11 +144,6 @@ class SongSegment(Storinator):
 
     def count(self) -> int:
         """counts the number of elements in the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
 
         Returns
         -------
@@ -182,12 +154,5 @@ class SongSegment(Storinator):
         return self._db._db[self._dbcol].count({})
 
     def close(self):
-        """closes the connection to the database
-    
-        Parameters
-        ----------
-        self
-            the entity itself
-        """
         
         self._db.close()
