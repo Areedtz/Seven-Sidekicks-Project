@@ -1,13 +1,11 @@
 import datetime
 
-from typing import Dict
-
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int) -> Dict:
+def _create_default_document(id: int):
     """Gives a database entity an id and a timestamp
     
     Parameters
@@ -26,7 +24,7 @@ def _create_default_document(id: int) -> Dict:
         "last_updated": datetime.datetime.utcnow(),
     }
  
-def _augment_document(doc1: dict, doc2: dict) -> Dict:
+def _augment_document(doc1: dict, doc2: dict):
     """Combines parameters into a larger dictionary
     
     Parameters
