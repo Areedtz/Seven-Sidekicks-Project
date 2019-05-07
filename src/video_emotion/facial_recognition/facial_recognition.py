@@ -25,14 +25,14 @@ GREEN = 177.0
 BLUE = 123.0
 
 
-def analyze_video(video_path : str, time_range=None) -> Dict:
+def analyze_video(video_path : str, time_range=None : int) -> Dict:
     """Analyses video finding faces, given videopath and a timerange
 
     Parameters
     ----------
     video_path : str
         the path of the video
-    time_range : optional
+    time_range : int, optional
         the time range in the video you want analyzed
         Given none the entire video will be analyzed
 
@@ -75,7 +75,7 @@ def analyze_video(video_path : str, time_range=None) -> Dict:
 
 
 def analyze_frame(frame) -> [[int, int]]:
-    """Analyses a single frame finding faces returning as a coordinate
+    """Analyses a single frame, finding faces returning as a coordinate
 
     Parameters
     ----------
