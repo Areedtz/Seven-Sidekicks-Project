@@ -24,7 +24,7 @@ class SSegmentation(Storinator):
         self._col = 'song_segmentation'
         self._db = Database()
 
-    def add(self, song_id: int, time_from: int, time_to: int):
+    def add(self, song_id: int, time_from: int, time_to: int) -> int:
         """adds entity to database
     
         Parameters

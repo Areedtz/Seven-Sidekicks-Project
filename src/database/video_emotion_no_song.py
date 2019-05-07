@@ -33,7 +33,7 @@ class VideoEmotionNS(Storinator):
         self._db = VEDatabase()
 
     def add(self,
-            video_id: int, time: int, emotions: dict):
+            video_id: int, time: int, emotions: dict) -> int:
         """Adds entity to database
     
         Parameters

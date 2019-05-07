@@ -25,7 +25,7 @@ class TrackEmotion(Storinator):
         self._col = 'track_emotion'
         self._db = Database()
 
-    def add(self, song_id: int, data: dict):
+    def add(self, song_id: int, data: dict) -> int:
         """Adds entity to database
     
         Parameters
