@@ -25,7 +25,7 @@ GREEN = 177.0
 BLUE = 123.0
 
 
-def analyze_video(video_path : str, time_range=None : int) -> Dict:
+def analyze_video(video_path : str, time_range:int =None) -> Dict:
     """Analyses video finding faces, given videopath and a timerange
 
     Parameters
