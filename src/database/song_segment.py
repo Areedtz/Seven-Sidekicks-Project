@@ -6,6 +6,8 @@ from database.storinator import Storinator
 
 
 class SongSegment(Storinator):
+
+    
     def __init__(self):
         """initialises the database
     

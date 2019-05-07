@@ -4,6 +4,22 @@ from database.storinator import Storinator
 
 
 class SSegmentation(Storinator):
+    """
+    An extension to the database class that calls it's methods with other
+    parameters to lessen code
+
+    Methods
+    -------
+    def add(self, song_id: int, time_from: int, time_to: int):
+        inserts data into the collection in the database
+
+    def get(self, song_id: int):
+        finds one entity given an id
+
+    def get_all(self):
+        finds all entities in the database
+    """
+    
     def __init__(self):
         """initialises the database
     

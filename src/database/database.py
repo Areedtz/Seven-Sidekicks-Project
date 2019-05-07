@@ -61,9 +61,6 @@ class Database:
 
     def find_all(self, col):
         finds all entities in the database
-
-    def close(self):
-        closes the database
     
     """
 

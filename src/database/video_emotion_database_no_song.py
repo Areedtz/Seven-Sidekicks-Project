@@ -1,7 +1,7 @@
 import datetime
-impor rtyping
+import typing
 
-1
+
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
@@ -49,6 +49,26 @@ def _augment_document(id1: dict, time: dict, emotion: dict) -> Dict:
 # Generic class for making functions implementable
 # for lower level classes of music analysis
 class VEDatabase:
+    """
+    A database class used to communicate with a database
+
+    Methods
+    -------
+    def insert(self, col,
+               video_id: int, time: dict, emotion: dict) -> int:
+        inserts data into the collection in the database
+
+    def find(self, col, video_id: int):
+        finds one entity given an id
+
+    def find_by_video_id(self, col, video_id: int):
+        finds all entities given an id
+
+    def find_all(self, col):
+        finds all entities in the database
+    
+    """
+
     def __init__(self):
         """Creates the individual collection in the database
     

@@ -3,6 +3,22 @@ import abc
 
 # Interface for different databases
 class Storinator(abc.ABC):
+    """
+    A generic class to structure future database classes
+
+    Methods
+    -------
+    def add(self, col, id: int):
+        Adds entity to database
+
+    def get(self, col, id: int):
+        Finds one entity from the database
+        
+    def get_all(self, col):
+        Finds all entities in the database
+    
+    """
+
 
     # Abstract methods
     @abc.abstractmethod
