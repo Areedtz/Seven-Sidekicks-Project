@@ -1,4 +1,4 @@
-from typing import Dict, Object, List
+from typing import Dict, object, List
 
 from database.database import Database
 from database.storinator import Storinator
@@ -49,7 +49,7 @@ class SSegmentation(Storinator):
             "time_to": time_to
         })
 
-    def get(self, song_id : int) -> Object:
+    def get(self, song_id : int) -> object:
         """Gets get the song_segment from the database
     
         Parameters
@@ -57,19 +57,19 @@ class SSegmentation(Storinator):
         song_id : int
             The id of the song
             
-        Object
-            Either a None Object or the Object from the database
+        object
+            Either a None object or the object from the database
         """
 
         return self._db.find(self._col, song_id)
 
-    def get_all(self) -> [Object]:
+    def get_all(self) -> [object]:
         """Gets all song_segments from the database
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database
+        object list
+            A list of the objects in the database
         """
         return self._db.find_all(self._col)
 

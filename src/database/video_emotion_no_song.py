@@ -1,4 +1,4 @@
-from typing import Dict, Object, List
+from typing import Dict, object, List
 
 from database.storinator import Storinator
 from database.video_emotion_database_no_song import VEDatabase
@@ -54,7 +54,7 @@ class VideoEmotionNS(Storinator):
 
         return self._db.insert(self._dbcol, video_id, time, emotions)
 
-    def get(self, video_id : int) -> Object:
+    def get(self, video_id : int) -> object:
         """Gets a video_segment_no_song from the database
     
         Parameters
@@ -64,13 +64,13 @@ class VideoEmotionNS(Storinator):
             
         Returns
         -------
-        Object
-            Either a None Object or the Object from the database
+        object
+            Either a None object or the object from the database
         """
 
         return self._db.find(self._dbcol, video_id)
 
-    def get_by_video_id(self, video_id : int) -> [Object]:
+    def get_by_video_id(self, video_id : int) -> [object]:
         """Gets all video_segments_no_song from the database by video_id
     
         Parameters
@@ -80,19 +80,19 @@ class VideoEmotionNS(Storinator):
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database from a given video_id
+        object list
+            A list of the objects in the database from a given video_id
         """
 
         return self._db.find_by_video_id(self._dbcol, video_id)
 
-    def get_all(self) -> [Object]:
+    def get_all(self) -> [object]:
         """Gets all video_segments_no_song from the database
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database
+        object list
+            A list of the objects in the database
         """
 
         return self._db.find_all(self._dbcol)

@@ -1,6 +1,6 @@
 import datetime
 
-from typing import Dict, Object, List
+from typing import Dict, object, List
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
@@ -115,7 +115,7 @@ class VEDatabase:
         return id
 
     def find(self, col : str,
-             song_id : int, video_id : int) -> Object:
+             song_id : int, video_id : int) -> object:
         """Find one instance of the video_segment requested
     
         Parameters
@@ -129,15 +129,15 @@ class VEDatabase:
             
         Returns
         -------
-        Object
-            Either a None Object or the Object from the database
+        object
+            Either a None object or the object from the database
         """
 
         return self._db[col].find({'song_id': song_id, 'video_id': video_id}
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
 
-    def find_by_song_id(self, col : str, song_id : int) -> [Object]:
+    def find_by_song_id(self, col : str, song_id : int) -> [object]:
         """Find all instances of the video_segments requested in the collection by song_id
     
         Parameters
@@ -149,8 +149,8 @@ class VEDatabase:
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database from a given song_id
+        object list
+            A list of the objects in the database from a given song_id
         """
 
         results = []
@@ -161,7 +161,7 @@ class VEDatabase:
             results.append(i)
         return results
 
-    def find_all(self, col : str) -> [Object]:
+    def find_all(self, col : str) -> [object]:
         """Find all instances of the video_segment requested in the collection
     
         Parameters
@@ -171,8 +171,8 @@ class VEDatabase:
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database
+        object list
+            A list of the objects in the database
         """
 
         results = []

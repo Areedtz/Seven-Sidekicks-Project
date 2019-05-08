@@ -1,6 +1,6 @@
 import datetime
 
-from typing import Dict, Object, List
+from typing import Dict, object, List
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
@@ -106,7 +106,7 @@ class VEDatabase:
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, col : int, video_id : int) -> Object:
+    def find(self, col : int, video_id : int) -> object:
         """Find one instance of the video_segment_no_song requested
     
         Parameters
@@ -118,15 +118,15 @@ class VEDatabase:
             
         Returns
         -------
-        Object
-            Either a None Object or the Object from the database
+        object
+            Either a None object or the object from the database
         """
 
         return self._db[col].find({'video_id': video_id}
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    def find_by_video_id(self, col : str, video_id : int) -> [Object]:
+    def find_by_video_id(self, col : str, video_id : int) -> [object]:
         """Find all instances of the video_segment_no_song requested in the collection by video_id
     
         Parameters
@@ -138,8 +138,8 @@ class VEDatabase:
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database from a given video_id
+        object list
+            A list of the objects in the database from a given video_id
         """
 
         results = []
@@ -150,7 +150,7 @@ class VEDatabase:
             results.append(i)
         return results
 
-    def find_all(self, col : str) -> [Object]:
+    def find_all(self, col : str) -> [object]:
         """Find all instances of the video_segment_no_song requested in the collection
     
         Parameters
@@ -160,8 +160,8 @@ class VEDatabase:
             
         Returns
         -------
-        Object list
-            A list of the Objects in the database 
+        object list
+            A list of the objects in the database 
         """
 
         results = []
