@@ -31,8 +31,9 @@ hostURL = cfg['rest_api_url']
 hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
-
-# Model is nested inside the song_fields model
+"""
+    Models the id of a piece of music
+"""
 id_model = api.model('IdModel', {
     'Release': fields.Integer(
         description='The release ID of the song',
@@ -45,6 +46,9 @@ id_model = api.model('IdModel', {
         required=True),
 })
 
+"""
+    Models an analysis request for a piece of music including its location and the user requesting the analysis
+"""
 song_fields = api.model('SongModel', {
     'ID': fields.Nested(
         id_model,
@@ -58,15 +62,21 @@ song_fields = api.model('SongModel', {
         required=True),
 })
 
+"""
+    Models the time-range of a video input
+"""
 timerange_model = api.model('TimeRange_Model', {
     'From': fields.Integer(
-        description='The beginning time of the content to analyze',
+        description='The beginning time of the content to analyze in milliseconds',
         required=True),
     'To': fields.Integer(
-        description='The end time of the content to analyze',
+        description='The end time of the content to analyze milliseconds',
         required=True),
 })
 
+"""
+    Models a request for analyzing a video and song in conjunction so that their data can be collated
+"""
 video_fields_with_song = api.model('VideoModelWithSong', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -85,6 +95,9 @@ video_fields_with_song = api.model('VideoModelWithSong', {
         required=True),
 })
 
+"""
+    Models a request for analyzing a video
+"""
 video_fields = api.model('VideoModel', {
     'ID': fields.String(
         description='The ID of the video to analyze',
@@ -123,7 +136,10 @@ song_id_field = api.model('SongIdField', {
 @api.route('/audio')
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
-    def post(self):
+    def post(self) -> str:
+        """Analyzes a song and outputs the data to the database
+        """
+
         data = request.get_json()
         song_id = '{}-{}-{}'.format(
             data["ID"]["Release"], data["ID"]["Side"],
@@ -150,9 +166,22 @@ class AnalyzeSong(Resource):
                             ' should be updated in Splunk as soon as it is done.'}, 201
 
 
-@api.route('/audio/<string:diskotek_nr>')
-class AnalyzeSongGet(Resource):
-    def get(self, diskotek_nr):
+@api.route('/get_analyzed_song/<string:diskotek_nr>')
+class GetAnalyzeSong(Resource):
+    def get(self, diskotek_nr: str) -> object:
+        """Retrieves a previously analyzed songs data from the database
+
+        Parameters
+        ----------
+        diskotek_nr : str
+            The ID of the the song to retrieve
+
+        Returns
+        -------
+        object
+            A json object containing the information of the analyzed song
+        """
+
         db = TrackEmotion()
 
         r = db.get(diskotek_nr)
@@ -173,7 +202,15 @@ class AnalyzeSongGet(Resource):
 @api.route('/video')
 class AnalyzeVideo(Resource):
     @api.expect(video_fields)
-    def post(self):
+    def post(self) -> object:
+        """Analyzes a video and outputs the data to the database
+
+        Returns
+        -------
+        object
+            A dummy json response to confirm that the analysis has begun
+        """
+
         data = request.get_json()
 
         video_id = data['ID']
@@ -208,7 +245,20 @@ class AnalyzeVideo(Resource):
 
 @api.route('/video/<string:video_id>')
 class AnalyzeVideoGet(Resource):
-    def get(self, video_id):
+    def get(self, video_id: str) -> object:
+        """Retrieves a previously analyzed songs data from the database
+
+        Parameters
+        ----------
+        video_id : str
+            The ID of the the video to analyze
+
+        Returns
+        -------
+        object
+            A json object of the information of the the analyzed video
+        """
+
         db = VideoEmotionNS()
         result = db.get_by_video_id(video_id)
 
@@ -225,7 +275,15 @@ class AnalyzeVideoGet(Resource):
 @api.route('/video_with_audio')
 class AnalyzeVideoWithSong(Resource):
     @api.expect(video_fields_with_song)
-    def post(self):
+    def post(self) -> object:
+        """Analyzes a video together with a song and outputs the data to the database
+
+        Returns
+        -------
+        object
+            A dummy json response to confirm that the analysis has begun
+        """
+
         data = request.get_json()
 
         video_id = data['ID']
@@ -263,7 +321,14 @@ class AnalyzeVideoWithSong(Resource):
 @api.route('/similarity')
 class AnalyzeSimilarity(Resource):
     @api.expect(similarity_analysis_model)
-    def post(self):
+    def post(self) -> object:
+        """Analyzes the similarity of a song
+
+        Returns
+        -------
+        object
+            A dummy json response to confirm that the analysis has begun
+        """
 
         data = request.get_json()
 
@@ -279,7 +344,24 @@ class AnalyzeSimilarity(Resource):
 
 @api.route('/similarity/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
 class Similar(Resource):
-    def get(self, diskotek_nr, from_time, to_time):
+    def get(self, diskotek_nr: str, from_time: int, to_time: int) -> object:
+        """Retrieves a previously analyzed songs similarity data from the database
+
+        Parameters
+        ----------
+        diskotek_nr : str
+            The diskotek ID of the song to analyze
+        from_time : int
+            The start time of the similarity value to get, in milliseconds
+        to_time: int
+            The end time of the similarity value to get, in milliseconds
+
+        Returns
+        -------
+        object
+            A json object of the information of the similarity analyzed song
+        """
+
         similar = query_similar(diskotek_nr, from_time, to_time)
 
         if similar == None:
@@ -291,7 +373,20 @@ class Similar(Resource):
 
 @api.route('/video_with_audio/<string:song_id>')
 class AnalyzeVideoWithSongGet(Resource):
-    def get(self, song_id):
+    def get(self, song_id: str) -> object:
+        """Retrieves a previously analyzed song+video from the database
+
+        Parameters
+        ----------
+        song_id : str
+            The ID of the song to get song+video data for
+
+        Returns
+        -------
+        object
+            A json object of the information of the analyzed song+video
+        """
+
         db = VideoEmotion()
         result = db.get_by_song_id(song_id)
 
