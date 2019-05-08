@@ -161,6 +161,7 @@ def query_similar(song_id, from_time, to_time):
     list of Dict[song_id : string, from_time: time_from, to_time: time_to]
         A list of all the segments which are similar
     """
+
     seg_db = SongSegment()
     segments = seg_db.get_all_by_song_id(song_id)
 
@@ -196,6 +197,7 @@ def _find_matches(searchContext):
     """ Searches for segments that
     are similar in the bucket
     """
+    
     searchSegment, query_object = searchContext
 
     return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
@@ -212,6 +214,7 @@ def analyze_songs(songs):
         The songs that need to be analyzed, containing song_id and filepath
 
     """
+
     fileChunks = []
     x = len(songs) // cpu_count() + 1
     for i in range(0, cpu_count()):
