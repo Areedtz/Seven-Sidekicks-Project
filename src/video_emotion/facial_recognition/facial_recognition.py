@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 import numpy as np
 import cv2
@@ -24,7 +25,23 @@ GREEN = 177.0
 BLUE = 123.0
 
 
-def analyze_video(video_path, time_range=None):
+def analyze_video(video_path : str, time_range:int =None) -> Dict:
+    """Analyses video finding faces, given videopath and a timerange
+
+    Parameters
+    ----------
+    video_path : str
+        the path of the video
+    time_range : int, optional
+        the time range in the video you want analyzed
+        Given none the entire video will be analyzed
+
+    Returns
+    -------
+    Dict
+        A dictionary of the facetuples found from the frames
+    """
+
     if time_range is not None:
         fro, to = time_range
     cap = cv2.VideoCapture(video_path)
@@ -57,7 +74,20 @@ def analyze_video(video_path, time_range=None):
     return dict_of_faces
 
 
-def analyze_frame(frame):
+def analyze_frame(frame) -> [[int, int]]:
+    """Analyses a single frame, finding faces returning as a coordinate
+
+    Parameters
+    ----------
+    frame
+        the frame of the video taken from cap.read()
+
+    Returns
+    -------
+    [[int, int]]
+        A list of facetuples that describe the placement of a face in the frame
+    """
+    
     # Get width and height of frame
     (h, w) = frame.shape[:2]
 
