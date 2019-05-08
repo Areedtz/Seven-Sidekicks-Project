@@ -1,4 +1,4 @@
-from typing import Dict, object
+from typing import Dict
 
 from database.storinator import Storinator
 from database.video_emotion_database import VEDatabase

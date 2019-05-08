@@ -1,4 +1,4 @@
-from typing import Dict, object
+from typing import Dict
 
 from database.database import Database
 from database.storinator import Storinator

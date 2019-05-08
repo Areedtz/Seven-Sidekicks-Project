@@ -1,6 +1,6 @@
 import datetime
 
-from typing import Dict, object
+from typing import Dict
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
