@@ -1,14 +1,15 @@
 import os
 import fileinput
+from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
 import librosa
 from scipy.spatial import distance
 import numpy as np
 import falconn
-from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
 from database.song_segment import SongSegment
 from utilities.config_loader import load_config
+from utilities.filehandler.handle_path import get_absolute_path
 
 cfg = load_config()
 MATCHES = cfg['similarity_matches']
