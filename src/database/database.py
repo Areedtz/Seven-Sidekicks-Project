@@ -1,11 +1,12 @@
 import datetime
 
+from typing import Dict, Object, List
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int):
+def _create_default_document(id: int) -> Dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
@@ -24,7 +25,7 @@ def _create_default_document(id: int):
         "last_updated": datetime.datetime.utcnow(),
     }
 
-def _create_default_segment_document(id: int):
+def _create_default_segment_document(id: int) -> Dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
@@ -43,7 +44,7 @@ def _create_default_segment_document(id: int):
         "last_updated": datetime.datetime.utcnow(),
     }
  
-def _augment_document(doc1: dict, doc2: dict):
+def _augment_document(doc1: dict, doc2: dict) -> Dict:
     """Combines parameters into a larger dictionary
     
     Parameters
@@ -92,7 +93,7 @@ class Database:
             password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, col, song_id: int, doc: dict):
+    def insert(self, col, song_id: int, doc: dict) -> int:
         """Insert data into the collection
     
         Parameters
@@ -116,7 +117,7 @@ class Database:
         return _id
 
 # Gets the newest entry, the other option would be to overwrite it in the insert method
-    def find(self, col, song_id: int):
+    def find(self, col, song_id: int) -> Object:
         """Find one instance of the data requested
     
         Parameters
@@ -139,7 +140,7 @@ class Database:
 
         return None
 
-    def find_all_by_id(self, name, song_id: int):
+    def find_all_by_id(self, name, song_id: int) -> list<Object>():
         """Find all instances of the data requested in the collection by song_id
     
         Parameters
@@ -160,7 +161,7 @@ class Database:
             results.append(res)
         return results
 
-    def find_all(self, col):
+    def find_all(self, col)  -> list<Object>():
         """Find all instances of the data requested in the collection
     
         Parameters

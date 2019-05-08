@@ -1,11 +1,12 @@
 import datetime
 
+from typing import Dict, Object, List
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int):
+def _create_default_document(id: int) -> Dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
@@ -24,7 +25,8 @@ def _create_default_document(id: int):
         "last_updated": datetime.datetime.utcnow(),
     }
 
-def _augment_document(id1: dict, time: dict, emotion: dict):
+def _augment_document(id1: dict, time: dict, 
+                      emotion: dict) -> Dict:
     """Combines parameters into a larger dictionary
     
     Parameters
@@ -104,7 +106,7 @@ class VEDatabase:
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, col, video_id: int):
+    def find(self, col, video_id: int) -> Object:
         """Find one instance of the data requested
     
         Parameters
@@ -124,7 +126,7 @@ class VEDatabase:
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    def find_by_video_id(self, col, video_id: int):
+    def find_by_video_id(self, col, video_id: int) -> list<Object>():
         """Find all instances of the data requested in the collection by video_id
     
         Parameters
@@ -148,7 +150,7 @@ class VEDatabase:
             results.append(i)
         return results
 
-    def find_all(self, col):
+    def find_all(self, col) -> list<Object>():
         """Find all instances of the data requested in the collection
     
         Parameters

@@ -1,3 +1,5 @@
+from typing import Dict, Object, List
+
 from database.storinator import Storinator
 from database.video_emotion_database import VEDatabase
 
@@ -53,7 +55,7 @@ class VideoEmotion(Storinator):
         return self._db.insert(self._col, song_id, video_id, time, emotions)
 
 
-    def get(self, song_id: int, video_id: int):
+    def get(self, song_id: int, video_id: int) -> Object:
         """gets an entity from the database
     
         Parameters
@@ -71,7 +73,7 @@ class VideoEmotion(Storinator):
 
         return self._db.find(self._col, song_id, video_id)
 
-    def get_by_song_id(self, song_id: int):
+    def get_by_song_id(self, song_id: int) -> list<Object>():
         """Gets all entities from the database by song_id
     
         Parameters
@@ -87,7 +89,7 @@ class VideoEmotion(Storinator):
 
         return self._db.find_by_song_id(self._col, song_id)
 
-    def get_all(self):
+    def get_all(self) -> list<Object>():
         """Gets all entities from the database
             
         Returns

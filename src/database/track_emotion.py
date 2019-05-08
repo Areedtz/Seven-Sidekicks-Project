@@ -1,3 +1,5 @@
+from typing import Dict, Object, List
+
 from database.database import Database
 from database.storinator import Storinator
 
@@ -43,7 +45,7 @@ class TrackEmotion(Storinator):
 
         return self._db.insert(self._col, song_id, data)
 
-    def get(self, song_id: int):
+    def get(self, song_id: int) -> Object:
         """Gets an entity from the database
     
         Parameters
@@ -59,7 +61,7 @@ class TrackEmotion(Storinator):
 
         return self._db.find(self._col, song_id)
 
-    def get_all(self):
+    def get_all(self) -> list<Object>():
         """Finds all entities in the database
     
         Parameters

@@ -1,3 +1,5 @@
+from typing import Dict, Object, List
+
 from database.database import Database
 from database.storinator import Storinator
 
@@ -47,7 +49,7 @@ class SSegmentation(Storinator):
             "time_to": time_to
         })
 
-    def get(self, song_id: int):
+    def get(self, song_id: int) -> Object:
         """Gets an entity from the database
     
         Parameters
@@ -61,7 +63,7 @@ class SSegmentation(Storinator):
 
         return self._db.find(self._col, song_id)
 
-    def get_all(self):
+    def get_all(self) -> list<Object>():
         """Gets all entities from the database
             
         Returns
