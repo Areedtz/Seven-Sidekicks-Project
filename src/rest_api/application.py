@@ -342,9 +342,8 @@ class AnalyzeSimilarity(Resource):
         return {'message': 'Updating similarity with new songs'}
 
 
-@api.route('/similar/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
+@api.route('/similarity/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
 class Similar(Resource):
-    @api.expect(timerange_model)
     def get(self, diskotek_nr: str, from_time: int, to_time: int) -> object:
         """Retrieves a previously analyzed songs similarity data from the database
 
