@@ -22,14 +22,22 @@ RUN mkdir /swig && cd /swig && git clone https://github.com/swig/swig.git \
     && cd /swig/swig && ./autogen.sh && ./configure && make && make install \
     && cd / && rm -rf /swig
 
+# Compile, build and install the gaia package
 RUN mkdir /gaia && cd /gaia && git clone https://github.com/MTG/gaia.git \
     && cd /gaia/gaia && python2 waf configure --with-python-bindings \
     && python2 waf && python2 waf install && cd / && rm -rf /gaia
 
+# Compile, build and install the essentia package
 RUN mkdir /essentia && cd /essentia && git clone https://github.com/MTG/essentia.git \
     && cd /essentia/essentia && git reset --hard 6b584720c2d0dc0202a9ed5fc4e2121756dadd3a \
     && python3.6 waf configure --build-static --with-examples --with-gaia \
     && python3.6 waf && python3.6 waf install && cd / && rm -rf /essentia
+
+# Install the clang compiler
+RUN apt-get install -y clang-6.0
+
+# Set environment to use the clang compiler instead of gcc for use with pip
+ENV CC=/usr/bin/clang-6.0
 
 COPY requirements.txt /requirements.txt
 RUN pip3.6 install -r /requirements.txt && pip3.6 install essentia
