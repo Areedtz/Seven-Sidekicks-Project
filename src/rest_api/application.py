@@ -279,7 +279,6 @@ class AnalyzeSimilarity(Resource):
 
 @api.route('/similar/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
 class Similar(Resource):
-    @api.expect(timerange_model)
     def get(self, diskotek_nr, from_time, to_time):
         similar = query_similar(diskotek_nr, from_time, to_time)
 
