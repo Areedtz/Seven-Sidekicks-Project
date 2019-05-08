@@ -70,7 +70,7 @@ class VideoEmotionNS(Storinator):
 
         return self._db.find(self._dbcol, video_id)
 
-    def get_by_video_id(self, video_id : int) -> list<Object>():
+    def get_by_video_id(self, video_id : int) -> [Object]:
         """Gets all video_segments_no_song from the database by video_id
     
         Parameters
@@ -86,7 +86,7 @@ class VideoEmotionNS(Storinator):
 
         return self._db.find_by_video_id(self._dbcol, video_id)
 
-    def get_all(self) -> list<Object>():
+    def get_all(self) -> [Object]:
         """Gets all video_segments_no_song from the database
             
         Returns

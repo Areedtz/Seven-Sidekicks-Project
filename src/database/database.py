@@ -140,7 +140,7 @@ class Database:
 
         return None
 
-    def find_all_by_id(self, col : str, song_id : int) -> list<Object>():
+    def find_all_by_id(self, col : str, song_id : int) -> [Object]:
         """Find all instances of the data requested in the collection by song_id
     
         Parameters
@@ -161,7 +161,7 @@ class Database:
             results.append(res)
         return results
 
-    def find_all(self, col : str)  -> list<Object>():
+    def find_all(self, col : str)  -> [Object]:
         """Find all instances of the data requested in the collection
     
         Parameters

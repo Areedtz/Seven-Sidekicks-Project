@@ -63,7 +63,7 @@ class SSegmentation(Storinator):
 
         return self._db.find(self._col, song_id)
 
-    def get_all(self) -> list<Object>():
+    def get_all(self) -> [Object]:
         """Gets all song_segments from the database
             
         Returns

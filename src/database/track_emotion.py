@@ -61,7 +61,7 @@ class TrackEmotion(Storinator):
 
         return self._db.find(self._col, song_id)
 
-    def get_all(self) -> list<Object>():
+    def get_all(self) -> [Object]:
         """Finds all tracks in the database
     
         Parameters

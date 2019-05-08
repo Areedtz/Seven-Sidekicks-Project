@@ -126,7 +126,7 @@ class VEDatabase:
                                    ).sort([('last_updated', -1)]
                                           ).limit(1)[0]
 
-    def find_by_video_id(self, col : str, video_id : int) -> list<Object>():
+    def find_by_video_id(self, col : str, video_id : int) -> [Object]:
         """Find all instances of the video_segment_no_song requested in the collection by video_id
     
         Parameters
@@ -150,7 +150,7 @@ class VEDatabase:
             results.append(i)
         return results
 
-    def find_all(self, col : str) -> list<Object>():
+    def find_all(self, col : str) -> [Object]:
         """Find all instances of the video_segment_no_song requested in the collection
     
         Parameters
