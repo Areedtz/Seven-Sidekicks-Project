@@ -167,7 +167,7 @@ def query_similar(song_id, from_time, to_time):
 
     best = None
     for segment in segments:
-        localdist = from_time - segment['time_from']
+        localdist = abs(from_time - segment['time_from'])
         if best == None or localdist < best[0]:
             best = (localdist, segment)
 
