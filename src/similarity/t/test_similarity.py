@@ -1,7 +1,7 @@
 import numpy as np
 
 import falconn
-from similarity.similarity import _load_songs, _dist, _create_bucket, query_similar, _find_matches, analyze_songs
+from similarity.similarity import _load_songs, _dist, _create_bucket, _find_matches
 from utilities.config_loader import load_config
 
 cfg = load_config()
@@ -51,11 +51,3 @@ def test_find_matches():
         map(lambda seg: (seg, query_object), segments))))
 
     assert len(matches) == MATCHES
-
-
-def test_analyze_songs():
-    assert True
-
-
-def test_query_similar():
-    assert True
