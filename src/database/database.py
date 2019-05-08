@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int) -> dict:
+def _create_default_document(id: int):
     """Gives a database entity an id and a timestamp
     
     Parameters
@@ -115,7 +115,7 @@ class Database:
         if (self._db[col].count({'song_id': song_id}) > 0):
             res = self._db[col].find({'song_id': song_id}
                                       ).sort([('last_updated', -1)]
-                                             ).limit(1)
+                                             ).limit(1)[0]
             return res[0]
 
         return None
@@ -162,5 +162,5 @@ class Database:
 
     def close(self):
         """Closes the conenction to the database"""
-        
+
         self._client.close()
