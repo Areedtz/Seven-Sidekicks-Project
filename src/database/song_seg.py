@@ -10,13 +10,13 @@ class SSegmentation(Storinator):
 
     Methods
     -------
-    def add(self, song_id: int, time_from: int, time_to: int):
+    add(song_id, time_from, time_to)
         Inserts data into the collection in the database
 
-    def get(self, song_id: int):
+    get(song_id)
         Finds one entity given an id
 
-    def get_all(self):
+    get_all()
         Finds all entities in the database
     """
     
@@ -25,15 +25,15 @@ class SSegmentation(Storinator):
         self._db = Database()
 
     def add(self, song_id: int, time_from: int, time_to: int) -> int:
-        """adds entity to database
+        """Insert data into the collection
     
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
-        time_from
+        time_from: int
             The start of the time interval
-        time_to
+        time_to: int
             The end of the time interval
             
         Returns
@@ -52,7 +52,7 @@ class SSegmentation(Storinator):
     
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
             
         Object
@@ -72,12 +72,6 @@ class SSegmentation(Storinator):
         return self._db.find_all(self._col)
 
     def close(self):
-        """Closes the connection to the database
-
-        Parameters
-        ----------
-        self
-            The entity itself
-        """
-
+        """Closes the conenction to the database"""
+        
         self._client.close()

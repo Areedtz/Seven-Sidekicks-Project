@@ -12,17 +12,16 @@ class VideoEmotionNS(Storinator):
 
     Methods
     -------
-    def add(self,
-            video_id: int, time: int, emotions: dict):
+    add(video_id, time, emotions)
         Inserts data into the collection in the database
 
-    def get(self, video_id: int):
+    get(video_id)
         Finds one entity given an id
 
-    def get_by_video_id(self, video_id: int):
+    get_by_video_id(video_id)
         Finds all entities given an id
 
-    def get_all(self):
+    get_all()
         Finds all entities in the database
     
     """
@@ -33,15 +32,17 @@ class VideoEmotionNS(Storinator):
         self._db = VEDatabase()
 
     def add(self,
-            video_id: int, time: int, emotions: dict) -> int:
-        """Adds entity to database
+            video_id: int, time: dict, emotions: dict) -> int:
+        """Insert data into the collection
     
         Parameters
         ----------
-        video_id
+        video_id: int
             The id of the video
-        emotions
-            The data from the entity
+        time: dict
+            Dictionary with time interval
+        emotions: dict
+            Dictionary with emotion data
             
         Returns
         -------
@@ -56,7 +57,7 @@ class VideoEmotionNS(Storinator):
     
         Parameters
         ----------
-        video_id
+        video_id: int
             The id from the video
             
         Returns
@@ -72,7 +73,7 @@ class VideoEmotionNS(Storinator):
     
         Parameters
         ----------
-        video_id
+        video_id: int
             The id of the video
             
         Returns
@@ -95,5 +96,6 @@ class VideoEmotionNS(Storinator):
         return self._db.find_all(self._dbcol)
 
     def close(self):
+        """Closes the conenction to the database"""
         
         self._db.close()

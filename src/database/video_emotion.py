@@ -9,17 +9,17 @@ class VideoEmotion(Storinator):
 
     Methods
     -------
-    def add(self, song_id: int,
-            video_id: int, time: int, emotions: dict):
+    add(song_id,
+            video_id, time, emotions)
         Inserts data into the collection in the database
 
-    def get(self, song_id: int, video_id: int):
+    get(song_id, video_id)
         Finds one entity given an id
 
-    def get_by_song_id(self, song_id: int):
+    get_by_song_id(song_id)
         Finds all entities given an id
 
-    def get_all(self):
+    get_all()
         Finds all entities in the database
     
     """
@@ -30,17 +30,19 @@ class VideoEmotion(Storinator):
         self._db = VEDatabase()
 
     def add(self, song_id: int,
-            video_id: int, time: int, emotions: dict) -> int:
-        """adds entity to database
+            video_id: int, time: dict, emotions: dict) -> int:
+        """Insert data into the collection
 
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
-        video_id
+        video_id: int
             The id of the video
-        emotions
-            The data from the entity
+        time: dict
+            Dictionary with time interval
+        emotions: dict
+            Dictionary with emotion data
             
         Returns
         -------
@@ -56,9 +58,9 @@ class VideoEmotion(Storinator):
     
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
-        video_id
+        video_id: int
             The id from the video
             
         Returns
@@ -74,7 +76,7 @@ class VideoEmotion(Storinator):
     
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
             
         Returns
@@ -97,5 +99,6 @@ class VideoEmotion(Storinator):
         return self._db.find_all(self._col)
 
     def close(self):
+        """Closes the conenction to the database"""
         
         self._db.close()

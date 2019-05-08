@@ -9,13 +9,13 @@ class TrackEmotion(Storinator):
 
     Methods
     -------
-    def add(self, song_id: int, data: dict):
+    add(song_id, data)
         Inserts data into the collection in the database
 
-    def get(self, song_id: int):
+    get(song_id)
         Finds one entity given an id
 
-    def get_all(self):
+    get_all()
         Finds all entities in the database
     
     """
@@ -26,13 +26,13 @@ class TrackEmotion(Storinator):
         self._db = Database()
 
     def add(self, song_id: int, data: dict) -> int:
-        """Adds entity to database
+        """Insert data into the collection
     
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
-        data
+        data: dict
             The data of the entity
             
         Returns
@@ -48,12 +48,13 @@ class TrackEmotion(Storinator):
     
         Parameters
         ----------
-        song_id
+        song_id: int
             The id of the song
             
         Returns
         -------
-            The find method with inputs
+        Object
+            Either a None Object or the Object from the database
         """
 
         return self._db.find(self._col, song_id)
@@ -75,6 +76,6 @@ class TrackEmotion(Storinator):
         return self._db.find_all(self._col)
 
     def close(self):
-
+        """Closes the conenction to the database"""
+        
         self._db.close()
-

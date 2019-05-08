@@ -5,12 +5,12 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id):
+def _create_default_document(id: int) -> dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
     ----------
-    id
+    id: int
         id of the entity to be created
         
     Returns
@@ -24,14 +24,14 @@ def _create_default_document(id):
         "last_updated": datetime.datetime.utcnow(),
     }
  
-def _augment_document(doc1, doc2):
+def _augment_document(doc1: dict, doc2: dict):
     """Combines parameters into a larger dictionary
     
     Parameters
     ----------
-    doc1
+    doc1: dict
         First dictionary
-    doc2
+    doc2: dict
         Second dictionary
         
     Returns
@@ -39,6 +39,7 @@ def _augment_document(doc1, doc2):
     Dict
         Dictionary combining two dictionaries
     """
+    return {**doc1, **doc2}
 
 
 # Generic class for making functions implementable
@@ -49,16 +50,16 @@ class Database:
 
     Methods
     -------
-    def insert(self, col, song_id: int, doc: dict) -> int
+    insert(col, song_id, doc)
         Inserts data into the collection in the database
 
-    def find(self, col, song_id: int):
+    find(col, song_id)
         Finds one entity given an id
 
-    def find_all_by_id(self, name, song_id: int):
+    find_all_by_id(name, song_id)
         Finds all entities given an id
 
-    def find_all(self, col):
+    find_all(col)
         Finds all entities in the database
     
     """
@@ -72,16 +73,16 @@ class Database:
             password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, col, song_id, doc):
+    def insert(self, col, song_id: int, doc: dict):
         """Insert data into the collection
     
         Parameters
         ----------
         col
             The collection to be added to
-        song_id
+        song_id: int
             id of the song
-        doc
+        doc: dict
             Dictionary with data
             
         Returns
@@ -96,14 +97,14 @@ class Database:
         return _id
 
 # Gets the newest entry, the other option would be to overwrite it in the insert method
-    def find(self, col, song_id):
+    def find(self, col, song_id: int):
         """Find one instance of the data requested
     
         Parameters
         ----------
         col
             The collection to be added to
-        song_id
+        song_id: int
             id of the song
             
         Returns
@@ -119,14 +120,14 @@ class Database:
 
         return None
 
-    def find_all_by_id(self, name, song_id):
+    def find_all_by_id(self, name, song_id: int):
         """Find all instances of the data requested in the collection by song_id
     
         Parameters
         ----------
         col
             The collection to be added to
-        song_id
+        song_id: int
             id of the song
             
         Returns
@@ -144,6 +145,7 @@ class Database:
         """Find all instances of the data requested in the collection
     
         Parameters
+        ----------
         col
             The collection to be added to
             
@@ -159,5 +161,6 @@ class Database:
         return results
 
     def close(self):
-
+        """Closes the conenction to the database"""
+        
         self._client.close()

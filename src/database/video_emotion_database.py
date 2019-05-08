@@ -56,27 +56,20 @@ class VEDatabase:
 
     Methods
     -------
-    def __init__(self)
-        Creates the individual collection in the database
-        
-    def insert(self, col,
-               song_id: int, video_id: int, 
-               time: dict, emotion: dict) -> int:
+    insert(col,
+           song_id, video_id, 
+           time, emotion)
         Inserts data into the collection in the database
 
-    def find(self, col,
-             song_id: int, video_id: int):
+    find(col,
+         song_id, video_id)
         Finds one entity given an id
 
-    def find_by_song_id(self, col, song_id: int):
+    find_by_song_id(col, song_id)
         Finds all entities given an id
 
-    def find_all(self, col):
+    find_all(col)
         Finds all entities in the database
-
-    def close(self):
-        Closes the database
-    
     """
 
     def __init__(self):
@@ -97,12 +90,14 @@ class VEDatabase:
         ----------
         col
             The collection to be added to
-        song_id
+        song_id: int
             id of the song
-        video_id
+        video_id: int
             id of the video
-        doc
-            Dictionary with data
+        time
+            Dictionary with time interval
+        emotion
+            Dictionary with emotion data
             
         Returns
         -------
@@ -126,9 +121,9 @@ class VEDatabase:
         ----------
         col
             The collection to be added to
-        song_id
+        song_id: int
             id of the song
-        video_id
+        video_id: int
             id of the videos
             
         Returns
@@ -148,7 +143,7 @@ class VEDatabase:
         ----------
         col
             The collection to be added to
-        song_id
+        song_id: int
             id of the song
             
         Returns
@@ -186,5 +181,6 @@ class VEDatabase:
         return results
 
     def close(self):
-
+        """Closes the conenction to the database"""
+        
         self._client.close()

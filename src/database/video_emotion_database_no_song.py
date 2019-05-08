@@ -1,18 +1,16 @@
 import datetime
 
-from typing import Dict
-
 
 from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int) -> Dict:
+def _create_default_document(id: int):
     """Gives a database entity an id and a timestamp
     
     Parameters
     ----------
-    id
+    id: int
         id of the entity to be created
         
     Returns
@@ -26,16 +24,16 @@ def _create_default_document(id: int) -> Dict:
         "last_updated": datetime.datetime.utcnow(),
     }
 
-def _augment_document(id1: dict, time: dict, emotion: dict) -> Dict:
+def _augment_document(id1: dict, time: dict, emotion: dict):
     """Combines parameters into a larger dictionary
     
     Parameters
     ----------
-    id1
+    id1: dict
         id of the entity
-    time
+    time: dict
         Dictionary of time interval
-    emotion
+    emotion: dict
         Dictionary of emotion data
         
     Returns
@@ -55,17 +53,17 @@ class VEDatabase:
 
     Methods
     -------
-    def insert(self, col,
-               video_id: int, time: dict, emotion: dict) -> int:
+    insert(col,
+               video_id, time, emotion)
         Inserts data into the collection in the database
 
-    def find(self, col, video_id: int):
+    find(col, video_id)
         Finds one entity given an id
 
-    def find_by_video_id(self, col, video_id: int):
+    find_by_video_id(col, video_id)
         Finds all entities given an id
 
-    def find_all(self, col):
+    find_all(col)
         Finds all entities in the database
     
     """
@@ -87,10 +85,12 @@ class VEDatabase:
         ----------
         col
             The collection to be added to
-        video_id
+        video_id: int
             id of the video
-        doc
-            Dictionary with data
+        time: dict
+            Dictionary with time interval
+        emotion: dict
+            Dictionary with emotion data
             
         Returns
         -------
@@ -169,5 +169,6 @@ class VEDatabase:
             
 
     def close(self):
-
+        """Closes the conenction to the database"""
+        
         self._client.close()

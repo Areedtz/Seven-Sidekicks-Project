@@ -18,7 +18,7 @@ class SongSegment(Storinator):
     
         Parameters
         ----------
-        song_id
+        song_id: int
             the id of the song
         time_from
             the start of the time interval
@@ -40,7 +40,7 @@ class SongSegment(Storinator):
         })
 
     def get(self, song_id):
-        """gets an entity from the database
+        """Insert data into the collection
     
         Parameters
         ----------
@@ -154,5 +154,6 @@ class SongSegment(Storinator):
         return self._db._db[self._dbcol].count({})
 
     def close(self):
+        """Closes the conenction to the database"""
         
         self._db.close()

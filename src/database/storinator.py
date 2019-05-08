@@ -8,13 +8,13 @@ class Storinator(abc.ABC):
 
     Methods
     -------
-    def add(self, col, id: int):
+    add(col, id)
         Adds entity to database
 
-    def get(self, col, id: int):
+    get(col, id)
         Finds one entity from the database
 
-    def get_all(self, col):
+    get_all(col)
         Finds all entities in the database
     
     """
@@ -29,7 +29,7 @@ class Storinator(abc.ABC):
         ----------
         col
             The collection to be added to
-        id
+        id: int
             The id of the the entity
         pass
         """
@@ -43,7 +43,7 @@ class Storinator(abc.ABC):
         ----------
         col
             The collection to be added to
-        id
+        id: int
             The id of the the entity
         """
 
@@ -75,7 +75,7 @@ class SegmentStorinator(abc.ABC):
         ----------
         col
             The collection to be added to
-        id
+        id: int
             The id of the the entity
         """
 
@@ -89,7 +89,7 @@ class SegmentStorinator(abc.ABC):
         ----------
         col
             The collection to be added to
-        id
+        id: int
             The id of the the entity
         """
 
@@ -109,4 +109,6 @@ class SegmentStorinator(abc.ABC):
 
     @abc.abstractmethod
     def close(self):
+        """Closes the conenction to the database"""
+        
         pass
