@@ -225,8 +225,13 @@ def analyze_songs(songs):
     allMatches = list(map(lambda x: [], segs))
 
     for i in range(0, count // BUCKET_SIZE + 1):
+        established_segments = list(filter( lambda x:
+            x['mfcc'] != None and
+            x['chroma'] != None and
+            x['tempogram'] != None,
+            ss.get_all_in_range(i*BUCKET_SIZE, (i+1)*BUCKET_SIZE)))
         established_segments = list(
-            map(_process_db_segment, ss.get_all_in_range(i*BUCKET_SIZE, (i+1)*BUCKET_SIZE)))
+            map(_process_db_segment, established_segments))
 
         data = np.array(list(map(lambda x: x[3], established_segments)))
 
@@ -248,6 +253,7 @@ def analyze_songs(songs):
         p.close()
 
     for i in range(0, len(segs)):
+        print(segs[i][1] + ": " + str(segs[i][2]))
         best = _find_best_matches(_flatten(allMatches[i]), segs[i])
 
         matches = ss.get_by_ids(list(map(lambda match: match[0][0], best)))
