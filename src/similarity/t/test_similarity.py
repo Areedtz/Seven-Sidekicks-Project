@@ -10,7 +10,9 @@ MATCHES = cfg['similarity_matches']
 
 def test_load_songs():
     segments = _load_songs(
-        [('8376-1-1', 'similarity/t/test_split_song/8376-1-1_Demolition_Man_proud_music_preview.wav')])
+        [('8376-1-1', "similarity/t/test_split_song"
+                      + "/8376-1-1_Demolition_Man_"
+                      + "proud_music_preview.wav")])
     assert len(segments) == 18
     assert segments[0][1] == '8376-1-1'
     assert segments[0][2] == 0
@@ -18,7 +20,9 @@ def test_load_songs():
 
 def test_create_bucket():
     segments = _load_songs(
-        [('8376-1-1', 'similarity/t/test_split_song/8376-1-1_Demolition_Man_proud_music_preview.wav')])
+        [('8376-1-1', "similarity/t/test_split_song"
+                      + "/8376-1-1_Demolition_Man_"
+                      + "proud_music_preview.wav")])
 
     data = np.array(list(map(lambda x: x[3], segments)))
 
@@ -38,7 +42,9 @@ def test_dist():
 
 def test_find_matches():
     segments = _load_songs(
-        [('8376-1-1', 'similarity/t/test_split_song/8376-1-1_Demolition_Man_proud_music_preview.wav')])
+        [('8376-1-1', "similarity/t/test_split_song"
+                      + "/8376-1-1_Demolition_Man_"
+                      + "proud_music_preview.wav")])
 
     data = np.array(list(map(lambda x: x[3], segments)))
 

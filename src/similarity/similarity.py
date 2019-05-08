@@ -42,6 +42,7 @@ def _load_songs(songs):
 
 
 def _load_song(song_id, filename, segments):
+    filename = get_absolute_path(filename)
     segs = segments.get_all_by_song_id(song_id)
 
     segment_data = []
@@ -191,6 +192,9 @@ def query_similar(song_id, from_time, to_time):
 
 
 def _find_matches(searchContext):
+    """ Searches for segments that
+    are similar in the bucket
+    """
     searchSegment, query_object = searchContext
 
     return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
