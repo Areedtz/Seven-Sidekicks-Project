@@ -5,7 +5,26 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id):
+def _create_default_document(id: int):
+    """Gives a database entity an id and a timestamp
+    
+    Parameters
+    ----------
+    id: int
+        id of the entity to be created
+        
+    Returns
+    -------
+    Dict
+        Containing id and timestamp
+    """
+
+    return {
+        "song_id": id,
+        "last_updated": datetime.datetime.utcnow(),
+    }
+
+def _create_default_segment_document(id: int):
     """Gives a database entity an id and a timestamp
     
     Parameters
