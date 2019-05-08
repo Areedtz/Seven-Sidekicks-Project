@@ -1,6 +1,6 @@
 import numpy as np
-
 import falconn
+
 from similarity.similarity import _load_songs, _dist, _create_bucket, _find_matches
 from utilities.config_loader import load_config
 
@@ -56,4 +56,4 @@ def test_find_matches():
     matches = list(map(_find_matches, list(
         map(lambda seg: (seg, query_object), segments))))
 
-    assert len(matches) == MATCHES
+    assert len(matches[0]) == 10
