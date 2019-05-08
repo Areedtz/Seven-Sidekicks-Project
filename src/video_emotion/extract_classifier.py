@@ -12,14 +12,14 @@ from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
 
 
 def classify_video(video_path: str, time_range=None):
-    """Clasifies the emotions in a video
+    """Classifies the emotions in a given video
 
     Parameters
     ----------
-    video_path
+    video_path:str
         The path of the video that is to be analyzed
 
-    emotion_set
+    time_range:Dict[str:int]
         The time range to analyze in as a dictionary of type string:int
 
     Returns
@@ -62,19 +62,18 @@ def classify_video(video_path: str, time_range=None):
         "surprise": surprise_sum / number_of_faces,
         "neutral": neutral_sum / number_of_faces
     }
-def find_emotions_cutoffs(emotions):
-
+def find_emotions_cutoffs(emotions:[float]) -> str:
     """Finds the emotional cutoffs for a set of emotions as a list
 
-        Parameters
-        ----------
-        emotions
-            The path of the video that is to be analyzedemotions
+    Parameters
+    ----------
+    emotions:str
+        An array of emotions
 
-        Returns
-        -------
-        string
-            Returns the cutoffs underscore seperated with the id first
+    Returns
+    -------
+    string
+        Returns the cutoffs underscore-separated with the id first
     """
 
     emotions2 = {

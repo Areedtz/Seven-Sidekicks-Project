@@ -5,18 +5,18 @@ from database.video_emotion_no_song import VideoEmotionNS
 from database.video_emotion import VideoEmotion
 
 
-def process_data_and_extract_emotions(video_id: int, video_path: str, time_range:Dict[str,int]) -> bool:
-    """Clasifies the emotions in a video
+def process_data_and_extract_emotions(video_id: str, video_path: str, time_range:Dict[str,int]) -> bool:
+    """Classifies the emotions in the given video
 
     Parameters
     ----------
-    video_id
+    video_id: str
         The id of the video to analyze
 
-    video_path
+    video_path: str
         The path of the video that is to be analyzed
 
-    time_range
+    time_range:Dict[str,int]
         The time range as a dictionary to analyze
 
     Returns
@@ -31,29 +31,31 @@ def process_data_and_extract_emotions(video_id: int, video_path: str, time_range
     return True
 
 
-def process_data_and_extract_emotions_with_song(video_id, video_path, 
-                                                time_range, song_id):
-    """Clasifies the emotions in a video and places it in the database with a songid
+def process_data_and_extract_emotions_with_song(video_id: str, video_path: str,
+                                                time_range: Dict[str, int],
+                                                song_id: str) -> bool:
+    """Classifies the emotions in a video and places
+    it in the database with a songid
 
-        Parameters
-        ----------
-        video_id
-            The id of the video to analyze
+    Parameters
+    ----------
+    video_id: str
+        The id of the video to analyze
 
-        video_path
-            The path of the video that is to be analyzed
+    video_path: str
+        The path of the video that is to be analyzed
 
-        time_range
-            The time range as a dictionary to analyze
+    time_range: Dict[str,int]
+        The time range as a dictionary to analyze
 
-        song_id
-            The song to associate the video with
+    song_id:str
+        The song to associate the video with
 
-        Returns
-        -------
-        string
-            Returns a csv of the emotions in the emotion set
-        """
+    Returns
+    -------
+    bool
+        Returns a boolean telling if the function succeeded
+    """
 
     data = classify_video(video_path, (time_range['From'], time_range['To']))
     vet = VideoEmotion()
