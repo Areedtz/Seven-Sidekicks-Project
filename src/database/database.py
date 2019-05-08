@@ -6,12 +6,12 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int) -> Dict:
+def _create_default_document(id : int) -> Dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
     ----------
-    id: int
+    id : int
         id of the entity to be created
         
     Returns
@@ -25,12 +25,12 @@ def _create_default_document(id: int) -> Dict:
         "last_updated": datetime.datetime.utcnow(),
     }
 
-def _create_default_segment_document(id: int) -> Dict:
+def _create_default_segment_document(id : int) -> Dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
     ----------
-    id: int
+    id : int
         id of the entity to be created
         
     Returns
@@ -44,14 +44,14 @@ def _create_default_segment_document(id: int) -> Dict:
         "last_updated": datetime.datetime.utcnow(),
     }
  
-def _augment_document(doc1: dict, doc2: dict) -> Dict:
+def _augment_document(doc1 : dict, doc2 : dict) -> Dict:
     """Combines parameters into a larger dictionary
     
     Parameters
     ----------
-    doc1: dict
+    doc1 : dict
         First dictionary
-    doc2: dict
+    doc2 : dict
         Second dictionary
         
     Returns
@@ -93,16 +93,16 @@ class Database:
             password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, col, song_id: int, doc: dict) -> int:
+    def insert(self, col : str, song_id : int, doc : dict) -> int:
         """Insert data into the collection
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
-        song_id: int
+        song_id : int
             id of the song
-        doc: dict
+        doc : dict
             Dictionary with data
             
         Returns
@@ -117,14 +117,14 @@ class Database:
         return _id
 
 # Gets the newest entry, the other option would be to overwrite it in the insert method
-    def find(self, col, song_id: int) -> Object:
+    def find(self, col : str, song_id : int) -> Object:
         """Find one instance of the data requested
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
-        song_id: int
+        song_id : int
             id of the song
             
         Returns
@@ -140,12 +140,12 @@ class Database:
 
         return None
 
-    def find_all_by_id(self, name, song_id: int) -> list<Object>():
+    def find_all_by_id(self, col : str, song_id : int) -> list<Object>():
         """Find all instances of the data requested in the collection by song_id
     
         Parameters
         ----------
-        col
+        col: str
             The collection to be added to
         song_id: int
             id of the song
@@ -157,16 +157,16 @@ class Database:
         """
 
         results = []
-        for res in self._db[name].find({'song_id': song_id}):
+        for res in self._db[col].find({'song_id': song_id}):
             results.append(res)
         return results
 
-    def find_all(self, col)  -> list<Object>():
+    def find_all(self, col : str)  -> list<Object>():
         """Find all instances of the data requested in the collection
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
             
         Returns

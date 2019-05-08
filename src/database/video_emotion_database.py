@@ -6,14 +6,14 @@ from pymongo import MongoClient
 from utilities.config_loader import load_config
 
 
-def _create_default_document(id: int, id2: int) -> Dict:
+def _create_default_document(id : int, id2 : int) -> Dict:
     """Gives a database entity an id and a timestamp
     
     Parameters
     ----------
-    id1
+    id1 : int
         song_id of the entity to be created
-    id2
+    id2 : int
         video_id of the entity to be created
         
     Returns
@@ -28,16 +28,16 @@ def _create_default_document(id: int, id2: int) -> Dict:
         "last_updated": datetime.datetime.utcnow(),
     }
 
-def _augment_document(id1: dict, time: dict, emotion: dict) -> Dict:
+def _augment_document(id1 : dict, time : dict, emotion : dict) -> Dict:
     """Combines parameters into a larger dictionary
     
     Parameters
     ----------
-    id1
+    id1 : int
         id of the entity
-    time
+    time : dict
         dictionary of time interval
-    emotion
+    emotion : dict
         dictionary of emotion data
         
     Returns
@@ -82,22 +82,22 @@ class VEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, col,
-               song_id: int, video_id: int, 
-               time: dict, emotion: dict) -> int:
-        """Insert data into the collection
+    def insert(self, col : str,
+               song_id : int, video_id : int, 
+               time : dict, emotion : dict) -> int:
+        """Insert video_segment into the collection
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
-        song_id: int
+        song_id : int
             id of the song
-        video_id: int
+        video_id : int
             id of the video
-        time
+        time : dict
             Dictionary with time interval
-        emotion
+        emotion : dict
             Dictionary with emotion data
             
         Returns
@@ -114,17 +114,17 @@ class VEDatabase:
         id = collection.insert_one(ins).inserted_id
         return id
 
-    def find(self, col,
-             song_id: int, video_id: int) -> Object:
-        """Find one instance of the data requested
+    def find(self, col : str,
+             song_id : int, video_id : int) -> Object:
+        """Find one instance of the video_segment requested
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
-        song_id: int
+        song_id : int
             id of the song
-        video_id: int
+        video_id : int
             id of the videos
             
         Returns
@@ -137,14 +137,14 @@ class VEDatabase:
                                   ).sort([('last_updated', -1)]
                                          ).limit(1)[0]
 
-    def find_by_song_id(self, col, song_id: int) -> list<Object>():
-        """Find all instances of the data requested in the collection by song_id
+    def find_by_song_id(self, col : str, song_id : int) -> list<Object>():
+        """Find all instances of the video_segments requested in the collection by song_id
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
-        song_id: int
+        song_id : int
             id of the song
             
         Returns
@@ -161,12 +161,12 @@ class VEDatabase:
             results.append(i)
         return results
 
-    def find_all(self, col) -> list<Object>():
-        """Find all instances of the data requested in the collection
+    def find_all(self, col : str) -> list<Object>():
+        """Find all instances of the video_segment requested in the collection
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
             
         Returns

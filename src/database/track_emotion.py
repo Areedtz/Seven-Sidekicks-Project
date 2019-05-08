@@ -27,14 +27,14 @@ class TrackEmotion(Storinator):
         self._col = 'track_emotion'
         self._db = Database()
 
-    def add(self, song_id: int, data: dict) -> int:
-        """Insert data into the collection
+    def add(self, song_id : int, data : dict) -> int:
+        """Insert track into the collection
     
         Parameters
         ----------
-        song_id: int
+        song_id : int
             The id of the song
-        data: dict
+        data : dict
             The data of the entity
             
         Returns
@@ -45,12 +45,12 @@ class TrackEmotion(Storinator):
 
         return self._db.insert(self._col, song_id, data)
 
-    def get(self, song_id: int) -> Object:
-        """Gets an entity from the database
+    def get(self, song_id : int) -> Object:
+        """Gets a track from the database
     
         Parameters
         ----------
-        song_id: int
+        song_id : int
             The id of the song
             
         Returns
@@ -62,11 +62,11 @@ class TrackEmotion(Storinator):
         return self._db.find(self._col, song_id)
 
     def get_all(self) -> list<Object>():
-        """Finds all entities in the database
+        """Finds all tracks in the database
     
         Parameters
         ----------
-        col
+        col : str
             The collection to be added to
             
         Returns

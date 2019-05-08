@@ -26,16 +26,16 @@ class SSegmentation(Storinator):
         self._col = 'song_segmentation'
         self._db = Database()
 
-    def add(self, song_id: int, time_from: int, time_to: int) -> int:
-        """Insert data into the collection
+    def add(self, song_id : int, time_from : int, time_to : int) -> int:
+        """Insert song_segment into the collection
     
         Parameters
         ----------
-        song_id: int
+        song_id : int
             The id of the song
-        time_from: int
+        time_from : int
             The start of the time interval
-        time_to: int
+        time_to : int
             The end of the time interval
             
         Returns
@@ -49,12 +49,12 @@ class SSegmentation(Storinator):
             "time_to": time_to
         })
 
-    def get(self, song_id: int) -> Object:
-        """Gets an entity from the database
+    def get(self, song_id : int) -> Object:
+        """Gets get the song_segment from the database
     
         Parameters
         ----------
-        song_id: int
+        song_id : int
             The id of the song
             
         Object
@@ -64,7 +64,7 @@ class SSegmentation(Storinator):
         return self._db.find(self._col, song_id)
 
     def get_all(self) -> list<Object>():
-        """Gets all entities from the database
+        """Gets all song_segments from the database
             
         Returns
         -------

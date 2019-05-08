@@ -34,16 +34,16 @@ class VideoEmotionNS(Storinator):
         self._db = VEDatabase()
 
     def add(self,
-            video_id: int, time: dict, emotions: dict) -> int:
-        """Insert data into the collection
+            video_id : int, time : dict, emotions : dict) -> int:
+        """Insert video_segments_no_song into the collection
     
         Parameters
         ----------
-        video_id: int
+        video_id : int
             The id of the video
-        time: dict
+        time : dict
             Dictionary with time interval
-        emotions: dict
+        emotions : dict
             Dictionary with emotion data
             
         Returns
@@ -54,12 +54,12 @@ class VideoEmotionNS(Storinator):
 
         return self._db.insert(self._dbcol, video_id, time, emotions)
 
-    def get(self, video_id: int) -> Object:
-        """Gets an entity from the database
+    def get(self, video_id : int) -> Object:
+        """Gets a video_segment_no_song from the database
     
         Parameters
         ----------
-        video_id: int
+        video_id : int
             The id from the video
             
         Returns
@@ -70,12 +70,12 @@ class VideoEmotionNS(Storinator):
 
         return self._db.find(self._dbcol, video_id)
 
-    def get_by_video_id(self, video_id: int) -> list<Object>():
-        """Gets all entities from the database by video_id
+    def get_by_video_id(self, video_id : int) -> list<Object>():
+        """Gets all video_segments_no_song from the database by video_id
     
         Parameters
         ----------
-        video_id: int
+        video_id : int
             The id of the video
             
         Returns
@@ -87,7 +87,7 @@ class VideoEmotionNS(Storinator):
         return self._db.find_by_video_id(self._dbcol, video_id)
 
     def get_all(self) -> list<Object>():
-        """Gets all entities from the database
+        """Gets all video_segments_no_song from the database
             
         Returns
         -------
