@@ -16,10 +16,18 @@ MATCHES = cfg['similarity_matches']
 BUCKET_SIZE = cfg['similarity_bucket_size']
 
 
-def _flatten(l): return [item for sublist in l for item in sublist]
+def _flatten(l): 
+    """ Creates an array from
+    an array of arrays
+    """
+
+    return [item for sublist in l for item in sublist]
 
 
 def _process_segment(segment, sr):
+    """ Computes the features from
+    a song segment
+    """
     harmonic, percussive = librosa.effects.hpss(segment)
 
     tempogram = librosa.feature.tempogram(
@@ -33,6 +41,10 @@ def _process_segment(segment, sr):
 
 
 def _load_songs(songs):
+    """ A wrapper around _load_song that
+    allows for multiple songs to be looked
+    up using the same database connection
+    """
     seg_db = SongSegment()
     segments = []
     for song in songs:
@@ -43,6 +55,10 @@ def _load_songs(songs):
 
 
 def _load_song(song_id, filename, segments):
+    """ Loads song features from the database if
+    available otherwise loading the file and
+    loading features from it directly
+    """
     filename = get_absolute_path(filename)
     segs = segments.get_all_by_song_id(song_id)
 
@@ -83,6 +99,9 @@ def _load_song(song_id, filename, segments):
 
 
 def _process_db_segment(segment):
+    """ Processes a db segment to the format
+    used by the module
+    """
     feature = _create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
         segment['chroma']), np.frombuffer(segment['tempogram']))
 
@@ -90,6 +109,9 @@ def _process_db_segment(segment):
 
 
 def _create_feature(mfcc, chroma, tempogram):
+    """ Creates a single feature vector from
+    the three individual features
+    """
     fm = mfcc
     fc = chroma
     ft = tempogram
@@ -103,6 +125,9 @@ def _create_feature(mfcc, chroma, tempogram):
 
 
 def _create_bucket(segments):
+    """ Creates a bucket of segments
+    to use for LSH similarity lookup
+    """
     params_cp = falconn.LSHConstructionParameters()
     params_cp.dimension = len(segments[0])
     params_cp.lsh_family = falconn.LSHFamily.CrossPolytope
@@ -121,10 +146,18 @@ def _create_bucket(segments):
 
 
 def _dist(seg1, seg2):
+    """ Finds the distance between
+    two segments
+    """
     return distance.euclidean(seg1[3], seg2[3])
 
 
 def _find_best_matches(matches, segment):
+    """ Finds the best n matches
+    out of all matches, where n is
+    the MATCHES variable
+    """
+
     lows = []
     for i in range(0, len(matches)):
         distance = _dist(
@@ -167,7 +200,7 @@ def query_similar(song_id, from_time, to_time):
 
     best = None
     for segment in segments:
-        localdist = from_time - segment['time_from']
+        localdist = abs(from_time - segment['time_from'])
         if best == None or localdist < best[0]:
             best = (localdist, segment)
 
@@ -180,17 +213,20 @@ def query_similar(song_id, from_time, to_time):
 
     similar_ids = list(map(lambda sim: sim['id'], similar))
 
-    similar = seg_db.get_by_ids(similar_ids)
+    similar_full = seg_db.get_by_ids(similar_ids)
 
-    x = list(map(lambda x: dict({
-        'song_id': x['song_id'],
-        'from_time': x['time_from'],
-        'to_time': x['time_to'],
-    }), similar))
+    similar_segments = []
+    for i in range(0, len(similar)):
+        similar_segments.append(dict({
+            'song_id': similar_full[i]['song_id'],
+            'from_time': similar_full[i]['time_from'],
+            'to_time': similar_full[i]['time_to'],
+            'distance': similar[i]['distance'],
+        }))
 
     seg_db.close()
 
-    return x
+    return similar_segments
 
 
 def _find_matches(searchContext):
