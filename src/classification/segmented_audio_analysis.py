@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3.6
-
 import csv
 import json
 import os
@@ -12,6 +11,8 @@ from multiprocessing import Pool
 from typing import Tuple
 from essentia.standard import MonoWriter
 
+# Imports done this way to have an easy way of manually making a .CSV
+# file by calling this file's main method.
 if __name__ == "__main__":
     sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 

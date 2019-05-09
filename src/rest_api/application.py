@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3.6
-
 import sys
 import os
 import json
@@ -13,13 +12,13 @@ from flask_restplus import Resource, Api, fields
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as mood_extract
 import classification.api_helper as music_emotion_classifier
-from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
-from utilities.get_song_id import get_song_id
-from utilities.config_loader import load_config
 from database.track_emotion import TrackEmotion
-from similarity.similarity import analyze_songs, query_similar
 from database.video_emotion import VideoEmotion
 from database.video_emotion_no_song import VideoEmotionNS
+from similarity.similarity import analyze_songs, query_similar
+from utilities.get_song_id import get_song_id
+from utilities.config_loader import load_config
+from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
 
 
 cfg = load_config()

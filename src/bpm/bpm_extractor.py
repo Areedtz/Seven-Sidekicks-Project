@@ -1,6 +1,5 @@
 #!/usr/local/bin/python3.6
 from typing import Tuple
-
 from multiprocessing import Pool
 
 from essentia.standard import RhythmExtractor2013
