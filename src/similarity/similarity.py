@@ -180,17 +180,20 @@ def query_similar(song_id, from_time, to_time):
 
     similar_ids = list(map(lambda sim: sim['id'], similar))
 
-    similar = seg_db.get_by_ids(similar_ids)
+    similar_full = seg_db.get_by_ids(similar_ids)
 
-    x = list(map(lambda x: dict({
-        'song_id': x['song_id'],
-        'from_time': x['time_from'],
-        'to_time': x['time_to'],
-    }), similar))
+    similar_segments = []
+    for i in range(0, len(similar)):
+        similar_segments.append(dict({
+            'song_id': similar_full[i]['song_id'],
+            'from_time': similar_full[i]['time_from'],
+            'to_time': similar_full[i]['time_to'],
+            'distance': similar[i]['distance'],
+        }))
 
     seg_db.close()
 
-    return x
+    return similar_segments
 
 
 def _find_matches(searchContext):
