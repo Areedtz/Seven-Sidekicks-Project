@@ -118,8 +118,8 @@ song_model = api.model('SongModel', {
         id_model,
         description='ID model of the song to analyze',
         required=True),
-    'Filepath': fields.String(
-        description='Filepath of the requested resource',
+    'SourcePath': fields.String(
+        description='SourcePath of the requested resource',
         required=True),
 })
 
@@ -150,7 +150,7 @@ class AnalyzeSong(Resource):
         if not os.path.isfile(song_path):
             api.abort(
                 400,
-                "The given filepath '{}' does not seem to exist"
+                "The given source path '{}' does not seem to exist"
                 .format(song_path)
             )
 
@@ -226,7 +226,7 @@ class AnalyzeVideo(Resource):
         if not os.path.isfile(video_path):
             api.abort(
                 400,
-                "The given filepath '{}' does not seem to exist"
+                "The given source path '{}' does not seem to exist"
                 .format(video_path)
             )
 
@@ -300,7 +300,7 @@ class AnalyzeVideoWithSong(Resource):
         if not os.path.isfile(video_path):
             api.abort(
                 400,
-                "The given filepath '{}' does not seem to exist"
+                "The given source path '{}' does not seem to exist"
                 .format(video_path)
             )
 
@@ -335,7 +335,7 @@ class AnalyzeSimilarity(Resource):
         transformed = list(map(lambda a: ('{}-{}-{}'.format(
             a["ID"]["Release"], a["ID"]["Side"],
             a["ID"]["Track"]
-        ), a['Filepath']), data['songs']))
+        ), a['SourcePath']), data['songs']))
 
         _thread.start_new_thread(analyze_songs, (transformed, ))
 
