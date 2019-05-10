@@ -12,47 +12,48 @@ class TrackEmotion(Storinator):
     Methods
     -------
     add(song_id, data)
-        Inserts data into the collection in the database
+        Insert document into the track_emotion collection
 
     get(song_id)
-        Finds one entity given an id
+        Gets the newest document with the given id in the track_emotion collection
 
     get_all()
-        Finds all entities in the database
-    
+        Gets all documents from the track_emotion collection
+
+    close()
+        Closes the connection to the database
     """
 
     def __init__(self):
-
         self._col = 'track_emotion'
         self._db = Database()
 
-    def add(self, song_id : int, data : dict) -> int:
-        """Insert track into the collection
-    
+    def add(self, song_id: str, data: dict) -> str:
+        """Insert document into the track_emotion collection
+
         Parameters
         ----------
-        song_id : int
+        song_id : str
             The id of the song
         data : dict
             The data of the entity
-            
+
         Returns
         -------
-        int
-            An int of the id
+        str
+            The created document's object id
         """
 
         return self._db.insert(self._col, song_id, data)
 
-    def get(self, song_id : int) -> object:
-        """Gets a track from the database
-    
+    def get(self, song_id: str) -> object:
+        """Gets the newest document with the given id in the track_emotion collection
+
         Parameters
         ----------
-        song_id : int
+        song_id : str
             The id of the song
-            
+
         Returns
         -------
         object
@@ -62,22 +63,17 @@ class TrackEmotion(Storinator):
         return self._db.find(self._col, song_id)
 
     def get_all(self) -> [object]:
-        """Finds all tracks in the database
-    
-        Parameters
-        ----------
-        col : str
-            The collection to be added to
-            
+        """Gets all documents from the track_emotion collection
+
         Returns
         -------
         object list
-            A list of the objects in the database 
+            A list of the objects in the track_emotion collection
         """
 
         return self._db.find_all(self._col)
 
     def close(self):
-        """Closes the conenction to the database"""
-        
+        """Closes the connection to the database"""
+
         self._db.close()

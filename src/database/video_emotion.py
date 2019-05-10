@@ -11,35 +11,34 @@ class VideoEmotion(Storinator):
 
     Methods
     -------
-    add(song_id,
-            video_id, time, emotions)
-        Inserts data into the collection in the database
+    add(song_id, video_id, time, emotions)
+        Insert video segment into the video_emotion collection
 
     get(song_id, video_id)
-        Finds one entity given an id
+        Gets a video_segment from the video_emotion collection
 
     get_by_song_id(song_id)
-        Finds all entities given an id
+        Gets all video segments from the video_emotion collection by song id
 
     get_all()
-        Finds all entities in the database
+        Gets all video segments from the video_emotion collection
 
+    close()
+        Closes the connection to the database
     """
 
     def __init__(self):
-
         self._col = 'video_emotion'
         self._db = VEDatabase()
 
-    def add(self, song_id: int,
-            video_id: int, time: dict, emotions: dict) -> int:
-        """Insert video_segment into the collection
+    def add(self, song_id: str, video_id: str, time: dict, emotions: dict) -> str:
+        """Insert video segment into the video_emotion collection
 
         Parameters
         ----------
-        song_id : int
+        song_id : str
             The id of the song
-        video_id : int
+        video_id : str
             The id of the video
         time : dict
             Dictionary with time interval
@@ -48,58 +47,58 @@ class VideoEmotion(Storinator):
 
         Returns
         -------
-        int
-            An int of the id
+        str
+            The created document's object id
         """
 
         return self._db.insert(self._col, song_id, video_id, time, emotions)
 
-    def get(self, song_id: int, video_id: int) -> object:
-        """gets a video_segment from the database
+    def get(self, song_id: str, video_id: str) -> object:
+        """Gets a video segment from the video_emotion collection
 
         Parameters
         ----------
-        song_id : int
+        song_id : str
             The id of the song
-        video_id : int
-            The id from the video
+        video_id : str
+            The id of the video
 
         Returns
         -------
         object
-            Either a None object or the object from the database
+            None if nothing was found, otherwise the document
         """
 
         return self._db.find(self._col, song_id, video_id)
 
-    def get_by_song_id(self, song_id: int) -> [object]:
-        """Gets all video_segments from the database by song_id
+    def get_by_song_id(self, song_id: str) -> [object]:
+        """Gets all video segments from the video_emotion collection by song id
 
         Parameters
         ----------
-        song_id : int
+        song_id : str
             The id of the song
 
         Returns
         -------
         object list
-            A list of the objects in the database from a given video_id
+            A list of the objects in the video_emotion collection from a given song id
         """
 
         return self._db.find_by_song_id(self._col, song_id)
 
     def get_all(self) -> [object]:
-        """Gets all video_segments from the database
+        """Gets all video segments from the video_emotion collection
 
         Returns
         -------
         object list
-            A list of the objects in the database
+            A list of the objects in the video_emotion collection
         """
 
         return self._db.find_all(self._col)
 
     def close(self):
-        """Closes the conenction to the database"""
+        """Closes the connection to the database"""
 
         self._db.close()
