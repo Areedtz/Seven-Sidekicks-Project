@@ -7,7 +7,6 @@ from database.storinator import Storinator
 
 class SongSegment(Storinator):
 
-
     def __init__(self):
 
         self._dbcol = 'song_segmentation'
@@ -15,7 +14,7 @@ class SongSegment(Storinator):
 
     def add(self, song_id, time_from, time_to, mfcc, chroma, tempogram, similar):
         """adds entity to database
-    
+
         Parameters
         ----------
         song_id: int
@@ -24,12 +23,12 @@ class SongSegment(Storinator):
             the start of the time interval
         time_to
             the end of the time interval
-            
+
         Returns
         -------
         the insert method from the database class with inputs
         """
-        
+
         return self._db.insert(self._dbcol, song_id, {
             "time_from": time_from,
             "time_to": time_to,
@@ -41,12 +40,12 @@ class SongSegment(Storinator):
 
     def get(self, song_id):
         """Insert data into the collection
-    
+
         Parameters
         ----------
         song_id
             the id of the song
-            
+
         Returns
         -------
         Object
@@ -56,11 +55,11 @@ class SongSegment(Storinator):
 
     def get_by_ids(self, ids):
         """gets all entities in the database given by ids.
-    
+
         Parameters
         ----------
         ids
-            
+
         Returns
         -------
         Object list
@@ -74,12 +73,12 @@ class SongSegment(Storinator):
 
     def get_all_by_song_id(self, song_id):
         """gets all entities from the database by song_id
-    
+
         Parameters
         ----------
         song_id
             the id of the song
-            
+
         Returns
         -------
         Object list
@@ -101,7 +100,7 @@ class SongSegment(Storinator):
 
     def get_all_in_range(self, from_count, to_count):
         """updates an entity in the database given an id
-    
+
         Parameters
         ----------
 
@@ -109,7 +108,7 @@ class SongSegment(Storinator):
             ???
         to_count
             ???
-            
+
         Returns
         -------
         Object list
@@ -123,14 +122,14 @@ class SongSegment(Storinator):
 
     def update_similar(self, id, similar):
         """updates an entity in the database given an id
-    
+
         Parameters
         ----------
         id
             id of the entity
         similar
             ???
-            
+
         Returns
         -------
         Object list
@@ -155,5 +154,5 @@ class SongSegment(Storinator):
 
     def close(self):
         """Closes the conenction to the database"""
-        
+
         self._db.close()

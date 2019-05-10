@@ -1,11 +1,5 @@
-#!/usr/local/bin/python3.6
-
 import sys
 from typing import Dict
-
-if __name__ == "__main__":
-    import os
-    sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
 from video_emotion.facial_recognition.facial_recognition import analyze_video
 from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
@@ -93,6 +87,3 @@ def find_emotions_cutoffs(emotions:[float]) -> str:
 
     return string
 
-if __name__ == "__main__":
-    data = classify_video(sys.argv[0], (0, 30000))
-    print(str(data))

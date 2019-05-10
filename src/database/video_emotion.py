@@ -23,7 +23,7 @@ class VideoEmotion(Storinator):
 
     get_all()
         Finds all entities in the database
-    
+
     """
 
     def __init__(self):
@@ -31,8 +31,8 @@ class VideoEmotion(Storinator):
         self._col = 'video_emotion'
         self._db = VEDatabase()
 
-    def add(self, song_id : int,
-            video_id : int, time : dict, emotions : dict) -> int:
+    def add(self, song_id: int,
+            video_id: int, time: dict, emotions: dict) -> int:
         """Insert video_segment into the collection
 
         Parameters
@@ -45,7 +45,7 @@ class VideoEmotion(Storinator):
             Dictionary with time interval
         emotions : dict
             Dictionary with emotion data
-            
+
         Returns
         -------
         int
@@ -54,17 +54,16 @@ class VideoEmotion(Storinator):
 
         return self._db.insert(self._col, song_id, video_id, time, emotions)
 
-
     def get(self, song_id: int, video_id: int) -> object:
         """gets a video_segment from the database
-    
+
         Parameters
         ----------
         song_id : int
             The id of the song
         video_id : int
             The id from the video
-            
+
         Returns
         -------
         object
@@ -75,12 +74,12 @@ class VideoEmotion(Storinator):
 
     def get_by_song_id(self, song_id: int) -> [object]:
         """Gets all video_segments from the database by song_id
-    
+
         Parameters
         ----------
         song_id : int
             The id of the song
-            
+
         Returns
         -------
         object list
@@ -91,7 +90,7 @@ class VideoEmotion(Storinator):
 
     def get_all(self) -> [object]:
         """Gets all video_segments from the database
-            
+
         Returns
         -------
         object list
@@ -102,5 +101,5 @@ class VideoEmotion(Storinator):
 
     def close(self):
         """Closes the conenction to the database"""
-        
+
         self._db.close()

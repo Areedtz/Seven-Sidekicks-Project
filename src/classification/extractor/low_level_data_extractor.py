@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.6
-
 import sys
 import subprocess
 import os
@@ -26,9 +24,3 @@ def make_low_level_data_file(filename: str, output_file_path: str):
     command = '{} {} {}'.format(extractor_path, filename, output_file_path)
 
     subprocess.run(command, shell=True)
-
-
-if __name__ == "__main__":
-    filename, output_filename = sys.argv[1], sys.argv[2]
-
-    make_low_level_data_file(filename, output_filename)

@@ -52,3 +52,4 @@ def test_find_returns_latest_with_songid():
     })
     track = db.find('test', 1)
     assert track["key"] == "v"
+

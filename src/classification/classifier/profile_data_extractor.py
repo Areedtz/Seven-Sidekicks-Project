@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.6
-
 import sys
 import os
 import subprocess
@@ -7,9 +5,6 @@ import json
 
 from typing import Tuple
 from tempfile import NamedTemporaryFile
-
-if __name__ == "__main__":
-    sys.path.insert(0, os.path.abspath(__file__ + "../../../../"))
 
 from utilities.filehandler.handle_path import get_absolute_path
 
@@ -79,9 +74,3 @@ def get_classifier_data(
          ]
 
     return t[0], t[1], t[2], t[3], t[4], t[5]
-
-
-if __name__ == "__main__":
-    data_file = sys.argv[1]
-
-    res = get_classifier_data(data_file)

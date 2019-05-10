@@ -16,15 +16,14 @@ class Storinator(abc.ABC):
 
     get_all(col)
         Finds all entities in the database
-    
-    """
 
+    """
 
     # Abstract methods
     @abc.abstractmethod
     def add(self, col, id: int):
         """Adds entity to database
-    
+
         Parameters
         ----------
         col
@@ -35,10 +34,11 @@ class Storinator(abc.ABC):
         """
 
         pass
+
     @abc.abstractmethod
     def get(self, col, id: int):
         """Finds one entity from the database
-    
+
         Parameters
         ----------
         col
@@ -52,7 +52,7 @@ class Storinator(abc.ABC):
     @abc.abstractmethod
     def get_all(self, col):
         """Finds all entities in the database
-    
+
         Parameters
         ----------
         col
@@ -70,7 +70,7 @@ class SegmentStorinator(abc.ABC):
     @abc.abstractmethod
     def add(self, name, segment_id):
         """Adds entity to database
-    
+
         Parameters
         ----------
         col
@@ -84,7 +84,7 @@ class SegmentStorinator(abc.ABC):
     @abc.abstractmethod
     def get(self, name, segment_id):
         """Finds one entity from the database
-    
+
         Parameters
         ----------
         col
@@ -98,7 +98,7 @@ class SegmentStorinator(abc.ABC):
     @abc.abstractmethod
     def get_all(self, name):
         """Finds all entities in the database
-    
+
         Parameters
         ----------
         col
@@ -110,5 +110,5 @@ class SegmentStorinator(abc.ABC):
     @abc.abstractmethod
     def close(self):
         """Closes the conenction to the database"""
-        
+
         pass
