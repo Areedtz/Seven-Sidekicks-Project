@@ -79,3 +79,4 @@ def classify_faces(faces) -> [[float]]:
     K.clear_session()
 
     return emotion_prediction
+    

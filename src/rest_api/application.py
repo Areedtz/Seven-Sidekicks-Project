@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.6
-
 import sys
 import os
 import json
@@ -13,13 +11,13 @@ from flask_restplus import Resource, Api, fields
 import bpm.bpm_extractor as bpm_extract
 import classification.api_helper as mood_extract
 import classification.api_helper as music_emotion_classifier
-from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
-from utilities.get_song_id import get_song_id
-from utilities.config_loader import load_config
 from database.track_emotion import TrackEmotion
-from similarity.similarity import analyze_songs, query_similar
 from database.video_emotion import VideoEmotion
 from database.video_emotion_no_song import VideoEmotionNS
+from similarity.similarity import analyze_songs, query_similar
+from utilities.get_song_id import get_song_id
+from utilities.config_loader import load_config
+from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
 
 
 cfg = load_config()
@@ -118,8 +116,8 @@ song_model = api.model('SongModel', {
         id_model,
         description='ID model of the song to analyze',
         required=True),
-    'Filepath': fields.String(
-        description='Filepath of the requested resource',
+    'SourcePath': fields.String(
+        description='SourcePath of the requested resource',
         required=True),
 })
 
@@ -150,7 +148,7 @@ class AnalyzeSong(Resource):
         if not os.path.isfile(song_path):
             api.abort(
                 400,
-                "The given filepath '{}' does not seem to exist"
+                "The given source path '{}' does not seem to exist"
                 .format(song_path)
             )
 
@@ -226,7 +224,7 @@ class AnalyzeVideo(Resource):
         if not os.path.isfile(video_path):
             api.abort(
                 400,
-                "The given filepath '{}' does not seem to exist"
+                "The given source path '{}' does not seem to exist"
                 .format(video_path)
             )
 
@@ -300,7 +298,7 @@ class AnalyzeVideoWithSong(Resource):
         if not os.path.isfile(video_path):
             api.abort(
                 400,
-                "The given filepath '{}' does not seem to exist"
+                "The given source path '{}' does not seem to exist"
                 .format(video_path)
             )
 
@@ -335,7 +333,7 @@ class AnalyzeSimilarity(Resource):
         transformed = list(map(lambda a: ('{}-{}-{}'.format(
             a["ID"]["Release"], a["ID"]["Side"],
             a["ID"]["Track"]
-        ), a['Filepath']), data['songs']))
+        ), a['SourcePath']), data['songs']))
 
         _thread.start_new_thread(analyze_songs, (transformed, ))
 
@@ -398,3 +396,4 @@ class AnalyzeVideoWithSongGet(Resource):
             )
 
         return result
+

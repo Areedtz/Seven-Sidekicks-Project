@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3.6
-
 from rest_api.application import app, hostURL, hostPort
 
 
