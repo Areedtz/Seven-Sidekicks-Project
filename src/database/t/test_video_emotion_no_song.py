@@ -135,3 +135,4 @@ def test_find_by_video_id():
     assert vet2['sad'] == 0.1
     assert vet2['surprise'] == 0.234
     assert vet2['neutral'] == 0.43
+    

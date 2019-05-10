@@ -15,3 +15,4 @@ def get_song_id(filename: str) -> str:
     """
 
     return re.search(r"([0-9]+-[0-9]+-[0-9]+)", filename).group(0)
+    

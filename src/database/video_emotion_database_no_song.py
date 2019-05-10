@@ -53,3 +53,4 @@ class VEDatabase:
         for track_bpm in self._db[col].find():
             results.append(track_bpm)
         return results
+        

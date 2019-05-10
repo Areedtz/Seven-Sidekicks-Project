@@ -134,3 +134,4 @@ if __name__ == "__main__":
         writer.writerows(csv_data)
 
     csv_file.close()
+    

@@ -1,4 +1,3 @@
-#!/usr/local/bin/python3.6
 import sys
 import os
 import json
@@ -397,3 +396,4 @@ class AnalyzeVideoWithSongGet(Resource):
             )
 
         return result
+

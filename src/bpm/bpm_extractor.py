@@ -1,4 +1,3 @@
-#!/usr/local/bin/python3.6
 from typing import Tuple
 from multiprocessing import Pool
 
@@ -23,3 +22,4 @@ def get_song_bpm(audio) -> Tuple[float, float]:
     bpm, _, beats_confidence, _, _ = rhythm_extractor(audio)
 
     return bpm, beats_confidence
+    

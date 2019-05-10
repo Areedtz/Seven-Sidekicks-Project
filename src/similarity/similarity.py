@@ -327,3 +327,4 @@ def analyze_songs(songs):
         ss.update_similar(segs[i][0], formatted)
 
     ss.close()
+    

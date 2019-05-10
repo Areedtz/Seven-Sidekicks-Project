@@ -59,3 +59,4 @@ class VEDatabase:
 
     def close(self):
         self._db.close()
+

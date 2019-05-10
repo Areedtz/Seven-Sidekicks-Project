@@ -12,3 +12,4 @@ def test_get_song_bpm():
 
     assert round(bpm, 3) == 139.847
     assert round(confidence, 4) == 2.4134
+    

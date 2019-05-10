@@ -20,3 +20,4 @@ def load_config() -> Dict[str, Any]:
         cfg = yaml.load(file, Loader=yaml.FullLoader)
 
     return cfg
+    

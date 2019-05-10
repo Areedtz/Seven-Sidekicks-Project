@@ -63,3 +63,4 @@ class Database:
 
     def close(self):
         self._client.close()
+        

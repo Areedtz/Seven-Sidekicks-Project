@@ -1,4 +1,3 @@
-#!/usr/local/bin/python3.6
 import sys
 import subprocess
 import os

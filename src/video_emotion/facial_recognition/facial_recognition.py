@@ -141,3 +141,4 @@ def analyze_frame(frame) -> [[int, int]]:
         face = frame[int(startY):int(endY), int(startX):int(endX)]
         faces_tuple.append(face)
     return faces_tuple
+    
