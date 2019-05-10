@@ -31,4 +31,4 @@ def test_get_all():
     ss.add(1, 0, 5000, None, None, None, None)
     seg = ss.get_all()
     assert len(seg) > 0
-    
+

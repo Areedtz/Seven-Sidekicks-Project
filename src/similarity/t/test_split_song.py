@@ -10,4 +10,4 @@ def test_split_song():
     segments = split_song(song)
 
     assert len(segments) == 19
-    
+

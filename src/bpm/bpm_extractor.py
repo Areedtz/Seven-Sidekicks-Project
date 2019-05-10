@@ -22,4 +22,3 @@ def get_song_bpm(audio) -> Tuple[float, float]:
     bpm, _, beats_confidence, _, _ = rhythm_extractor(audio)
 
     return bpm, beats_confidence
-    

@@ -22,4 +22,4 @@ class VideoEmotion(Storinator):
 
     def close(self):
         self._db.close()
-        
+

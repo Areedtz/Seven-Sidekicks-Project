@@ -57,4 +57,4 @@ def test_find_matches():
         map(lambda seg: (seg, query_object), segments))))
 
     assert len(matches[0]) == 10
-    
+

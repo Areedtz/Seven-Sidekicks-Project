@@ -37,4 +37,4 @@ class SegmentStorinator(abc.ABC):
     @abc.abstractmethod
     def close(self):
         pass
-        
+

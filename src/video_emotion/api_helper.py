@@ -61,4 +61,3 @@ def process_data_and_extract_emotions_with_song(video_id: str, video_path: str,
     vet = VideoEmotion()
     vet.add(video_id, song_id, time_range, data)
     return True
-    

@@ -24,4 +24,4 @@ class VideoEmotionNS(Storinator):
 
     def close(self):
         self._db.close()
-        
+
