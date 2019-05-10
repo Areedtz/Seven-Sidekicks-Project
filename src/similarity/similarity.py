@@ -217,10 +217,11 @@ def query_similar(song_id, from_time, to_time):
 
     similar_segments = []
     for i in range(0, len(similar)):
+        sim_seg = next(seg for seg in similar_full if seg['_id'] == similar[i]['id'])
         similar_segments.append(dict({
-            'song_id': similar_full[i]['song_id'],
-            'from_time': similar_full[i]['time_from'],
-            'to_time': similar_full[i]['time_to'],
+            'song_id': sim_seg['song_id'],
+            'from_time': sim_seg['time_from'],
+            'to_time': sim_seg['time_to'],
             'distance': similar[i]['distance'],
         }))
 
