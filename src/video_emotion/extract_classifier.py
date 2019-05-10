@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3.6
 
 import sys
+from typing import Dict
 
 if __name__ == "__main__":
     import os
@@ -10,7 +11,23 @@ from video_emotion.facial_recognition.facial_recognition import analyze_video
 from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
 
 
-def classify_video(video_path, time_range=None):
+def classify_video(video_path: str, time_range=None):
+    """Classifies the emotions in a given video
+
+    Parameters
+    ----------
+    video_path:str
+        The path of the video that is to be analyzed
+
+    time_range:Dict[str:int]
+        The time range to analyze in as a dictionary of type string:int
+
+    Returns
+    -------
+    string
+        Returns a csv of the emotions in the emotion set
+    """
+
     faces = analyze_video(video_path, time_range)
     angry_sum =\
         disgust_sum =\
@@ -45,7 +62,36 @@ def classify_video(video_path, time_range=None):
         "surprise": surprise_sum / number_of_faces,
         "neutral": neutral_sum / number_of_faces
     }
+def find_emotions_cutoffs(emotions:[float]) -> str:
+    """Finds the emotional cutoffs for a set of emotions as a list
 
+    Parameters
+    ----------
+    emotions:str
+        An array of emotions
+
+    Returns
+    -------
+    string
+        Returns the cutoffs underscore-separated with the id first
+    """
+
+    emotions2 = {
+        "angry": emotions[0],
+        "disgust": emotions[1],
+        "fear": emotions[2],
+        "happy": emotions[3],
+        "sad": emotions[4],
+        "surprise": emotions[5],
+        "neutral": emotions[6]
+    }
+
+    string = ""
+    for key, value in emotions2.items():
+        if value > 0.3:
+            string = string + key + "_" + str(value.round(decimals=2)) + "_"
+
+    return string
 
 if __name__ == "__main__":
     data = classify_video(sys.argv[0], (0, 30000))
