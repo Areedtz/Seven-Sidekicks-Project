@@ -45,7 +45,7 @@ def analyze_video(video_path : str, time_range:int =None) -> Dict:
     if time_range is not None:
         fro, to = time_range
     cap = cv2.VideoCapture(video_path)
-    cap.SetCaptureProperty(cap,cv2.CV_CAP_PROP_POS_MSEC,fro) #Jump to specified time in video
+    cap.set(cv2.CV_CAP_PROP_POS_MSEC,fro) #Jump to specified time in video
     dict_of_faces = {}
     while cap.isOpened():
         # Get frame from video
