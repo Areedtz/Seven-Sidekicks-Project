@@ -5,11 +5,13 @@ from database.storinator import Storinator
 
 def test_implements_Storinator():
     temo = TrackEmotion()
+
     assert isinstance(temo, Storinator)
 
 
 def test_database_name():
     temo = TrackEmotion()
+
     assert temo._col == 'track_emotion'
 
 
@@ -55,6 +57,7 @@ def test_add_and_get():
              }
              )
     track = temo.get("1")
+
     assert track['song_id'] == "1"
     assert track['bpm']['value'] == 100.0
     assert track['bpm']['confidence'] == 3.0
@@ -115,5 +118,6 @@ def test_get_all():
              }
              )
     tracks = temo.get_all()
+
     assert len(tracks) > 0
 
