@@ -164,7 +164,7 @@ class AnalyzeSong(Resource):
                             ' should be updated in Splunk as soon as it is done.'}, 201
 
 
-@api.route('/get_analyzed_song/<string:diskotek_nr>')
+@api.route('/audio/<string:diskotek_nr>')
 class GetAnalyzeSong(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed songs data from the database
