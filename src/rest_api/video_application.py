@@ -17,8 +17,6 @@ cfg = load_config()
 app = Flask(__name__)
 api = Api(app)
 
-hostURL = cfg['rest_api_url']
-hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
 """

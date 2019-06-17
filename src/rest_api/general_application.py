@@ -22,39 +22,16 @@ cfg = load_config()
 app = Flask(__name__)
 api = Api(app)
 
-hostURL = cfg['rest_api_url']
-hostPort = cfg['rest_api_port']
 output_directory_for_commands = "./"
 
-"""
-    Models the id of a piece of music
-"""
-id_model = api.model('IdModel', {
-    'Release': fields.Integer(
-        description='The release ID of the song',
-        required=True),
-    'Side': fields.Integer(
-        description='The side of the media',
-        required=True),
-    'Track': fields.Integer(
-        description='The tracknumber of the media',
-        required=True),
-})
 
 """
     Models an analysis request for a piece of music including its location and the user requesting the analysis
 """
 song_fields = api.model('SongModel', {
-    'ID': fields.Nested(
-        id_model,
-        description='ID model of the song to analyze',
-        required=False),
     'SourcePath': fields.String(
         description='The path of the song to analyze',
-        required=True),
-    'User': fields.String(
-        description='The requesting user',
-        required=True),
+        required=True)
 })
 
 """
@@ -108,26 +85,6 @@ video_fields = api.model('VideoModel', {
         required=True),
 })
 
-song_model = api.model('SongModel', {
-    'ID': fields.Nested(
-        id_model,
-        description='ID model of the song to analyze',
-        required=True),
-    'SourcePath': fields.String(
-        description='SourcePath of the requested resource',
-        required=True),
-})
-
-similarity_analysis_model = api.model('SimilarityAnalysisModel', {
-                                      'songs': fields.List(fields.Nested(song_model))})
-
-song_id_field = api.model('SongIdField', {
-    'SongID': fields.String(
-        description='The ID of the song in the video',
-        required=True),
-})
-
-
 @api.route('/audio')
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
@@ -136,33 +93,22 @@ class AnalyzeSong(Resource):
         """
 
         data = request.get_json()
-        song_id = '{}-{}-{}'.format(
-            data["ID"]["Release"], data["ID"]["Side"],
-            data["ID"]["Track"]
-        )
-
         song_path = data["SourcePath"]
-        if not os.path.isfile(song_path):
+
+        if not (os.path.isfile(song_path) or os.path.isdir(song_path)):
             api.abort(
                 400,
                 "The given source path '{}' does not seem to exist"
                 .format(song_path)
             )
 
-        _thread.start_new_thread(
-            music_emotion_classifier.process_data_and_extract_profiles,
-            (
-                song_id,
-                song_path
-            )
-        )
+        # Send request to music API
 
-        return {'Response': 'The request has been sent and'
-                            ' should be updated in Splunk as soon as it is done.'}, 201
+        return {'Response': 'The request has been sent and currently does nothing'}, 201
 
 
-@api.route('/get_analyzed_song/<string:diskotek_nr>')
-class GetAnalyzeSong(Resource):
+@api.route('/audio/<string:diskotek_nr>')
+class GetAnalyzedSong(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed songs data from the database
 
@@ -218,28 +164,19 @@ class AnalyzeVideo(Resource):
                 "From and to can not be equal"
             )
 
-        if not os.path.isfile(video_path):
+        if not (os.path.isfile(video_path) or os.path.isdir(video_path)):
             api.abort(
                 400,
                 "The given source path '{}' does not seem to exist"
                 .format(video_path)
             )
 
-        _thread.start_new_thread(
-            process_data_and_extract_emotions,
-            (
-                video_id,
-                video_path,
-                video_time_range
-            )
-        )
-
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}, 201
 
 
 @api.route('/video/<string:video_id>')
-class AnalyzeVideoGet(Resource):
+class GetAnalyzedVideo(Resource):
     def get(self, video_id: str) -> object:
         """Retrieves a previously analyzed songs data from the database
 
@@ -312,6 +249,33 @@ class AnalyzeVideoWithSong(Resource):
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}
 
+@api.route('/video_with_audio/<string:song_id>')
+class GetAnalyzedVideoWithSong(Resource):
+    def get(self, song_id: str) -> object:
+        """Retrieves a previously analyzed song+video from the database
+
+        Parameters
+        ----------
+        song_id : str
+            The ID of the song to get song+video data for
+
+        Returns
+        -------
+        object
+            A json object of the information of the analyzed song+video
+        """
+
+        db = VideoEmotion()
+        result = db.get_by_song_id(song_id)
+
+        if result is None:
+            api.abort(
+                400,
+                "The given no. '{}' does not seem to exist"
+                .format(song_id)
+            )
+
+        return result
 
 @api.route('/similarity/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
 class Similar(Resource):
@@ -340,32 +304,3 @@ class Similar(Resource):
             api.abort(400, 'No similar songs found')
 
         return similar
-
-
-@api.route('/video_with_audio/<string:song_id>')
-class AnalyzeVideoWithSongGet(Resource):
-    def get(self, song_id: str) -> object:
-        """Retrieves a previously analyzed song+video from the database
-
-        Parameters
-        ----------
-        song_id : str
-            The ID of the song to get song+video data for
-
-        Returns
-        -------
-        object
-            A json object of the information of the analyzed song+video
-        """
-
-        db = VideoEmotion()
-        result = db.get_by_song_id(song_id)
-
-        if result is None:
-            api.abort(
-                400,
-                "The given no. '{}' does not seem to exist"
-                .format(song_id)
-            )
-
-        return result

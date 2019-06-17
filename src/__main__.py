@@ -1,13 +1,17 @@
 #!/usr/local/bin/python3.6
 
-import sys, getopt 
+import sys
+import getopt 
 
-from rest_api.general_application import app as g_app, hostURL as g_hostURL, hostPort as g_hostPort
-from rest_api.music_application import app as m_app, hostURL as m_hostURL, hostPort as m_hostPort
-from rest_api.video_application import app as v_app, hostURL as v_hostURL, hostPort as v_hostPort
+from rest_api.general_application import app as g_app
+from rest_api.music_application import app as m_app
+from rest_api.video_application import app as v_app
+from utilities.config_loader import load_config
 
 
 def main(argv):
+    cfg = load_config()
+
     type = ""
 
     try:
@@ -23,11 +27,11 @@ def main(argv):
             type = arg
 
     if type in ("general", ""):
-        g_app.run(host=g_hostURL, port=g_hostPort, debug=False)
+        g_app.run(host=cfg['rest_api_host_url'], port=cfg['rest_api_host_port'], debug=False)
     elif type == "music":
-        m_app.run(host=m_hostURL, port=m_hostPort, debug=False)
+        m_app.run(host=cfg['rest_api_host_url'], port=cfg['rest_api_host_port'], debug=False)
     elif type == "video":
-        v_app.run(host=v_hostURL, port=v_hostPort, debug=False)
+        v_app.run(host=cfg['rest_api_host_url'], port=cfg['rest_api_host_port'], debug=False)
 
 
 if __name__ == "__main__":
