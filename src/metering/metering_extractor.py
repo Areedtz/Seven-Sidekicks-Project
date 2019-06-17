@@ -4,10 +4,12 @@ from typing import Tuple
 
 from essentia import run, Pool
 from essentia.standard import RhythmExtractor2013
-from essentia.streaming import LoudnessEBUR128, AudioLoader
+from essentia.streaming import LoudnessEBUR128
+
+from utilities.filehandler.audio_loader import get_audio_loaded_song
 
 
-def get_song_metering(data_file_name) -> Tuple[list, list, float, float]:
+def get_song_metering(data_file_path) -> Tuple[list, list, float, float]:
     """Extracts the metering data for the given audio
 
     Parameters
@@ -23,28 +25,28 @@ def get_song_metering(data_file_name) -> Tuple[list, list, float, float]:
 
     p = Pool()
 
-    a = AudioLoader(filename = data_file_name)
-    a.sampleRate >> (p, "sampleRate")
-    a.numberChannels >> (p, "numberChannels")
-    a.md5 >> (p, "md5")
-    a.bit_rate >> (p, "bit_rate")
-    a.codec >> (p, "codec")
+    audio = get_audio_loaded_song(data_file_path)
+    audio.sampleRate >> (p, "sampleRate")
+    audio.numberChannels >> (p, "numberChannels")
+    audio.md5 >> (p, "md5")
+    audio.bit_rate >> (p, "bit_rate")
+    audio.codec >> (p, "codec")
 
     b = LoudnessEBUR128(hopSize = 0.1, sampleRate = 44100)
-    a.audio >> b.signal
+    audio >> b.signal
     b.momentaryLoudness >> (p, "momentaryLoudness")
     b.shortTermLoudness >> (p, "shortTermLoudness")
     b.integratedLoudness >> (p, "integratedLoudness")
     b.loudnessRange >> (p, "loudnessRange")
 
-    run(a)
+    run(audio)
 
     return p["momentaryLoudness"], p["shortTermLoudness"], p["integratedLoudness"], p["loudnessRange"]
 
-a = get_song_metering(sys.argv[1])
+#a = get_song_metering(sys.argv[1])
 
-print(min(a[0]))
-print(max(a[1]))
-print(sum(a[0])/len(a[0]))
-print(sum(a[1])/len(a[0]))
-print(a[3])
+#print(min(a[0]))
+#print(max(a[1]))
+#print(sum(a[0])/len(a[0]))
+#print(sum(a[1])/len(a[0]))
+#print(a[3])

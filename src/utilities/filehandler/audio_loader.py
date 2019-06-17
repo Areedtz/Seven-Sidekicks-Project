@@ -1,5 +1,5 @@
 from essentia.standard import MonoLoader
-from essentia.standard import AudioLoader
+from essentia.streaming import AudioLoader
 
 from utilities.filehandler.handle_path import get_absolute_path
 
@@ -41,5 +41,8 @@ def get_audio_loaded_song(song_path: str):
 
     path = get_absolute_path(song_path)
     loader = AudioLoader(filename=path)
+
+    print(song_path)
+    print(path)
 
     return loader()

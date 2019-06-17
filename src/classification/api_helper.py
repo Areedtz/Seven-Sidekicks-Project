@@ -38,9 +38,7 @@ def process_data_and_extract_profiles(
 
     bpm_info = get_song_bpm(mono_loaded_song)
 
-    audio_loaded_song = get_audio_loaded_song(song_file_path)
-
-    momentaryLoudness, shortTermLoudness, integratedLoudness, loudnessRange = get_song_metering(audio_loaded_song)
+    momentaryLoudness, shortTermLoudness, integratedLoudness, loudnessRange = get_song_metering(song_file_path)
 
     data = {}
     data['bpm'] = {
