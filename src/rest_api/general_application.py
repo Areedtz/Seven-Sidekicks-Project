@@ -7,6 +7,7 @@ from bson.json_util import dumps
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
+import requests
 
 import classification.api_helper as music_emotion_classifier
 from database.track_emotion import TrackEmotion
@@ -85,6 +86,7 @@ video_fields = api.model('VideoModel', {
         required=True),
 })
 
+
 @api.route('/audio')
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
@@ -92,8 +94,8 @@ class AnalyzeSong(Resource):
         """Analyzes a song and outputs the data to the database
         """
 
-        data = request.get_json()
-        song_path = data["SourcePath"]
+        req_data = request.get_json()
+        song_path = req_data["SourcePath"]
 
         if not (os.path.isfile(song_path) or os.path.isdir(song_path)):
             api.abort(
@@ -102,9 +104,10 @@ class AnalyzeSong(Resource):
                 .format(song_path)
             )
 
-        # Send request to music API
+        resp = requests.post(
+            cfg['rest_api_music_url'] + "/audio", json=req_data)
 
-        return {'Response': 'The request has been sent and currently does nothing'}, 201
+        return resp
 
 
 @api.route('/audio/<string:diskotek_nr>')
@@ -171,6 +174,8 @@ class AnalyzeVideo(Resource):
                 .format(video_path)
             )
 
+        # Send request to the video API
+
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}, 201
 
@@ -236,18 +241,11 @@ class AnalyzeVideoWithSong(Resource):
                 .format(video_path)
             )
 
-        _thread.start_new_thread(
-            process_data_and_extract_emotions_with_song,
-            (
-                video_id,
-                video_path,
-                video_time_range,
-                song_id
-            )
-        )
+        # Send request to the video API
 
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}
+
 
 @api.route('/video_with_audio/<string:song_id>')
 class GetAnalyzedVideoWithSong(Resource):
@@ -276,6 +274,7 @@ class GetAnalyzedVideoWithSong(Resource):
             )
 
         return result
+
 
 @api.route('/similarity/<string:diskotek_nr>/<int:from_time>/<int:to_time>')
 class Similar(Resource):

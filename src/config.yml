@@ -6,10 +6,11 @@ mongo_db: dr
 
 rest_api_host_url: 0.0.0.0
 rest_api_host_port: 8080
+rest_api_debug: true
 
-rest_api_general_url: general_code
-rest_api_music_url: music_code
-rest_api_video_url: video_code
+rest_api_general_url: http://general_code:8080
+rest_api_music_url: http://music_code:8080
+rest_api_video_url: http://video_code:8080
 
 similarity_matches: 10
 similarity_bucket_size: 6000

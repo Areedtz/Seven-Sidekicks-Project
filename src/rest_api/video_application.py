@@ -70,6 +70,7 @@ video_fields = api.model('VideoModel', {
         required=True),
 })
 
+
 @api.route('/video')
 class AnalyzeVideo(Resource):
     @api.expect(video_fields)

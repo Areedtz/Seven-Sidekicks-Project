@@ -39,10 +39,11 @@ class AnalyzeSong(Resource):
 
         data = request.get_json()
         song_path = data["SourcePath"]
+
         if os.path.isfile(song_path):
             # Do something
             print("Got request for the " + song_path + " file")
-        else: # Is folder
+        else:  # Is folder
             # Do something else
             print("Got request for the " + song_path + " folder")
 
