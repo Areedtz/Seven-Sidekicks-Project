@@ -8,7 +8,6 @@ from tempfile import NamedTemporaryFile
 
 from utilities.filehandler.handle_path import get_absolute_path
 
-
 def get_classifier_data(
     data_file_name: str) -> Tuple[
         Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:

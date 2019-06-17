@@ -8,7 +8,7 @@ from multiprocessing import Pool
 
 from classification.segmented_audio_analysis import process_data_and_extract_profiles
 from similarity.split_song import split_song
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.audio_loader import get_mono_loaded_song
 
 from pprint import pprint
 
@@ -20,7 +20,7 @@ def test_profile_song_data():
 
     song_id = s_id.get_song_id(filename)
     
-    loaded_song = get_MonoLoaded_Song(filename)
+    loaded_song = get_mono_loaded_song(filename)
 
     split_song_list = split_song(loaded_song)
 
@@ -60,7 +60,7 @@ def test_audio_analysis_makes_csvfile():
 
     song_id = s_id.get_song_id(filename)
 
-    loaded_song = get_MonoLoaded_Song(filename)
+    loaded_song = get_mono_loaded_song(filename)
 
     split_song_list = split_song(loaded_song)
 
