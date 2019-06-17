@@ -1,35 +1,24 @@
 sudo: required
-
 dist: cosmic
-
 language: python
 python:
-  - '3.6'
-
+- '3.6'
 cache:
   directories:
-    - /usr/local/include
-    - /usr/local/lib
-    - /usr/local/share
-    - /usr/local/bin
-    - $HOME/essentia
-    - $HOME/virtualenv
-
-# command to install dependencies
+  - "/usr/local/include"
+  - "/usr/local/lib"
+  - "/usr/local/share"
+  - "/usr/local/bin"
+  - "$HOME/essentia"
+  - "$HOME/virtualenv"
 install:
-  - pip install -r requirements.txt
-
-# command to run tests
+- pip install -r requirements.txt
 script:
-  - pytest
-
-# services
+- pytest
 services:
-  - mongod
-
+- mongod
 before_install:
 - bash install_essentia.sh
-
-# slack integration
 notifications:
-  slack: thesevensidekicks:0rnkF7TfoqTqpyFPLIr8hN30
+  slack:
+    secure: r0E8/kXh9FdWRU6xhsTCMjX+Wsx/Nsbjr4zGETKGV8B5d1/mNa44qQhmyDXjpWlcfVMdUSP6tXfl23tUou2REm5KwilcYK+5XfBbuG7zV7wQ9IoDpI0uZxGD6uUiTepZF9qsfgViovPbpLBgQaY7hAIxLDqgmaT/qCw3XXkAnEZgu+dWBw+4MuI2WKK39TxbOE9vmZPwXeByniiBedhM526Zun3T71gKoBgq8rL3w4Vo5+dyzW2z1GZuuDIOe1OarsDTVUD7kkNeNKg8K0GjewBPN1+iMo9YbXSP0DO7ciPEgEtYMqr6fUjgx6cRAa5D4LjSiY9rIF2N77GbROoTsnihwHAxQrpX8rTnaZcqeEeHSmqUhIVd4i4Nk6RD7keftuezCK5hUN0w5jW472jJSBbuzQvtLY+MtWzXcdgDk1zAKZsSt2ClH23wwjp4sE07QDIqXOqnIsbTHUR0dTn17svlMIh29TSU9FfuFyH037XFNd0W/rFMlgNLnctPSa3bNV9OO93MSmdak1kERCUg0t2xAvikuy3zAv8IkY+UV9tf1euMdV9lQVkwQswCWL0sxzyalEW7NpHFZgHXf6mA5A7crpUHYDHSLr3n79YVdTW08W7z8Z//S17b8ZgWxMv5Tx2xucINkpH9BHpSB9eQbhPpdvsF8dyXTdVYPXP9Rdk=
