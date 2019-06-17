@@ -9,7 +9,6 @@ from flask import request
 from flask_restplus import Resource, Api, fields
 
 import classification.api_helper as music_emotion_classifier
-from database.track_emotion import TrackEmotion
 from utilities.config_loader import load_config
 
 
@@ -85,36 +84,3 @@ class AnalyzeSong(Resource):
 
         return {'Response': 'The request has been sent and'
                             ' should be updated in Splunk as soon as it is done.'}, 201
-
-
-@api.route('/get_analyzed_song/<string:diskotek_nr>')
-class GetAnalyzeSong(Resource):
-    def get(self, diskotek_nr: str) -> object:
-        """Retrieves a previously analyzed songs data from the database
-
-        Parameters
-        ----------
-        diskotek_nr : str
-            The ID of the the song to retrieve
-
-        Returns
-        -------
-        object
-            A json object containing the information of the analyzed song
-        """
-
-        db = TrackEmotion()
-
-        r = db.get(diskotek_nr)
-
-        if r is None:
-            api.abort(
-                400,
-                "The given no. '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
-
-        del r['_id']
-        r['last_updated'] = r['last_updated'].isoformat()
-
-        return r

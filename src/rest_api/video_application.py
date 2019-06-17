@@ -8,8 +8,6 @@ from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
-from database.video_emotion import VideoEmotion
-from database.video_emotion_no_song import VideoEmotionNS
 from utilities.config_loader import load_config
 from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
 
@@ -118,35 +116,6 @@ class AnalyzeVideo(Resource):
                             ' updated in Splunk as soon as it is done.'}, 201
 
 
-@api.route('/video/<string:video_id>')
-class AnalyzeVideoGet(Resource):
-    def get(self, video_id: str) -> object:
-        """Retrieves a previously analyzed songs data from the database
-
-        Parameters
-        ----------
-        video_id : str
-            The ID of the the video to analyze
-
-        Returns
-        -------
-        object
-            A json object of the information of the the analyzed video
-        """
-
-        db = VideoEmotionNS()
-        result = db.get_by_video_id(video_id)
-
-        if result is None:
-            api.abort(
-                400,
-                "The given no. '{}' does not seem to exist"
-                .format(video_id)
-            )
-
-        return result
-
-
 @api.route('/video_with_audio')
 class AnalyzeVideoWithSong(Resource):
     @api.expect(video_fields_with_song)
@@ -191,32 +160,3 @@ class AnalyzeVideoWithSong(Resource):
 
         return {'Response': 'The request has been sent and should be'
                             ' updated in Splunk as soon as it is done.'}
-
-
-@api.route('/video_with_audio/<string:song_id>')
-class AnalyzeVideoWithSongGet(Resource):
-    def get(self, song_id: str) -> object:
-        """Retrieves a previously analyzed song+video from the database
-
-        Parameters
-        ----------
-        song_id : str
-            The ID of the song to get song+video data for
-
-        Returns
-        -------
-        object
-            A json object of the information of the analyzed song+video
-        """
-
-        db = VideoEmotion()
-        result = db.get_by_song_id(song_id)
-
-        if result is None:
-            api.abort(
-                400,
-                "The given no. '{}' does not seem to exist"
-                .format(song_id)
-            )
-
-        return result
