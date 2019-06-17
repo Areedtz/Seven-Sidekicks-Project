@@ -6,8 +6,10 @@ from classification.classifier.profile_data_extractor import \
     get_classifier_data
 from classification.extractor.low_level_data_extractor import \
     make_low_level_data_file
+from metering.metering_extractor import get_song_metering
 from database.track_emotion import TrackEmotion
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.audio_loader import get_mono_loaded_song
+from utilities.filehandler.audio_loader import get_audio_loaded_song
 
 
 def process_data_and_extract_profiles(
@@ -32,9 +34,13 @@ def process_data_and_extract_profiles(
 
     temp_file.close()
 
-    mono_loaded_song = get_MonoLoaded_Song(song_file_path)
+    mono_loaded_song = get_mono_loaded_song(song_file_path)
 
     bpm_info = get_song_bpm(mono_loaded_song)
+
+    audio_loaded_song = get_audio_loaded_song(song_file_path)
+
+    momentaryLoudness, shortTermLoudness, integratedLoudness, loudnessRange = get_song_metering(audio_loaded_song)
 
     data = {}
     data['bpm'] = {
