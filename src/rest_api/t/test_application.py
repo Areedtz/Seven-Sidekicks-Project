@@ -6,7 +6,7 @@ import time
 from flask_restplus import Resource
 from flask import request
 
-
+testURL = "0.0.0.0"
 testPort = 6969
 
 
@@ -25,7 +25,7 @@ def start_rest():
                 raise RuntimeError('Not running with the Werkzeug Server')
 
             func()
-    rest.app.run(host=rest.hostURL, port=testPort, debug=False)
+    rest.app.run(host=testURL, port=testPort, debug=False)
 
 
 def test_rest_server():
@@ -37,9 +37,9 @@ def test_rest_server():
     while number_of_tries < 10:
         try:
             r = requests.get(
-                "http://" + rest.hostURL + ":" + str(testPort) + "/hello")
+                "http://" + testURL + ":" + str(testPort) + "/hello")
             requests.get(
-                "http://" + rest.hostURL + ":" + str(testPort) + "/shutdown")
+                "http://" + testURL + ":" + str(testPort) + "/shutdown")
             break
         except requests.exceptions.ConnectionError:
             number_of_tries += 1
