@@ -1,16 +1,39 @@
 version: '3'
 services:
-  codebase:
+  general_code:
     # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
     user: ${CURRENT_UID}
     build: .
+    restart: always
     volumes:
       - ./src:/code
     ports:
       - '127.0.0.1:80:1337'
-    command: ./__main__.py
+    command: ./__main__.py --type general
 
-  # Out comment this container if on production envrionment
+  music_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    ports:
+      - '127.0.0.1:81:1337'
+    command: ./__main__.py --type music
+
+  video_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    ports:
+      - '127.0.0.1:82:1337'
+    command: ./__main__.py --type video
+
+  # Out comment this container if on production environment
   mongodb:
     image: mongo
     restart: always

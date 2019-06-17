@@ -1,5 +1,5 @@
 import requests
-import rest_api.application as rest
+import rest_api.general_application as rest
 import threading
 import time
 
@@ -46,4 +46,3 @@ def test_rest_server():
             time.sleep(0.5)
 
     assert(r.json is not None)
-
