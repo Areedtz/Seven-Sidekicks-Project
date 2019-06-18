@@ -2,6 +2,7 @@ import os
 import fileinput
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
+import threading
 import librosa
 import numpy as np
 import falconn
@@ -52,7 +53,9 @@ def _load_songs(songs):
     for song in songs:
         song_id, filename = song
         segments.append(_load_song(song_id, filename, seg_db))
+
     seg_db.close()
+
     return _flatten(segments)
 
 
@@ -61,6 +64,8 @@ def _load_song(song_id, filename, segments):
     available otherwise loading the file and
     loading features from it directly
     """
+
+    print('Loading: ' + filename)
     filename = get_absolute_path(filename)
     segs = segments.get_all_by_song_id(song_id)
 
@@ -329,15 +334,3 @@ def analyze_songs(songs):
         ss.update_similar(segs[i][0], formatted)
 
     ss.close()
-
-
-filenames = []
-
-for root, dirs, files in os.walk('./music'):
-        for filename in files:
-            if filename.endswith('.wav'):
-                filenames.append(filename)
-
-songs = list(map(lambda name: (get_song_id(name), './music/' + name), filenames))
-
-analyze_songs(songs)
