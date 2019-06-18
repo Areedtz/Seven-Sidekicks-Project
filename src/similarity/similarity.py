@@ -65,7 +65,7 @@ def _load_song(song_id, filename, segments):
     loading features from it directly
     """
 
-    print('Loading: ' + filename)
+    print('Loading: ' + song_id)
     filename = get_absolute_path(filename)
     segs = segments.get_all_by_song_id(song_id)
 
