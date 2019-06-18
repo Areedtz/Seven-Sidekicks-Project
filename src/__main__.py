@@ -17,4 +17,4 @@ if __name__ == "__main__":
     songs = list(
         map(lambda name: (get_song_id(name), '../music_small/' + name), filenames))
 
-    _load_songs(songs)
+    analyze_songs(songs)
