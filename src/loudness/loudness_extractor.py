@@ -1,5 +1,4 @@
 import sys
-
 from typing import Tuple
 
 from essentia import run, Pool
@@ -41,3 +40,4 @@ def get_song_loudness(audio) -> Tuple[float, float, float]:
     max_loudness = (max(p["momentaryLoudness"]) + max(p["shortTermLoudness"])) / 2
 
     return max_loudness, p["integratedLoudness"], p["loudnessRange"]
+    

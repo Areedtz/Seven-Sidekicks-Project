@@ -43,3 +43,4 @@ def get_audio_loaded_song(song_path: str):
     loader = AudioLoader(filename=path)
 
     return loader
+    
