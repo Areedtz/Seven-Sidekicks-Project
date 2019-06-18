@@ -298,6 +298,8 @@ def analyze_songs(songs):
 
         p = Pool(cpu_count())
 
+        segs = list(filter(lambda seg: seg[2] == 30, segs))
+
         matches = list(map(_find_matches, list(
             map(lambda seg: (seg, query_object), segs))))
 
