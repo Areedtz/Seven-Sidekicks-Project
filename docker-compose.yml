@@ -1,42 +1,42 @@
-version: '3'
+version: "3"
 services:
-  general_code:
-    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-    user: ${CURRENT_UID}
-    build: .
-    restart: always
-    volumes:
-      - ./src:/code
-    ports:
-      - '127.0.0.1:80:8080'
-    command: ./__main__.py --type general
+    general_code:
+        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+        user: ${CURRENT_UID}
+        build: .
+        restart: always
+        volumes:
+            - ./src:/code
+        ports:
+            - "80:8080"
+        command: ./__main__.py --type general
 
-  music_code:
-    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-    user: ${CURRENT_UID}
-    build: .
-    restart: always
-    volumes:
-      - ./src:/code
-    ports:
-      - '127.0.0.1:81:8080'
-    command: ./__main__.py --type music
+    music_code:
+        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+        user: ${CURRENT_UID}
+        build: .
+        restart: always
+        volumes:
+            - ./src:/code
+        ports:
+            - "81:8080"
+        command: ./__main__.py --type music
 
-  video_code:
-    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-    user: ${CURRENT_UID}
-    build: .
-    restart: always
-    volumes:
-      - ./src:/code
-    ports:
-      - '127.0.0.1:82:8080'
-    command: ./__main__.py --type video
+    video_code:
+        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+        user: ${CURRENT_UID}
+        build: .
+        restart: always
+        volumes:
+            - ./src:/code
+        ports:
+            - "82:8080"
+        command: ./__main__.py --type video
 
-  # Out comment this container if on production environment
-  mongodb:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pass
+    # Out comment this container if on production environment
+    mongodb:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: pass
