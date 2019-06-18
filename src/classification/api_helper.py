@@ -76,16 +76,19 @@ def process_data_and_extract_profiles(
         'confidence': sad[1]
     }
 
-    data['dbfs'] = {
-        'value': loudness_info[0]
+    data['peak'] = {
+        'value': loudness_info[0],
+        'unit': "dbFS"
     }
 
-    data['r128'] = {
-        'value': loudness_info[1]
+    data['loudness_integrated'] = {
+        'value': loudness_info[1],
+        'unit': "LUFS"
     }
 
     data['loudness_range'] = {
-        'value': loudness_info[2]
+        'value': loudness_info[2],
+        'unit': "LU"
     }
 
     DBConnecter = TrackEmotion()
