@@ -16,6 +16,7 @@ random_samples/
 *.csv
 *.wav
 *.mp3
+**/XDG_CACHE_HOME/*
 
 ### Includes ###
 !*/.gitkeep
