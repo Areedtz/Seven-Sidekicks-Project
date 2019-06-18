@@ -276,7 +276,9 @@ def analyze_songs(songs):
 
     count = ss.count()
 
+    # TODO: Please remove at earliest convenience
     segs = list(filter(lambda seg: seg[2] == 30, segs))
+
     allMatches = list(map(lambda x: [], segs))
 
     print(count // BUCKET_SIZE + 1)
@@ -311,7 +313,7 @@ def analyze_songs(songs):
         p.close()
 
     for i in range(0, len(segs)):
-        print(segs[i][1] + ": " + str(segs[i][2]))
+        # print(segs[i][1] + ": " + str(segs[i][2]))
         best = _find_best_matches(_flatten(allMatches[i]), segs[i])
 
         matches = ss.get_by_ids(list(map(lambda match: match[0][0], best)))
@@ -336,6 +338,9 @@ def analyze_songs(songs):
                 'id': match[0][0],
                 'distance': match[1]
             }))
+
+        if len(best) > 0:
+            print(segs[i][1] + ": " + str(segs[i][2]) + " | " + best[0][0][1] + ": " + str(best[0][0][2]))
 
         ss.update_similar(segs[i][0], formatted)
 
