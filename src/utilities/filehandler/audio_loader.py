@@ -42,7 +42,4 @@ def get_audio_loaded_song(song_path: str):
     path = get_absolute_path(song_path)
     loader = AudioLoader(filename=path)
 
-    print(song_path)
-    print(path)
-
-    return loader()
+    return loader
