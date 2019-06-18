@@ -23,11 +23,9 @@ cfg = load_config()
 app = Flask(__name__)
 api = Api(app)
 
-output_directory_for_commands = "./"
-
 
 """
-    Models an analysis request for a piece of music including its location and the user requesting the analysis
+    Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
     'SourcePath': fields.String(
@@ -91,7 +89,7 @@ video_fields = api.model('VideoModel', {
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
     def post(self) -> str:
-        """Analyzes a song and outputs the data to the database
+        """Validates the request and forwards it to the audio API
         """
 
         req_data = request.get_json()
@@ -147,12 +145,12 @@ class GetAnalyzedSong(Resource):
 class AnalyzeVideo(Resource):
     @api.expect(video_fields)
     def post(self) -> object:
-        """Analyzes a video and outputs the data to the database
+        """Validates the request and forwards it to the video API
 
         Returns
         -------
         object
-            A dummy json response to confirm that the analysis has begun
+            A json response to confirm that the analysis has begun
         """
 
         data = request.get_json()
@@ -174,10 +172,10 @@ class AnalyzeVideo(Resource):
                 .format(video_path)
             )
 
-        # Send request to the video API
+        resp = requests.post(
+            cfg['rest_api_video_url'] + "/video", json=data)
 
-        return {'Response': 'The request has been sent and should be'
-                            ' updated in Splunk as soon as it is done.'}, 201
+        return resp
 
 
 @api.route('/video/<string:video_id>')
@@ -213,12 +211,12 @@ class GetAnalyzedVideo(Resource):
 class AnalyzeVideoWithSong(Resource):
     @api.expect(video_fields_with_song)
     def post(self) -> object:
-        """Analyzes a video together with a song and outputs the data to the database
+        """Validates the request and forwards it to the video API
 
         Returns
         -------
         object
-            A dummy json response to confirm that the analysis has begun
+            A json response to confirm that the analysis has begun
         """
 
         data = request.get_json()
@@ -241,10 +239,10 @@ class AnalyzeVideoWithSong(Resource):
                 .format(video_path)
             )
 
-        # Send request to the video API
+        resp = requests.post(
+            cfg['rest_api_video_url'] + "/video_with_audio", json=data)
 
-        return {'Response': 'The request has been sent and should be'
-                            ' updated in Splunk as soon as it is done.'}
+        return resp
 
 
 @api.route('/video_with_audio/<string:song_id>')

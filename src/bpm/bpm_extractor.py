@@ -5,7 +5,7 @@ from essentia.standard import RhythmExtractor2013
 
 
 def get_song_bpm(audio) -> Tuple[float, float]:
-    """Extracts the BPM for the given audio
+    """Extracts the BPM for the given audio file
 
     Parameters
     ----------

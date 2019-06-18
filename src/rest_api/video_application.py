@@ -17,8 +17,6 @@ cfg = load_config()
 app = Flask(__name__)
 api = Api(app)
 
-output_directory_for_commands = "./"
-
 """
     Models the time-range of a video input
 """
@@ -111,8 +109,7 @@ class AnalyzeVideo(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be'
-                            ' updated in Splunk as soon as it is done.'}, 201
+        return {'Response': 'The request is being processed and will be available in the database when done.'}
 
 
 @api.route('/video_with_audio')
@@ -157,5 +154,4 @@ class AnalyzeVideoWithSong(Resource):
             )
         )
 
-        return {'Response': 'The request has been sent and should be'
-                            ' updated in Splunk as soon as it is done.'}
+        return {'Response': 'The request is being processed and will be available in the database when done.'}
