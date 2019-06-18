@@ -10,6 +10,7 @@ from scipy.spatial import distance
 from database.song_segment import SongSegment
 from utilities.config_loader import load_config
 from utilities.filehandler.handle_path import get_absolute_path
+from utilities.get_song_id import get_song_id
 
 
 cfg = load_config()
@@ -329,3 +330,14 @@ def analyze_songs(songs):
 
     ss.close()
 
+
+filenames = []
+
+for root, dirs, files in os.walk('./music'):
+        for filename in files:
+            if filename.endswith('.wav'):
+                filenames.append(filename)
+
+songs = list(map(lambda name: (get_song_id(name), './music/' + name), filenames))
+
+analyze_songs(songs)
