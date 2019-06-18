@@ -14,8 +14,6 @@ random_samples/
 .pytest_cache
 .DS_store
 *.csv
-*.wav
-*.mp3
 **/XDG_CACHE_HOME/*
 
 ### Includes ###
