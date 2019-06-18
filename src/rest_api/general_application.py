@@ -143,7 +143,40 @@ class GetAnalyzedSong(Resource):
         return result
 
 
-@api.route('/audio/bpm/<string:diskotek_nr>')
+@api.route('/audio/rhythm/<string:diskotek_nr>')
+class GetAnalyzedSongBPM(Resource):
+    def get(self, diskotek_nr: str) -> object:
+        """Retrieves a previously analyzed song's rhythm data from the database
+
+        Parameters
+        ----------
+        diskotek_nr : str
+            The ID of the the song to retrieve
+
+        Returns
+        -------
+        object
+            A json object containing the rhythm information of the analyzed song
+        """
+
+        db = TrackEmotion()
+
+        result = db.get(diskotek_nr)
+
+        if result is None:
+            api.abort(
+                400,
+                "The given no. '{}' does not seem to exist"
+                .format(diskotek_nr)
+            )
+
+        del result['_id']
+        result['last_updated'] = result['last_updated'].isoformat()
+
+        return result
+
+
+@api.route('/audio/rhythm/bpm/<string:diskotek_nr>')
 class GetAnalyzedSongBPM(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed song's BPM data from the database
@@ -407,10 +440,10 @@ class GetAnalyzedSongEmotionsSad(Resource):
         return result
 
 
-@api.route('/audio/meter/<string:diskotek_nr>')
+@api.route('/audio/levels/<string:diskotek_nr>')
 class GetAnalyzedSongMeter(Resource):
     def get(self, diskotek_nr: str) -> object:
-        """Retrieves a previously analyzed song's meter data from the database
+        """Retrieves a previously analyzed song's levels data from the database
 
         Parameters
         ----------
@@ -420,7 +453,7 @@ class GetAnalyzedSongMeter(Resource):
         Returns
         -------
         object
-            A json object containing the meter information of the analyzed song
+            A json object containing the levels information of the analyzed song
         """
         
         db = TrackEmotion()
@@ -440,7 +473,7 @@ class GetAnalyzedSongMeter(Resource):
         return result
 
 
-@api.route('/audio/meter/peak/<string:diskotek_nr>')
+@api.route('/audio/levels/peak/<string:diskotek_nr>')
 class GetAnalyzedSongMeterPeak(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed song's peak data from the database
@@ -473,7 +506,7 @@ class GetAnalyzedSongMeterPeak(Resource):
         return result
 
 
-@api.route('/audio/meter/loudness_integrated/<string:diskotek_nr>')
+@api.route('/audio/levels/loudness_integrated/<string:diskotek_nr>')
 class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed song's loudness integrated data from the database
@@ -486,7 +519,7 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
         Returns
         -------
         object
-            A json object containing the peak loudness integrated of the analyzed song
+            A json object containing the loudness integrated of the analyzed song
         """
         
         db = TrackEmotion()
@@ -506,7 +539,7 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
         return result
 
 
-@api.route('/audio/meter/loudness_range/<string:diskotek_nr>')
+@api.route('/audio/levels/loudness_range/<string:diskotek_nr>')
 class GetAnalyzedSongMeterLoudnessRange(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed song's loudness range data from the database
