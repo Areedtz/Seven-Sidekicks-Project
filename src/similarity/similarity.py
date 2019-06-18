@@ -241,8 +241,10 @@ def _find_matches(searchContext):
     """ Searches for segments that
     are similar in the bucket
     """
+
     
     searchSegment, query_object = searchContext
+    print(searchSegment[1] + " - " + str(searchSegment[2]))
 
     return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
 
@@ -276,6 +278,7 @@ def analyze_songs(songs):
 
     allMatches = list(map(lambda x: [], segs))
 
+    print(count // BUCKET_SIZE + 1)
     for i in range(0, count // BUCKET_SIZE + 1):
         print(i)
         established_segments = list(filter( lambda x:
