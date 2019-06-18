@@ -340,7 +340,7 @@ def analyze_songs(songs):
             }))
 
         if len(best) > 0:
-            print(segs[i][1] + ": " + str(segs[i][2]) + " | " + best[0][0][1] + ": " + str(best[0][0][2]))
+            print(segs[i][1] + ": " + str(segs[i][2]) + " | " + best[0][0][1] + ": " + str(best[0][0][2]) + " -> " + str(best[0][1]))
 
         ss.update_similar(segs[i][0], formatted)
 
