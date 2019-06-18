@@ -277,6 +277,7 @@ def analyze_songs(songs):
     allMatches = list(map(lambda x: [], segs))
 
     for i in range(0, count // BUCKET_SIZE + 1):
+        print(i)
         established_segments = list(filter( lambda x:
             x['mfcc'] != None and
             x['chroma'] != None and
