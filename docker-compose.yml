@@ -1,39 +1,46 @@
 version: "3"
 services:
-    general_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "80:8080"
-        command: ./__main__.py --type general
+    #general_code:
+    #    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    #    user: ${CURRENT_UID}
+    #    build: .
+    #    restart: always
+    #    volumes:
+    #        - ./src:/code
+    #    ports:
+    #        - "80:8080"
+    #    command: ./__main__.py --type general
+    #    depends_on:
+    #        - pipeline
 
-    music_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "81:8080"
-        command: ./__main__.py --type music
-
-    video_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "82:8080"
-        command: ./__main__.py --type video
+    #music_code:
+    #    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    #    user: ${CURRENT_UID}
+    #    build: .
+    #    restart: always
+    #    volumes:
+    #        - ./src:/code
+    #    ports:
+    #        - "81:8080"
+    #    command: ./__main__.py --type music
+    #    depends_on:
+    #        - pipeline
+    #
+    #video_code:
+    #    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    #    user: ${CURRENT_UID}
+    #    build: .
+    #    restart: always
+    #    volumes:
+    #        - ./src:/code
+    #    ports:
+    #        - "82:8080"
+    #    command: ./__main__.py --type video
+    #    depends_on:
+    #        - pipeline
 
     pipeline:
+        user: ${CURRENT_UID}
         build: .
         volumes:
             - ./src:/code

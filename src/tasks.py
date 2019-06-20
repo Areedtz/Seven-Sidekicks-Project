@@ -1,7 +1,11 @@
+from tempfile import NamedTemporaryFile
+
 from celery import Celery
+
 from bpm.bpm_extractor import get_song_bpm
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.audio_loader import get_mono_loaded_song
 from classification.classifier.profile_data_extractor import get_classifier_data
+from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from similarity.similarity import _load_song, SongSegment
 from utilities.config_loader import load_config
 
@@ -31,7 +35,7 @@ def check_done(x):
 @app.task
 def add_bpm(x):
     if not x['BPM_DONE']:
-        song = get_MonoLoaded_Song(x['source_path'])
+        song = get_mono_loaded_song(x['source_path'])
         bpm, confidence = get_song_bpm(song)
         x['BPM'] = dict({'BPM': bpm, 'confidence': confidence})
         x['BPM_DONE'] = True
@@ -41,12 +45,39 @@ def add_bpm(x):
 @app.task
 def add_emotions(x):
     if not x['MER_DONE']:
-        data = get_classifier_data(
-            x['source_path']
-        )
+        temp_file = NamedTemporaryFile(delete=True)
+
+        make_low_level_data_file(x['source_path'], temp_file.name)
+        timbre, relaxed, party, aggressive, happy, sad = get_classifier_data(
+            temp_file.name)
+
+        temp_file.close()
+
         x['timbre'] = dict({
-            'timbre': data[0][0],
-            'confidence': data[0][1],
+            'value': timbre[0],
+            'confidence': timbre[1]
+        })
+        x['emotions'] = dict({
+            'relaxed': dict({
+                'value': relaxed[0],
+                'confidence': relaxed[1]
+            }),
+            'party': dict({
+                'value': party[0],
+                'confidence': party[1]
+            }),
+            'aggressive': dict({
+                'value': aggressive[0],
+                'confidence': aggressive[1]
+            }),
+            'happy': dict({
+                'value': happy[0],
+                'confidence': happy[1]
+            }),
+            'sad': dict({
+                'value': sad[0],
+                'confidence': sad[1]
+            })
         })
         x['MER_DONE'] = True
     return x

@@ -25,4 +25,4 @@ def make_low_level_data_file(filename: str, output_file_path: str):
     command = '{} {} {}'.format(
         extractor_path, fixed_filename, output_file_path)
 
-    subprocess.call(command)
+    subprocess.run(command, shell=True)
