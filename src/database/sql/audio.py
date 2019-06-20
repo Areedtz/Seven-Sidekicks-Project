@@ -29,8 +29,6 @@ class AudioDB:
         return result[0]
 
     def setup(self):
-        print("--------------------------------")
-        print("--------------------------------")
         self._db.query("""  
         CREATE TABLE IF NOT EXISTS Audio
         (
