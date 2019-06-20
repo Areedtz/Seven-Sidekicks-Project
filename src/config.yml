@@ -4,6 +4,11 @@ mongo_user: root
 mongo_pass: pass
 mongo_db: dr
 
+sql_host: mysql
+sql_user: root
+sql_pass: pass
+sql_db: itumir
+
 rest_api_host_url: 0.0.0.0
 rest_api_host_port: 8080
 rest_api_debug: true

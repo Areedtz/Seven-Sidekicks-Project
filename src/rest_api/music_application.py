@@ -17,11 +17,9 @@ cfg = load_config()
 app = Flask(__name__)
 api = Api(app)
 
-output_directory_for_commands = "./"
-
 
 """
-    Models an analysis request for a piece of music including its location and the user requesting the analysis
+    Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
     'SourcePath': fields.String(

@@ -4,8 +4,5 @@ mongo_user:
 mongo_pass:
 mongo_db: dr
 
-rest_api_url: 0.0.0.0
-rest_api_port: 1337
-
 similarity_matches: 10
 similarity_bucket_size: 60000
