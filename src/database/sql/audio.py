@@ -109,11 +109,11 @@ class AudioDB:
         else:
             query = query + "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "
 
-        if 'levels' in data:
-            query = "{}{}, ".format(query, data['levels']['peak'])
+        if 'loudness' in data:
+            query = "{}{}, ".format(query, data['loudness']['peak'])
             query = "{}{}, ".format(
-                query, data['levels']['loudness_integrated'])
-            query = "{}{}, ".format(query, data['levels']['loudness_range'])
+                query, data['loudness']['loudness_integrated'])
+            query = "{}{}, ".format(query, data['loudness']['loudness_range'])
         else:
             query = query + "NULL, NULL, NULL)"
 
