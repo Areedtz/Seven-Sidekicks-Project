@@ -35,6 +35,9 @@ class AudioDB:
             PRIMARY KEY(sRelease, Side, Track)
         )""")
 
+    def post_all(self, audio_id: str) -> str:
+        pass
+
     def get_all(self, audio_id: str) -> str:
         """Get all fields for the given audio_id
 
@@ -311,7 +314,7 @@ class AudioDB:
 
         return rows.export("json")
 
-    def get_peak(self, audio_id: str) - str:
+    def get_peak(self, audio_id: str) -> str:
         """Get all peak fields for the given audio_id
 
         Parameters
