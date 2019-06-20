@@ -32,7 +32,7 @@ class AudioDB:
             Loudness_Range FLOAT,
             Last_Updated TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
             Created_At TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY(sRelease, Side, Track)
+            PRIMARY KEY(sRelease, sSide, sTrack)
         )""")
 
     def post_all(self, audio_id: str) -> str:
