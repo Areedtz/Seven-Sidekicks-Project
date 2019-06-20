@@ -11,8 +11,8 @@ class AudioDB:
         CREATE TABLE IF NOT EXISTS Audio
         (
             sRelease INT NOT NULL,
-            Side INT NOT NULL,
-            Track INT NOT NULL,
+            sSide INT NOT NULL,
+            sTrack INT NOT NULL,
             BPM INT,
             BPM_Confidence FLOAT,
             Timbre VARCHAR(20),
