@@ -22,7 +22,7 @@ from classification.classifier.profile_data_extractor import \
 from classification.extractor.low_level_data_extractor import \
     make_low_level_data_file
 from similarity.split_song import split_song
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.audio_loader import get_mono_loaded_song
 from utilities.filehandler.handle_path import get_absolute_path
 from utilities.get_song_id import get_song_id
 
@@ -90,7 +90,7 @@ def segment_song_and_return_arguments(
 
     song_id = get_song_id(song_file)
 
-    loaded_song = get_MonoLoaded_Song(song_file)
+    loaded_song = get_mono_loaded_song(song_file)
 
     split_song_list = split_song(loaded_song)
 
