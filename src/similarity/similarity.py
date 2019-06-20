@@ -341,7 +341,6 @@ def analyze_songs(songs):
         matcher.stop()
 
     for i in range(0, len(segs)):
-        # print(segs[i][1] + ": " + str(segs[i][2]))
         best = _find_best_matches(_flatten(allMatches[i]), segs[i])
 
         matches = ss.get_by_ids(list(map(lambda match: match[0][0], best)))
