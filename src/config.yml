@@ -4,7 +4,8 @@ mongo_user: root
 mongo_pass: pass
 mongo_db: dr
 
-sql_host: mysql
+sql_type: mysql
+sql_host: sqldb
 sql_user: root
 sql_pass: pass
 sql_db: itumir
