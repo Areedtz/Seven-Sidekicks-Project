@@ -9,10 +9,6 @@ def test_get_song_loudness():
                                + "1_Demolition_Man_proud_music_preview.wav")
     max_loudness, integratedLoudness, loudnessRange = get_song_loudness(song)
 
-    print(max_loudness)
-    print(integratedLoudness)
-    print(loudnessRange)
-
     assert round(float(max_loudness), 5) == -6.05837
     assert round(float(integratedLoudness), 5) == -9.10699
     assert loudnessRange == 10.448598861694336
