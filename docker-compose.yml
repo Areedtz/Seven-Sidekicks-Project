@@ -9,6 +9,18 @@ services:
     ports:
       - '127.0.0.1:80:1337'
     command: ./__main__.py
+    depends_on:
+      - pipeline
+
+  pipeline:
+    build: .
+    volumes:
+      - ./src:/code
+    command: celery -A tasks worker --loglevel=info
+    depends_on:
+      - broker
+      - mongodb
+      - backend
 
   # Out comment this container if on production envrionment
   mongodb:
@@ -17,3 +29,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: pass
+
+  broker:
+    image: rabbitmq
+    restart: always
+
+  backend:
+    image: redis
+    restart: always

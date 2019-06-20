@@ -9,3 +9,6 @@ rest_api_port: 1337
 
 similarity_matches: 10
 similarity_bucket_size: 6000
+
+rmq_host: broker
+redis_host: backend
