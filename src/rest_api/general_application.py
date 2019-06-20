@@ -2,14 +2,16 @@ import sys
 import os
 import json
 import _thread
+import requests
+import datetime
 from bson.json_util import dumps
 
-import requests
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
 import classification.api_helper as music_emotion_classifier
+from database.sql.audio import AudioDB
 from database.track_emotion import TrackEmotion
 from database.video_emotion import VideoEmotion
 from database.video_emotion_no_song import VideoEmotionNS
@@ -23,6 +25,7 @@ cfg = load_config()
 app = Flask(__name__)
 api = Api(app)
 
+db_connection = AudioDB()
 
 """
     Models an analysis request for a piece of music including its location
@@ -124,25 +127,23 @@ class GetAnalyzedSong(Resource):
             A json object containing the information of the analyzed song
         """
 
-        db = TrackEmotion()
-
-        result = db.get(diskotek_nr)
+        result = db_connection.get_all(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
 
 @api.route('/audio/rhythm/<string:diskotek_nr>')
-class GetAnalyzedSongBPM(Resource):
+class GetAnalyzedSongRhythm(Resource):
     def get(self, diskotek_nr: str) -> object:
         """Retrieves a previously analyzed song's rhythm data from the database
 
@@ -157,19 +158,17 @@ class GetAnalyzedSongBPM(Resource):
             A json object containing the rhythm information of the analyzed song
         """
 
-        db = TrackEmotion()
-
-        result = db.get(diskotek_nr)
+        result = db_connection.get_rhythm(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -190,19 +189,17 @@ class GetAnalyzedSongBPM(Resource):
             A json object containing the BPM information of the analyzed song
         """
 
-        db = TrackEmotion()
-
-        result = db.get(diskotek_nr)
+        result = db_connection.get_bpm(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -222,20 +219,18 @@ class GetAnalyzedSongTimbre(Resource):
         object
             A json object containing the timbre information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_timbre(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -255,20 +250,18 @@ class GetAnalyzedSongEmotions(Resource):
         object
             A json object containing the emotion information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_emotions(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -288,20 +281,18 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
         object
             A json object containing the relaxed information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_relaxed(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -321,20 +312,18 @@ class GetAnalyzedSongEmotionsParty(Resource):
         object
             A json object containing the party information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_party(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -354,20 +343,18 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
         object
             A json object containing the aggressive information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_aggressive(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -387,20 +374,18 @@ class GetAnalyzedSongEmotionsHappy(Resource):
         object
             A json object containing the happy information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_happy(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -420,20 +405,18 @@ class GetAnalyzedSongEmotionsSad(Resource):
         object
             A json object containing the sad information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_sad(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -453,20 +436,18 @@ class GetAnalyzedSongMeter(Resource):
         object
             A json object containing the levels information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_level(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -486,20 +467,18 @@ class GetAnalyzedSongMeterPeak(Resource):
         object
             A json object containing the peak information of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_peak(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -519,20 +498,18 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
         object
             A json object containing the loudness integrated of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_loudness_integrated(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -552,20 +529,18 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
         object
             A json object containing the peak loudness range of the analyzed song
         """
-        
-        db = TrackEmotion()
 
-        result = db.get(diskotek_nr)
+        result = db_connection.get_loudness_range(diskotek_nr)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(diskotek_nr)
             )
 
-        del result['_id']
-        result['last_updated'] = result['last_updated'].isoformat()
+        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        result['Last_Updated'] = date.isoformat()
 
         return result
 
@@ -623,13 +598,13 @@ class GetAnalyzedVideo(Resource):
             A json object of the information of the the analyzed video
         """
 
-        db = VideoEmotionNS()
-        result = db.get_by_video_id(video_id)
+        db_connection = VideoEmotionNS()
+        result = db_connection.get_by_video_id(video_id)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(video_id)
             )
 
@@ -690,13 +665,13 @@ class GetAnalyzedVideoWithSong(Resource):
             A json object of the information of the analyzed song + video
         """
 
-        db = VideoEmotion()
-        result = db.get_by_song_id(song_id)
+        db_connection = VideoEmotion()
+        result = db_connection.get_by_song_id(song_id)
 
         if result is None:
             api.abort(
                 400,
-                "The given no. '{}' does not seem to exist"
+                "The given id '{}' does not seem to exist"
                 .format(song_id)
             )
 
