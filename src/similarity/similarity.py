@@ -340,6 +340,23 @@ def analyze_songs(songs):
             }))
 
         if len(best) > 0:
+            song = next(song for song in songs if song[0] == segs[i][1])
+            print(song)
+            song2 = next(song for song in songs if song[0] == best[0][0][1])
+            print(song2)
+
+            sample_index = segs[i][2]
+            low = best[0][0][2]
+
+            y, sr = librosa.load(song[1])
+            sample = y[sample_index*sr: (sample_index+5)*sr]
+
+            y, sr = librosa.load(song2[1])
+            sample1 = y[low*sr: (low+5)*sr]
+
+            librosa.output.write_wav('random_samples/' + song[0] + '-' + str(
+                sample_index) + '_' + song2[0] + '-' + str(low) + '-' + str(best[0][1]) + '.wav', np.concatenate([sample, sample1]), sr)
+
             print(segs[i][1] + ": " + str(segs[i][2]) + " | " + best[0][0][1] + ": " + str(best[0][0][2]) + " -> " + str(best[0][1]))
 
         ss.update_similar(segs[i][0], formatted)
