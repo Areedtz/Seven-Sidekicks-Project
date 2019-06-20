@@ -1,13 +1,20 @@
+from typing import Dict
 import json
 
 from records import Database
 
+from utilities.config_loader import load_config
+
 
 class AudioDB:
     def __init__(self):
-        self._db = Database('mysql://root:pass@sqldb/itumir')
+        cfg = load_config()
 
-        self._db.query("""DROP TABLE Audio;
+        self._db = Database("{}://{}:{}@{}/{}".format(
+            cfg['sql_type'], cfg['sql_user'], cfg['sql_pass'], cfg['sql_host'], cfg['sql_db']))
+
+    def setup(self):
+        self._db.query("""
         CREATE TABLE IF NOT EXISTS Audio
         (
             sRelease INT NOT NULL,
@@ -35,8 +42,64 @@ class AudioDB:
             PRIMARY KEY(sRelease, sSide, sTrack)
         )""")
 
-    def post_all(self, audio_id: str) -> str:
-        pass
+        # CREATE INDEXES
+
+    def post_all(self, data: Dict) -> str:
+        if not 'song_id' in data:
+            pass
+
+        ids = data['song_id'].split("-")
+
+        query = """INSERT INTO Audio (
+                sRelease, sSide, sTrack,
+                BPM, BPM_Confidence, Timbre,
+                Timbre_Confidence, Relaxed,
+                Relaxed_Confidence, Party,
+                Party_Confidence, Aggressive,
+                Aggressive_Confidence, Happy,
+                Happy_Confidence, Sad,
+                Sad_Confidence, Peak,
+                Loudness_Integrated, Loudness_Range
+            )
+            VALUES ("""
+
+        query = "{}{}, {}, {}, ".format(query, ids[0], ids[1], ids[2])
+
+        if 'BPM' in data:
+            query = "{}{}, {}, ".format(
+                query, data['BPM'], data['BPM_Confidence'])
+        else:
+            query = query + "NULL, NULL, "
+
+        if 'Timbre' in data:
+            query = "{}{}, {}, ".format(
+                query, data['Timbre'], data['Timbre_Confidence'])
+        else:
+            query = query + "NULL, NULL, "
+
+        if 'Moods' in data:
+            query = "{}{}, {}, ".format(
+                query, data['Moods']['Relaxed'], data['Moods']['Relaxed_Confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['Moods']['Party'], data['Moods']['Party_Confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['Moods']['Aggressive'], data['Moods']['Aggressive_Confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['Moods']['Happy'], data['Moods']['Happy_Confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['Moods']['Sad'], data['Moods']['Sad_Confidence'])
+        else:
+            query = query + "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "
+
+        if 'Levels' in data:
+            query = "{}{}, ".format(query, data['Levels']['Peak'])
+            query = "{}{}, ".format(
+                query, data['Levels']['Loudness_Integrated'])
+            query = "{}{}, ".format(query, data['Levels']['Loudness_Range'])
+        else:
+            query = query + "NULL, NULL, NULL)"
+
+        self._db.query(query)
 
     def get_all(self, audio_id: str) -> str:
         """Get all fields for the given audio_id
