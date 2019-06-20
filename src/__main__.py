@@ -1,14 +1,49 @@
 #!/usr/local/bin/python3.6
 #from rest_api.application import app, hostURL, hostPort
 
+import sys
+import getopt
 
-# if __name__ == "__main__":
-#    app.run(host=hostURL, port=hostPort, debug=False
-
-from tasks import check_done, add_bpm, add_emotions, add_metering, add_similarity_features, save_to_db
 from celery import chain, group
 
+from tasks import check_done, add_bpm, add_emotions, add_metering, add_similarity_features, save_to_db
+from rest_api.general_application import app as g_app
+from rest_api.music_application import app as m_app
+from rest_api.video_application import app as v_app
+from utilities.config_loader import load_config
+
+
+def main(argv):
+    cfg = load_config()
+
+    type = ""
+
+    try:
+        opts, args = getopt.getopt(argv, "ht:", ["help", "type="])
+    except getopt.GetoptError:
+        print('__main__.py -t <api_type>')
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt in ('-h', "help"):
+            print('__main__.py -t <api_type>')
+            sys.exit()
+        elif opt in ('-t', "--type"):
+            type = arg
+
+    if type in ("general", ""):
+        g_app.run(host=cfg['rest_api_host_url'],
+                  port=cfg['rest_api_host_port'], debug=cfg['rest_api_debug'])
+    elif type == "music":
+        m_app.run(host=cfg['rest_api_host_url'],
+                  port=cfg['rest_api_host_port'], debug=cfg['rest_api_debug'])
+    elif type == "video":
+        v_app.run(host=cfg['rest_api_host_url'],
+                  port=cfg['rest_api_host_port'], debug=cfg['rest_api_debug'])
+
+
 if __name__ == "__main__":
+    # main(sys.argv[1:])
+
     song = dict({
         'song_id': '8376-1-2',
         'source_path': '/code/similarity/t/test_split_song/8376-1-1_Demolition_Man_proud_music_preview.wav',

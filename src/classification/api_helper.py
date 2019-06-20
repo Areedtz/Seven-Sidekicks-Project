@@ -6,13 +6,15 @@ from classification.classifier.profile_data_extractor import \
     get_classifier_data
 from classification.extractor.low_level_data_extractor import \
     make_low_level_data_file
+from loudness.loudness_extractor import get_song_loudness
 from database.track_emotion import TrackEmotion
-from utilities.filehandler.handle_audio import get_MonoLoaded_Song
+from utilities.filehandler.audio_loader import get_mono_loaded_song
+from utilities.filehandler.audio_loader import get_audio_loaded_song
 
 
 def process_data_and_extract_profiles(
     song_id: str, song_file_path: str):
-    """Extracts BPM, moods from a song 
+    """Extracts BPM, moods and loudness values from a song 
     and puts it into the database
 
     Parameters
@@ -23,18 +25,20 @@ def process_data_and_extract_profiles(
         the filepath of the given song
     """
 
+    # Extracting mood & timbre values
     temp_file = NamedTemporaryFile(delete=True)
-
     make_low_level_data_file(song_file_path, temp_file.name)
-
     timbre, relaxed, party, aggressive, happy, sad = get_classifier_data(
         temp_file.name)
-
     temp_file.close()
 
-    mono_loaded_song = get_MonoLoaded_Song(song_file_path)
-
+    # Extracting bpm value
+    mono_loaded_song = get_mono_loaded_song(song_file_path)
     bpm_info = get_song_bpm(mono_loaded_song)
+
+    # Extracting loudness value
+    audio = get_audio_loaded_song(song_file_path)
+    loudness_info = get_song_loudness(audio)
 
     data = {}
     data['bpm'] = {
@@ -70,6 +74,21 @@ def process_data_and_extract_profiles(
     data['sad'] = {
         'value': sad[0],
         'confidence': sad[1]
+    }
+
+    data['peak'] = {
+        'value': loudness_info[0],
+        'unit': "dbFS"
+    }
+
+    data['loudness_integrated'] = {
+        'value': loudness_info[1],
+        'unit': "LUFS"
+    }
+
+    data['loudness_range'] = {
+        'value': loudness_info[2],
+        'unit': "LU"
     }
 
     DBConnecter = TrackEmotion()

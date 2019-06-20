@@ -5,13 +5,16 @@ from database.video_emotion import VideoEmotion
 
 # vet = Video Emotion Test
 
+
 def test_implements_Storinator():
     vet = VideoEmotion()
+
     assert isinstance(vet, Storinator)
 
 
 def test_database_name():
     vet = VideoEmotion()
+
     assert vet._col == 'video_emotion'
 
 
@@ -19,8 +22,8 @@ def test_add_and_get():
     vet = VideoEmotion()
 
     timerange = {
-        "from1" : 3000,
-        "to1" : 4000
+        "from1": 3000,
+        "to1": 4000
     }
 
     emotions = {
@@ -48,14 +51,15 @@ def test_add_and_get():
     assert ve['surprise'] == 0.7
     assert ve['neutral'] == 0.99
 
+
 def test_by_song_id():
     vet = VideoEmotion()
 
     timerange1 = {
-        "from1" : 3000,
-        "to1" : 4000,
+        "from1": 3000,
+        "to1": 4000,
     }
-    
+
     emotions1 = {
         "angry": 0.98,
         "disgust": 0.70,
@@ -67,8 +71,8 @@ def test_by_song_id():
     }
 
     timerange2 = {
-        "from1" : 4000,
-        "to1" : 5000,
+        "from1": 4000,
+        "to1": 5000,
     }
 
     emotions2 = {
@@ -84,14 +88,16 @@ def test_by_song_id():
     vet.add(1000, 2, timerange2, emotions2)
 
     all_id_1 = vet.get_by_song_id(1000)
+
     assert len(all_id_1) > 0
+
 
 def test_get_all():
     vet = VideoEmotion()
 
     timerange1 = {
-        'from1' : 3000,
-        'to1' : 4000,
+        'from1': 3000,
+        'to1': 4000,
     }
 
     emotions1 = {
@@ -105,8 +111,8 @@ def test_get_all():
     }
 
     timerange2 = {
-        'from1' : 3000,
-        'to1' : 4000,
+        'from1': 3000,
+        'to1': 4000,
     }
 
     emotions2 = {
@@ -122,8 +128,8 @@ def test_get_all():
     vet.add(1, 2, timerange1, emotions1)
     vet.add(2, 3, timerange2, emotions2)
 
-    vet1 = vet.get(1,2)
-    vet2 = vet.get(2,3)
+    vet1 = vet.get(1, 2)
+    vet2 = vet.get(2, 3)
     vets = vet.get_all()
 
     assert len(vets) > 0
