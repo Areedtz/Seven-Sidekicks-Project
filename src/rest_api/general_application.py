@@ -2,10 +2,10 @@ import sys
 import os
 import json
 import _thread
-import requests
 import datetime
 from bson.json_util import dumps
 
+import requests
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
@@ -24,8 +24,6 @@ cfg = load_config()
 
 app = Flask(__name__)
 api = Api(app)
-
-db_connection = AudioDB()
 
 """
     Models an analysis request for a piece of music including its location
@@ -127,6 +125,8 @@ class GetAnalyzedSong(Resource):
             A json object containing the information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_all(diskotek_nr)
 
         if result is None:
@@ -136,7 +136,8 @@ class GetAnalyzedSong(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -158,6 +159,8 @@ class GetAnalyzedSongRhythm(Resource):
             A json object containing the rhythm information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_rhythm(diskotek_nr)
 
         if result is None:
@@ -167,7 +170,8 @@ class GetAnalyzedSongRhythm(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -189,6 +193,8 @@ class GetAnalyzedSongBPM(Resource):
             A json object containing the BPM information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_bpm(diskotek_nr)
 
         if result is None:
@@ -198,7 +204,8 @@ class GetAnalyzedSongBPM(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -220,6 +227,8 @@ class GetAnalyzedSongTimbre(Resource):
             A json object containing the timbre information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_timbre(diskotek_nr)
 
         if result is None:
@@ -229,7 +238,8 @@ class GetAnalyzedSongTimbre(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -251,6 +261,8 @@ class GetAnalyzedSongEmotions(Resource):
             A json object containing the emotion information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_emotions(diskotek_nr)
 
         if result is None:
@@ -260,7 +272,8 @@ class GetAnalyzedSongEmotions(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -282,6 +295,8 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
             A json object containing the relaxed information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_relaxed(diskotek_nr)
 
         if result is None:
@@ -291,7 +306,8 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -313,6 +329,8 @@ class GetAnalyzedSongEmotionsParty(Resource):
             A json object containing the party information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_party(diskotek_nr)
 
         if result is None:
@@ -322,7 +340,8 @@ class GetAnalyzedSongEmotionsParty(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -344,6 +363,8 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
             A json object containing the aggressive information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_aggressive(diskotek_nr)
 
         if result is None:
@@ -353,7 +374,8 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -375,6 +397,8 @@ class GetAnalyzedSongEmotionsHappy(Resource):
             A json object containing the happy information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_happy(diskotek_nr)
 
         if result is None:
@@ -384,7 +408,8 @@ class GetAnalyzedSongEmotionsHappy(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -406,6 +431,8 @@ class GetAnalyzedSongEmotionsSad(Resource):
             A json object containing the sad information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_sad(diskotek_nr)
 
         if result is None:
@@ -415,7 +442,8 @@ class GetAnalyzedSongEmotionsSad(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -437,6 +465,8 @@ class GetAnalyzedSongMeter(Resource):
             A json object containing the levels information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_level(diskotek_nr)
 
         if result is None:
@@ -446,7 +476,8 @@ class GetAnalyzedSongMeter(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -468,6 +499,8 @@ class GetAnalyzedSongMeterPeak(Resource):
             A json object containing the peak information of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_peak(diskotek_nr)
 
         if result is None:
@@ -477,7 +510,8 @@ class GetAnalyzedSongMeterPeak(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -499,6 +533,8 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
             A json object containing the loudness integrated of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_loudness_integrated(diskotek_nr)
 
         if result is None:
@@ -508,7 +544,8 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result
@@ -530,6 +567,8 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
             A json object containing the peak loudness range of the analyzed song
         """
 
+        db_connection = AudioDB()
+
         result = db_connection.get_loudness_range(diskotek_nr)
 
         if result is None:
@@ -539,7 +578,8 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
                 .format(diskotek_nr)
             )
 
-        date = datetime.datetime.strptime(result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+        date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
         result['Last_Updated'] = date.isoformat()
 
         return result

@@ -25,11 +25,11 @@ class AudioDB:
 
         if len(result) == 0:
             return None
-        
+
         return result[0]
 
     def setup(self):
-        self._db.query("""  
+        self._db.query("""
         CREATE TABLE IF NOT EXISTS Audio
         (
             sRelease INT NOT NULL,
@@ -60,10 +60,13 @@ class AudioDB:
         # CREATE INDEXES
 
     def post_all(self, data: Dict) -> str:
-        if not 'song_id' in data:
+        if not 'audio_id' in data:
             pass
 
-        ids = data['song_id'].split("-")
+        ids = data['audio_id'].split("-")
+
+        if len(ids) != 3:
+            return None
 
         query = """INSERT INTO Audio (
                 sRelease, sSide, sTrack,
@@ -82,35 +85,35 @@ class AudioDB:
 
         if 'BPM' in data:
             query = "{}{}, {}, ".format(
-                query, data['BPM'], data['BPM_Confidence'])
+                query, data['value'], data['confidence'])
         else:
             query = query + "NULL, NULL, "
 
-        if 'Timbre' in data:
+        if 'timbre' in data:
             query = "{}{}, {}, ".format(
-                query, data['Timbre'], data['Timbre_Confidence'])
+                query, data['value'], data['confidence'])
         else:
             query = query + "NULL, NULL, "
 
-        if 'Moods' in data:
+        if 'emotions' in data:
             query = "{}{}, {}, ".format(
-                query, data['Moods']['Relaxed'], data['Moods']['Relaxed_Confidence'])
+                query, data['emotions']['relaxed']['value'], data['emotions']['relaxed']['confidence'])
             query = "{}{}, {}, ".format(
-                query, data['Moods']['Party'], data['Moods']['Party_Confidence'])
+                query, data['emotions']['party']['value'], data['emotions']['party']['confidence'])
             query = "{}{}, {}, ".format(
-                query, data['Moods']['Aggressive'], data['Moods']['Aggressive_Confidence'])
+                query, data['emotions']['aggressive']['value'], data['emotions']['aggressive']['confidence'])
             query = "{}{}, {}, ".format(
-                query, data['Moods']['Happy'], data['Moods']['Happy_Confidence'])
+                query, data['emotions']['happy']['value'], data['emotions']['happy']['confidence'])
             query = "{}{}, {}, ".format(
-                query, data['Moods']['Sad'], data['Moods']['Sad_Confidence'])
+                query, data['emotions']['sad']['value'], data['emotions']['sad']['confidence'])
         else:
             query = query + "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "
 
-        if 'Levels' in data:
-            query = "{}{}, ".format(query, data['Levels']['Peak'])
+        if 'levels' in data:
+            query = "{}{}, ".format(query, data['levels']['peak'])
             query = "{}{}, ".format(
-                query, data['Levels']['Loudness_Integrated'])
-            query = "{}{}, ".format(query, data['Levels']['Loudness_Range'])
+                query, data['levels']['loudness_integrated'])
+            query = "{}{}, ".format(query, data['levels']['loudness_range'])
         else:
             query = query + "NULL, NULL, NULL)"
 
@@ -135,7 +138,7 @@ class AudioDB:
                 FROM Audio 
                 WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
                 """
-        
+
         return self.get_data(query, audio_id)
 
     def get_rhythm(self, audio_id: str) -> str:
@@ -157,7 +160,7 @@ class AudioDB:
                 FROM Audio 
                 WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
                 """
-        
+
         return self.get_data(query, audio_id)
 
     def get_bpm(self, audio_id: str) -> str:
@@ -179,7 +182,7 @@ class AudioDB:
                 FROM Audio 
                 WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
                 """
-        
+
         return self.get_data(query, audio_id)
 
     def get_timbre(self, audio_id: str) -> str:
