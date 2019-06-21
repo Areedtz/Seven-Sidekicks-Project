@@ -12,9 +12,9 @@ from flask_restplus import Resource, Api, fields
 
 import classification.api_helper as music_emotion_classifier
 from database.sql.audio import AudioDB
-from database.track_emotion import TrackEmotion
-from database.video_emotion import VideoEmotion
-from database.video_emotion_no_song import VideoEmotionNS
+from database.mongo.audio.track_emotion import TrackEmotion
+from database.mongo.video.video_emotion import VideoEmotion
+from database.mongo.video.video_emotion_no_song import VideoEmotionNS
 from similarity.similarity import query_similar
 from utilities.config_loader import load_config
 from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
@@ -129,18 +129,9 @@ class GetAnalyzedSong(Resource):
 
         result = db_connection.get_all(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/rhythm/<string:diskotek_nr>')
@@ -163,18 +154,9 @@ class GetAnalyzedSongRhythm(Resource):
 
         result = db_connection.get_rhythm(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/rhythm/bpm/<string:diskotek_nr>')
@@ -197,18 +179,9 @@ class GetAnalyzedSongBPM(Resource):
 
         result = db_connection.get_bpm(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/timbre/<string:diskotek_nr>')
@@ -231,18 +204,9 @@ class GetAnalyzedSongTimbre(Resource):
 
         result = db_connection.get_timbre(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/emotions/<string:diskotek_nr>')
@@ -265,18 +229,9 @@ class GetAnalyzedSongEmotions(Resource):
 
         result = db_connection.get_emotions(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/emotions/relaxed/<string:diskotek_nr>')
@@ -299,18 +254,9 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
 
         result = db_connection.get_relaxed(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/emotions/party/<string:diskotek_nr>')
@@ -333,18 +279,9 @@ class GetAnalyzedSongEmotionsParty(Resource):
 
         result = db_connection.get_party(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/emotions/aggressive/<string:diskotek_nr>')
@@ -367,18 +304,9 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
 
         result = db_connection.get_aggressive(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/emotions/happy/<string:diskotek_nr>')
@@ -401,18 +329,9 @@ class GetAnalyzedSongEmotionsHappy(Resource):
 
         result = db_connection.get_happy(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/emotions/sad/<string:diskotek_nr>')
@@ -435,18 +354,9 @@ class GetAnalyzedSongEmotionsSad(Resource):
 
         result = db_connection.get_sad(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/levels/<string:diskotek_nr>')
@@ -469,18 +379,9 @@ class GetAnalyzedSongMeter(Resource):
 
         result = db_connection.get_level(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/levels/peak/<string:diskotek_nr>')
@@ -503,18 +404,9 @@ class GetAnalyzedSongMeterPeak(Resource):
 
         result = db_connection.get_peak(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/levels/loudness_integrated/<string:diskotek_nr>')
@@ -537,18 +429,9 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
 
         result = db_connection.get_loudness_integrated(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/audio/levels/loudness_range/<string:diskotek_nr>')
@@ -571,18 +454,9 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
 
         result = db_connection.get_loudness_range(diskotek_nr)
 
-        if result is None:
-            api.abort(
-                400,
-                "The given id '{}' does not seem to exist"
-                .format(diskotek_nr)
-            )
+        check_if_none(result, diskotek_nr)
 
-        date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-        result['Last_Updated'] = date.isoformat()
-
-        return result
+        return format_date(result)
 
 
 @api.route('/video')
@@ -745,3 +619,20 @@ class Similar(Resource):
             api.abort(400, 'No similar songs found')
 
         return similar
+        
+
+def check_if_none(result, diskotek_nr):
+    if result is None:
+        api.abort(
+            400,
+            "The given id '{}' does not seem to exist"
+            .format(diskotek_nr)
+        )
+    return
+
+def format_date(result):
+    date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+    result['Last_Updated'] = date.isoformat()
+    
+    return result
