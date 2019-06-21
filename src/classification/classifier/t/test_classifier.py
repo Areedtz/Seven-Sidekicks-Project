@@ -5,6 +5,8 @@ from classification.classifier.profile_data_extractor \
     import get_classifier_data
 
 def test_profile_song_data():
+    # This is the setup required to dynamically run this 
+    # test from anywhere you'd like.
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
         dirname,

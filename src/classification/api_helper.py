@@ -7,7 +7,7 @@ from classification.classifier.profile_data_extractor import \
 from classification.extractor.low_level_data_extractor import \
     make_low_level_data_file
 from loudness.loudness_extractor import get_song_loudness
-from database.track_emotion import TrackEmotion
+from database.mongo.audio.track_emotion import TrackEmotion
 from utilities.filehandler.audio_loader import get_mono_loaded_song
 from utilities.filehandler.audio_loader import get_audio_loaded_song
 

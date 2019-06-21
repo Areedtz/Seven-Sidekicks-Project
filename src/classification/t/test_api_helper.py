@@ -1,13 +1,13 @@
 import sys
 
 from classification.api_helper import process_data_and_extract_profiles
-from database.track_emotion import TrackEmotion
-import utilities.filehandler.handle_path as path_handler
+from database.mongo.audio.track_emotion import TrackEmotion
+from utilities.filehandler.handle_path import get_absolute_path
 
 
 def test_api_helper():
     id = "1337"
-    file_path = path_handler.get_absolute_path("classification/t/test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
+    file_path = get_absolute_path("classification/t/test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
 
     process_data_and_extract_profiles(id, file_path)
 

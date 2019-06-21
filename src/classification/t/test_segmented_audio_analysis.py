@@ -14,19 +14,9 @@ from pprint import pprint
 
 
 def test_profile_song_data():
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    output_folder_path = os.path.join(dirname, "")
     filename = "classification/t/test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav"
 
-    song_id = s_id.get_song_id(filename)
-    
-    loaded_song = get_mono_loaded_song(filename)
-
-    split_song_list = split_song(loaded_song)
-
-    #for i in range(len(split_song_list)):
-    song_output_file = "{}{}_{}_output.json".format(
-            output_folder_path, 0, song_id)
+    split_song_list = load_and_split_song(filename)
 
     (segment_id, bpm, 
      timbre, mood_relaxed, 
@@ -59,10 +49,8 @@ def test_audio_analysis_makes_csvfile():
     argument_tuples = []
 
     song_id = s_id.get_song_id(filename)
-
-    loaded_song = get_mono_loaded_song(filename)
-
-    split_song_list = split_song(loaded_song)
+    
+    split_song_list = load_and_split_song(filename)
 
     for i in range(len(split_song_list)):
         argument_tuples.append((
@@ -93,3 +81,8 @@ def test_audio_analysis_makes_csvfile():
     csv_file.close()
 
     assert csv_file
+
+def load_and_split_song(filename):
+    loaded_song = get_mono_loaded_song(filename)
+
+    return split_song(loaded_song)

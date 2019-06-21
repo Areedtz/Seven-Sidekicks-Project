@@ -11,8 +11,8 @@ from multiprocessing import Pool
 from typing import Tuple
 from essentia.standard import MonoWriter
 
-# Imports done this way to have an easy way of manually making a .CSV
-# file by calling this file's main method.
+# Imports done this way, as to have an easier way of
+# manually making a .CSV file.
 if __name__ == "__main__":
     sys.path.insert(0, os.path.abspath(__file__ + "../../../"))
 
@@ -101,7 +101,7 @@ def segment_song_and_return_arguments(
 
     return song_id, dirname, argument_tuples
 
-
+# Has a main function to be able to easily make a .CSV
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         exit()
