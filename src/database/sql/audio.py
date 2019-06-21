@@ -1,13 +1,35 @@
+from typing import Dict
 import json
 
 from records import Database
 
+from utilities.config_loader import load_config
+
 
 class AudioDB:
     def __init__(self):
-        self._db = Database('mysql://root:pass@sqldb/itumir')
+        cfg = load_config()
 
-        self._db.query("""DROP TABLE Audio;
+        self._db = Database("{}://{}:{}@{}/{}".format(
+            cfg['sql_type'], cfg['sql_user'], cfg['sql_pass'], cfg['sql_host'], cfg['sql_db']))
+
+    def get_data(self, query, audio_id):
+        ids = audio_id.split("-")
+
+        if len(ids) != 3:
+            return None
+
+        rows = self._db.query(query, rel=ids[0], side=ids[1], track=ids[2])
+
+        result = json.loads(rows.export("json"))
+
+        if len(result) == 0:
+            return None
+
+        return result[0]
+
+    def setup(self):
+        self._db.query("""
         CREATE TABLE IF NOT EXISTS Audio
         (
             sRelease INT NOT NULL,
@@ -35,8 +57,67 @@ class AudioDB:
             PRIMARY KEY(sRelease, sSide, sTrack)
         )""")
 
-    def post_all(self, audio_id: str) -> str:
-        pass
+        # CREATE INDEXES
+
+    def post_all(self, data: Dict) -> str:
+        if not 'audio_id' in data:
+            pass
+
+        ids = data['audio_id'].split("-")
+
+        if len(ids) != 3:
+            return None
+
+        query = """INSERT INTO Audio (
+                sRelease, sSide, sTrack,
+                BPM, BPM_Confidence, Timbre,
+                Timbre_Confidence, Relaxed,
+                Relaxed_Confidence, Party,
+                Party_Confidence, Aggressive,
+                Aggressive_Confidence, Happy,
+                Happy_Confidence, Sad,
+                Sad_Confidence, Peak,
+                Loudness_Integrated, Loudness_Range
+            )
+            VALUES ("""
+
+        query = "{}{}, {}, {}, ".format(query, ids[0], ids[1], ids[2])
+
+        if 'BPM' in data:
+            query = "{}{}, {}, ".format(
+                query, data['value'], data['confidence'])
+        else:
+            query = query + "NULL, NULL, "
+
+        if 'timbre' in data:
+            query = "{}{}, {}, ".format(
+                query, data['value'], data['confidence'])
+        else:
+            query = query + "NULL, NULL, "
+
+        if 'emotions' in data:
+            query = "{}{}, {}, ".format(
+                query, data['emotions']['relaxed']['value'], data['emotions']['relaxed']['confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['emotions']['party']['value'], data['emotions']['party']['confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['emotions']['aggressive']['value'], data['emotions']['aggressive']['confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['emotions']['happy']['value'], data['emotions']['happy']['confidence'])
+            query = "{}{}, {}, ".format(
+                query, data['emotions']['sad']['value'], data['emotions']['sad']['confidence'])
+        else:
+            query = query + "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "
+
+        if 'loudness' in data:
+            query = "{}{}, ".format(query, data['loudness']['peak'])
+            query = "{}{}, ".format(
+                query, data['loudness']['loudness_integrated'])
+            query = "{}{}, ".format(query, data['loudness']['loudness_range'])
+        else:
+            query = query + "NULL, NULL, NULL)"
+
+        self._db.query(query)
 
     def get_all(self, audio_id: str) -> str:
         """Get all fields for the given audio_id
@@ -52,16 +133,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT * 
+                FROM Audio 
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT * 
-            FROM Audio 
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_rhythm(self, audio_id: str) -> str:
         """Get all rhythm fields for the given audio_id
@@ -77,16 +155,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT BPM, BPM_Confidence, Last_Updated
+                FROM Audio 
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT BPM, BPM_Confidence, Last_Updated
-            FROM Audio 
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_bpm(self, audio_id: str) -> str:
         """Get all BPM fields for the given audio_id
@@ -102,16 +177,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT BPM, BPM_Confidence, Last_Updated
+                FROM Audio 
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT BPM, BPM_Confidence, Last_Updated
-            FROM Audio 
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_timbre(self, audio_id: str) -> str:
         """Get all timbre fields for the given audio_id
@@ -127,16 +199,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT Timbre, Timbre_Confidence, Last_Updated
+                FROM Audio
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT Timbre, Timbre_Confidence, Last_Updated
-            FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_emotions(self, audio_id: str) -> str:
         """Get all emotion fields for the given audio_id
@@ -152,17 +221,15 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT Relaxed, Relaxed_Confidence, Party, Party_Confidence, 
+                       Aggressive, Aggressive_Confidence, Happy, Happy_Confidence, 
+                       Sad, Sad_Confidence, Last_Updated
+                FROM Audio 
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT Relaxed, Relaxed_Confidence, Party, Party_Confidence, 
-                   Aggressive, Aggressive_Confidence, Happy, Happy_Confidence, 
-                   Sad, Sad_Confidence, Last_Updated
-            FROM Audio 
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2])
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_relaxed(self, audio_id: str) -> str:
         """Get all relaxed fields for the given audio_id
@@ -178,16 +245,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT Relaxed, Relaxed_Confidence, Last_Updated
+                FROM Audio
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT Relaxed, Relaxed_Confidence, Last_Updated
-            FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_party(self, audio_id: str) -> str:
         """Get all party fields for the given audio_id
@@ -203,16 +267,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
+        query = """
             SELECT Party, Party_Confidence, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_aggressive(self, audio_id: str) -> str:
         """Get all aggressive fields for the given audio_id
@@ -228,16 +289,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
+        query = """
             SELECT Aggressive, Aggressive_Confidence, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_happy(self, audio_id: str) -> str:
         """Get all happy fields for the given audio_id
@@ -253,16 +311,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
+        query = """
             SELECT Happy, Happy_Confidence, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_sad(self, audio_id: str) -> str:
         """Get all sad fields for the given audio_id
@@ -278,16 +333,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
+        query = """
+                SELECT Sad, Sad_Confidence, Last_Updated
+                FROM Audio
+                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                """
 
-        rows = self._db.query("""
-            SELECT Sad, Sad_Confidence, Last_Updated
-            FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
-
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_level(self, audio_id: str) -> str:
         """Get all level fields for the given audio_id
@@ -303,16 +355,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
-            SELECT Peak, Loudness_Integrated, Loudness_Range, Last_Updated
+        query = """
+            SELECT Peak, Loudness_integrated, Loudness_Range, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_peak(self, audio_id: str) -> str:
         """Get all peak fields for the given audio_id
@@ -328,16 +377,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
+        query = """
             SELECT Peak, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_loudness_integrated(self, audio_id: str) -> str:
         """Get all loudness integrated fields for the given audio_id
@@ -353,16 +399,13 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
-            SELECT Loudness_Integrated, Last_Updated
+        query = """
+            SELECT Loudness_integrated, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)
 
     def get_loudness_range(self, audio_id: str) -> str:
         """Get all loudness range fields for the given audio_id
@@ -378,13 +421,10 @@ class AudioDB:
             A JSON string containing the result
         """
 
-        ids = audio_id.split("-")
-
-        rows = self._db.query("""
+        query = """
             SELECT Loudness_Range, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND Side=:side AND Track=:track
-            """, rel=ids[0], side=ids[1], track=ids[2]
-        )
+            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            """
 
-        return rows.export("json")
+        return self.get_data(query, audio_id)

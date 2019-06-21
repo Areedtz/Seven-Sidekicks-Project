@@ -39,10 +39,13 @@ class AnalyzeSong(Resource):
         song_path = data["SourcePath"]
 
         if os.path.isfile(song_path):
-            # Do something
+            # if song_path.endswith(("mp3", "wav")):
+                # Send to pipeline
             print("Got request for the " + song_path + " file")
         else:  # Is folder
-            # Do something else
+            # for file in os.listdir(song_path):
+                # if file.endswith(("mp3", "wav")):
+                    # Send to pipeline
             print("Got request for the " + song_path + " folder")
 
         return {'Response': 'The request has been received and this API does nothing atm'}, 201
