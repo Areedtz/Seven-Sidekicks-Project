@@ -43,10 +43,8 @@ services:
 
     # Comment out this container if on production environment
     sqldb:
-        image: mysql
-        command: --default-authentication-plugin=mysql_native_password
+        image: postgres
         restart: always
         environment:
-            MYSQL_DATABASE: itumir
-            MYSQL_ROOT_PASSWORD: pass
-            
+            POSTGRES_DB: itumir
+            POSTGRES_PASSWORD: pass
