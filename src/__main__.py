@@ -7,11 +7,15 @@ from rest_api.general_application import app as g_app
 from rest_api.music_application import app as m_app
 from rest_api.video_application import app as v_app
 from utilities.config_loader import load_config
+from database.sql.audio import AudioDB
 
 
 def main(argv):
-    cfg = load_config()
+    db = AudioDB()
+    db.setup()
 
+    cfg = load_config()
+    
     type = ""
 
     try:
