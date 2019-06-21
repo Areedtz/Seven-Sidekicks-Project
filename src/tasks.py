@@ -7,7 +7,10 @@ from utilities.filehandler.audio_loader import get_mono_loaded_song
 from classification.classifier.profile_data_extractor import get_classifier_data
 from classification.extractor.low_level_data_extractor import make_low_level_data_file
 from similarity.similarity import _load_song, SongSegment
+from loudness.loudness_extractor import get_song_loudness
+from utilities.filehandler.audio_loader import get_audio_loaded_song
 from utilities.config_loader import load_config
+
 
 cfg = load_config()
 
@@ -86,7 +89,15 @@ def add_emotions(x):
 @app.task
 def add_metering(x):
     if not x['METERING_DONE']:
-        # TODO: When metering is done, add here
+        song = get_audio_loaded_song("loudness/t/test_loudness_extractor/8376-1-"
+                                     + "1_Demolition_Man_proud_music_preview.wav")
+        max_loudness, integratedLoudness, loudnessRange = get_song_loudness(
+            song)
+        x['loudness'] = dict({
+            'peak': max_loudness,
+            'loudness_integrated': integratedLoudness,
+            'loudness_range': loudnessRange,
+        })
         x['METERING_DONE'] = True
     return x
 
