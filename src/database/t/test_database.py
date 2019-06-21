@@ -1,6 +1,6 @@
 import datetime
 
-from database.database import _create_default_document, _augment_document, Database
+from database.mongo.database import _create_default_document, _augment_document, Database
 
 
 def test_create_default_document():

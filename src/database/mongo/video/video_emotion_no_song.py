@@ -1,7 +1,7 @@
 from typing import Dict
 
-from database.storinator import Storinator
-from database.video_emotion_database_no_song import VEDatabase
+from database.mongo.storinator import Storinator
+from database.mongo.video.video_emotion_database_no_song import VEDatabase
 
 
 # VideoEmotionNS = video emotions no song

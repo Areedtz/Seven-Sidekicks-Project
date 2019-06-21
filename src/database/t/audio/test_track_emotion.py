@@ -1,6 +1,6 @@
 import datetime
-from database.track_emotion import TrackEmotion
-from database.storinator import Storinator
+from database.mongo.audio.track_emotion import TrackEmotion
+from database.mongo.storinator import Storinator
 
 
 def test_implements_Storinator():
