@@ -10,6 +10,7 @@ from similarity.similarity import _load_song, SongSegment
 from loudness.loudness_extractor import get_song_loudness
 from utilities.filehandler.audio_loader import get_audio_loaded_song
 from utilities.config_loader import load_config
+from database.sql.audio import AudioDB
 
 
 cfg = load_config()
@@ -20,6 +21,14 @@ app = Celery('tasks', backend='redis://@' +
 
 @app.task
 def check_done(x):
+    db = AudioDB()
+
+    existing_entry = db.get_all(x['audio_id'])
+    if existing_entry and not x['FORCE']:
+        # This should handle if only some fields are set
+        print(existing_entry)
+        raise Exception("Song already exists")
+
     # TODO: Contact database to see if anything has already been done
 
     if not x['FORCE']:
@@ -32,6 +41,7 @@ def check_done(x):
         x['MER_DONE'] = False
         x['METERING_DONE'] = False
         x['SIMILARITY_DONE'] = False
+
     return x
 
 
@@ -40,8 +50,10 @@ def add_bpm(x):
     if not x['BPM_DONE']:
         song = get_mono_loaded_song(x['source_path'])
         bpm, confidence = get_song_bpm(song)
-        x['BPM'] = dict({'BPM': bpm, 'confidence': confidence})
+
+        x['BPM'] = dict({'value': bpm, 'confidence': confidence})
         x['BPM_DONE'] = True
+
     return x
 
 
@@ -83,6 +95,7 @@ def add_emotions(x):
             })
         })
         x['MER_DONE'] = True
+
     return x
 
 
@@ -99,20 +112,22 @@ def add_metering(x):
             'loudness_range': loudnessRange,
         })
         x['METERING_DONE'] = True
+
     return x
 
 
 @app.task
 def add_similarity_features(x):
     if not x['SIMILARITY_DONE']:
-        _load_song(x['song_id'], x['source_path'], SongSegment())
+        _load_song(x['audio_id'], x['source_path'], SongSegment())
         x['SIMILARITY_DONE'] = True
+
     return x
 
 
 @app.task
 def save_to_db(x):
-    print(x)
-    # TODO: Save to the database
+    db = AudioDB()
+    db.post_all(x)
 
     return

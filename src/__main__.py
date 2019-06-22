@@ -19,7 +19,7 @@ def main(argv):
     db.setup()
 
     cfg = load_config()
-    
+
     type = ""
 
     try:
@@ -46,27 +46,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    # main(sys.argv[1:])
-
-    song = dict({
-        'song_id': '8376-1-2',
-        'source_path': '/code/similarity/t/test_split_song/8376-1-1_Demolition_Man_proud_music_preview.wav',
-        'FORCE': True,
-    })
-
-    print(song)
-
-    s = chain(
-        check_done.s(),
-        group(
-            add_bpm.s(),
-            add_emotions.s(),
-            add_metering.s(),
-            add_similarity_features.s(),
-        ),
-        save_to_db.s()
-    )
-
-    s.delay(song)
-
-    print("Pipeline started")
+    main(sys.argv[1:])

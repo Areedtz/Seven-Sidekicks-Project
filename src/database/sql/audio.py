@@ -85,26 +85,26 @@ class AudioDB:
 
         if 'BPM' in data:
             query = "{}{}, {}, ".format(
-                query, data['value'], data['confidence'])
+                query, data['BPM']['value'], data['BPM']['confidence'])
         else:
             query = query + "NULL, NULL, "
 
         if 'timbre' in data:
-            query = "{}{}, {}, ".format(
-                query, data['value'], data['confidence'])
+            query = "{}'{}', {}, ".format(
+                query, data['timbre']['value'], data['timbre']['confidence'])
         else:
             query = query + "NULL, NULL, "
 
         if 'emotions' in data:
-            query = "{}{}, {}, ".format(
+            query = "{}'{}', {}, ".format(
                 query, data['emotions']['relaxed']['value'], data['emotions']['relaxed']['confidence'])
-            query = "{}{}, {}, ".format(
+            query = "{}'{}', {}, ".format(
                 query, data['emotions']['party']['value'], data['emotions']['party']['confidence'])
-            query = "{}{}, {}, ".format(
+            query = "{}'{}', {}, ".format(
                 query, data['emotions']['aggressive']['value'], data['emotions']['aggressive']['confidence'])
-            query = "{}{}, {}, ".format(
+            query = "{}'{}', {}, ".format(
                 query, data['emotions']['happy']['value'], data['emotions']['happy']['confidence'])
-            query = "{}{}, {}, ".format(
+            query = "{}'{}', {}, ".format(
                 query, data['emotions']['sad']['value'], data['emotions']['sad']['confidence'])
         else:
             query = query + "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "
@@ -113,7 +113,7 @@ class AudioDB:
             query = "{}{}, ".format(query, data['loudness']['peak'])
             query = "{}{}, ".format(
                 query, data['loudness']['loudness_integrated'])
-            query = "{}{}, ".format(query, data['loudness']['loudness_range'])
+            query = "{}{})".format(query, data['loudness']['loudness_range'])
         else:
             query = query + "NULL, NULL, NULL)"
 
