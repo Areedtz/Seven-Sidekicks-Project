@@ -34,6 +34,19 @@ RUN mkdir /essentia && cd /essentia && git clone https://github.com/MTG/essentia
     && python3.6 waf configure --build-static --with-examples --with-gaia \
     && python3.6 waf && python3.6 waf install && cd / && rm -rf /essentia
 
+# Install cx_oracle requirements
+RUN apt-get install -y libaio-dev
+
+ENV ORACLE_HOME /opt/oracle/instantclient_12_1
+ENV LD_RUN_PATH=$ORACLE_HOME
+
+WORKDIR /tmp/
+
+RUN wget https://github.com/odedlaz/docker-cx_oracle/raw/master/instantclient/instantclient-basic-linux.x64-12.1.0.2.0.zip
+RUN wget https://github.com/odedlaz/docker-cx_oracle/raw/master/instantclient/instantclient-sdk-linux.x64-12.1.0.2.0.zip
+RUN mkdir /opt/oracle/ && unzip "/tmp/instantclient*.zip" -d /opt/oracle
+RUN ln -s $ORACLE_HOME/libclntsh.so.12.1 $ORACLE_HOME/libclntsh.so
+
 # Install the clang compiler
 RUN apt-get install -y clang-6.0
 
