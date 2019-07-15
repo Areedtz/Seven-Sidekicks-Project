@@ -1,7 +1,7 @@
 from typing import Dict
 
-from database.storinator import Storinator
-from database.video_emotion_database import VEDatabase
+from database.mongo.storinator import Storinator
+from database.mongo.video.video_emotion_database import VEDatabase
 
 
 class VideoEmotion(Storinator):

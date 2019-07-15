@@ -9,7 +9,7 @@ def split_song(audio, segment_length=5):
 
     segment_list = []
     for i in range(segment_length, song_length, segment_length):
-        segment = audio[(i - segment_length)*sr: i*sr]
+        segment = audio[(i-segment_length)*sr: i*sr]
         segment_list.append(segment)
 
     return segment_list

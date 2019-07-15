@@ -2,8 +2,8 @@ import sys
 import os
 import subprocess
 import json
-
 from typing import Tuple
+
 from tempfile import NamedTemporaryFile
 
 from utilities.filehandler.handle_path import get_absolute_path
@@ -26,8 +26,9 @@ def get_classifier_data(
         A tuple of tuples describing all moods and their probability
     """
 
+    # This is the setup required to dynamically run this 
+    # test from anywhere you'd like.
     dirname = os.path.abspath(os.path.dirname(__file__))
-
     profile_file = get_absolute_path("utilities/ressources/"
                                      + "timbre_moods_profile.yaml")
 
@@ -44,6 +45,7 @@ def get_classifier_data(
 
     temp_file.close()
 
+    # Setting the data JSON data up in variables
     highlevel = data['highlevel']
 
     timbre = highlevel['timbre']['value']

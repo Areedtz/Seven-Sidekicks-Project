@@ -1,10 +1,11 @@
 import requests
-import rest_api.general_application as rest
 import threading
 import time
 
 from flask_restplus import Resource
 from flask import request
+
+import rest_api.general_application as rest
 
 testURL = "0.0.0.0"
 testPort = 6969
@@ -33,6 +34,7 @@ def test_rest_server():
 
     t.start()
 
+    # Hacky solution to ensure it only tries to connect 10 times
     number_of_tries = 0
     while number_of_tries < 10:
         try:

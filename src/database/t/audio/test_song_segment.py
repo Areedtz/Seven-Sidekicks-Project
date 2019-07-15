@@ -1,5 +1,5 @@
-from database.song_segment import SongSegment
-from database.storinator import Storinator
+from database.mongo.audio.song_segment import SongSegment
+from database.mongo.storinator import Storinator
 import datetime
 
 

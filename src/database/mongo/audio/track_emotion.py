@@ -1,7 +1,7 @@
 from typing import Dict
 
-from database.database import Database
-from database.storinator import Storinator
+from database.mongo.database import Database
+from database.mongo.storinator import Storinator
 
 
 class TrackEmotion(Storinator):

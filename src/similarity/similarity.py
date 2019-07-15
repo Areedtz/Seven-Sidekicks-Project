@@ -7,7 +7,7 @@ import numpy as np
 import falconn
 from scipy.spatial import distance
 
-from database.song_segment import SongSegment
+from database.mongo.audio.song_segment import SongSegment
 from utilities.config_loader import load_config
 from utilities.filehandler.handle_path import get_absolute_path
 

@@ -87,18 +87,9 @@ class AnalyzeVideo(Resource):
         video_path = data['SourcePath']
         video_time_range = data['TimeRange']
 
-        if video_time_range["From"] == video_time_range["To"]:
-            api.abort(
-                400,
-                "From and to can not be equal"
-            )
+        check_if_invalid_time_range(video_time_range)
 
-        if not os.path.isfile(video_path):
-            api.abort(
-                400,
-                "The given source path '{}' does not seem to exist"
-                .format(video_path)
-            )
+        check_if_none(video_path)
 
         _thread.start_new_thread(
             process_data_and_extract_emotions,
@@ -131,18 +122,9 @@ class AnalyzeVideoWithSong(Resource):
         video_path = data['SourcePath']
         video_time_range = data['TimeRange']
 
-        if video_time_range["From"] == video_time_range["To"]:
-            api.abort(
-                400,
-                "From and to can not be equal"
-            )
+        check_if_invalid_time_range(video_time_range)
 
-        if not os.path.isfile(video_path):
-            api.abort(
-                400,
-                "The given source path '{}' does not seem to exist"
-                .format(video_path)
-            )
+        check_if_none(video_path)
 
         _thread.start_new_thread(
             process_data_and_extract_emotions_with_song,
@@ -155,3 +137,20 @@ class AnalyzeVideoWithSong(Resource):
         )
 
         return {'Response': 'The request is being processed and will be available in the database when done.'}
+
+def check_if_invalid_time_range(video_time_range):
+    if video_time_range["From"] == video_time_range["To"]:
+            api.abort(
+                400,
+                "From and to can not be equal"
+            )
+    return
+
+def check_if_none(video_path):
+    if not os.path.isfile(video_path):
+        api.abort(
+            400,
+            "The given source path '{}' does not seem to exist"
+            .format(video_path)
+        )
+    return

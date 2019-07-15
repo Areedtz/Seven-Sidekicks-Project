@@ -8,12 +8,14 @@ def test_song_data_extraction():
                                  + "8376-1-1 Demolition_Man_"
                                    "proud_music_preview.wav")
 
+    # This is the setup required to dynamically run this 
+    # test from anywhere you'd like.
     dirname = os.path.abspath(os.path.dirname(__file__))
     output_filename = os.path.join(dirname, "8376-1-1_output.json")
 
     make_low_level_data_file(filename, output_filename)
 
     assert os.path.isfile(output_filename)
-    assert os.stat(output_filename) != 0
+    assert len(os.stat(output_filename)) != 0
 
     os.remove(output_filename)

@@ -10,7 +10,7 @@ RUN apt-get update \
     && apt-get install -y python-six python3-dev python3-numpy-dev python3-numpy python3-yaml \
     autoconf automake cmake bison libpcre3-dev wget openssl libssl-dev zlib1g-dev \
     libncurses5-dev libreadline-dev libgdbm-dev libdb5.3-dev libbz2-dev liblzma-dev \
-    libsqlite3-dev libffi-dev tcl-dev tk tk-dev libmysqlclient-dev
+    libsqlite3-dev libffi-dev tcl-dev tk tk-dev libmysqlclient-dev libpq-dev
 
 RUN wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz \
     && tar xf Python-3.6.8.tar.xz && cd Python-3.6.8 \
