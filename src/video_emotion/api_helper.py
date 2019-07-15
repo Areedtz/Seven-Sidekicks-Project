@@ -1,8 +1,8 @@
 from typing import Dict
 
 from video_emotion.extract_classifier import classify_video
-from database.video_emotion_no_song import VideoEmotionNS
-from database.video_emotion import VideoEmotion
+from database.mongo.video.video_emotion_no_song import VideoEmotionNS
+from database.mongo.video.video_emotion import VideoEmotion
 
 
 def process_data_and_extract_emotions(video_id: str, video_path: str, time_range:Dict[str,int]) -> bool:

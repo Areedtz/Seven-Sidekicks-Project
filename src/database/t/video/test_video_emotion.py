@@ -1,7 +1,7 @@
 import datetime
 
-from database.storinator import Storinator
-from database.video_emotion import VideoEmotion
+from database.mongo.storinator import Storinator
+from database.mongo.video.video_emotion import VideoEmotion
 
 # vet = Video Emotion Test
 

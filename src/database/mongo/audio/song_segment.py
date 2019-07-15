@@ -1,7 +1,7 @@
 import typing
 
-from database.database import Database
-from database.storinator import Storinator
+from database.mongo.database import Database
+from database.mongo.storinator import Storinator
 
 
 class SongSegment(Storinator):

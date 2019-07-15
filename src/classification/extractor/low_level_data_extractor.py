@@ -2,7 +2,7 @@ import sys
 import subprocess
 import os
 
-import utilities.filehandler.handle_path as path_handler
+from utilities.filehandler.handle_path import get_absolute_path
 
 
 def make_low_level_data_file(filename: str, output_file_path: str):
@@ -16,9 +16,11 @@ def make_low_level_data_file(filename: str, output_file_path: str):
     output_file_path
         output path of the lowlevel datafile
     """
+
+    # Allows for the file names to have spaces
     fixed_filename = filename.replace(' ', r'\ ')
     
-    extractor_path = path_handler.get_absolute_path("utilities/ressources"
+    extractor_path = get_absolute_path("utilities/ressources"
                                                     + "/extractors/"
                                                     + "streaming_extractor_music")
 
