@@ -21,9 +21,7 @@ services:
     command: celery -A tasks worker --loglevel=info
     depends_on:
       - broker
-      - mongodb
       - backend
-      - sqldb
 
   broker:
     image: rabbitmq
