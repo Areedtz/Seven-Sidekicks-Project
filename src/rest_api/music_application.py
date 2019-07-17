@@ -34,6 +34,28 @@ song_fields = api.model('SongModel', {
 })
 
 
+pipeline = chain(
+    check_done.s(),
+    add_bpm.s(),
+    add_emotions.s(),
+    add_metering.s(),
+    add_similarity_features.s(),
+    save_to_db.s()
+)
+
+
+def add_to_pipeline(data, song_path):
+    if song_path.endswith(("mp3", "wav")):
+        id = get_song_id(song_path)
+        song = dict({
+            'audio_id': id,
+            'source_path': song_path,
+            'FORCE': data['force'],
+        })
+
+        pipeline.delay(song)
+
+
 @api.route('/audio')
 class AnalyzeSong(Resource):
     @api.expect(song_fields)
@@ -45,43 +67,9 @@ class AnalyzeSong(Resource):
         song_path = data["source_path"]
 
         if os.path.isfile(song_path):
-            if song_path.endswith(("mp3", "wav")):
-                id = get_song_id(song_path)
-                song = dict({
-                    'audio_id': id,
-                    'source_path': song_path,
-                    'FORCE': data['force'],
-                })
-
-                s = chain(
-                    check_done.s(),
-                    add_bpm.s(),
-                    add_emotions.s(),
-                    add_metering.s(),
-                    add_similarity_features.s(),
-                    save_to_db.s()
-                )
-
-                s.delay(song)
+            add_to_pipeline(data, song_path)
         else:  # Is folder
             for file in os.listdir(song_path):
-                if file.endswith(("mp3", "wav")):
-                    id = get_song_id(file)
-                    song = dict({
-                        'audio_id': id,
-                        'source_path': file,
-                        'FORCE': data['force'],
-                    })
+                add_to_pipeline(data, song_path)
 
-                    s = chain(
-                        check_done.s(),
-                        add_bpm.s(),
-                        add_emotions.s(),
-                        add_metering.s(),
-                        add_similarity_features.s(),
-                        save_to_db.s()
-                    )
-
-                    s.delay(song)
-
-        return {'Response': 'The request has been received and this API does nothing atm'}, 201
+        return {'Response': 'The song has been added to the pipeline and will be available once analyzed'}, 201
