@@ -32,7 +32,7 @@ song_fields = api.model('SongModel', {
     'source_path': fields.String(
         description='The path of the song to analyze',
         required=True),
-    'force': fields.String(
+    'force': fields.Boolean(
         description='Should every analysis run',
         required=False)
 })
