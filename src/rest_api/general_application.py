@@ -109,7 +109,7 @@ class AnalyzeSong(Resource):
         resp = requests.post(
             cfg['rest_api_music_url'] + "/audio", json=req_data)
 
-        return resp.json()
+        return resp.json(), resp.status_code
 
 
 @api.route('/audio/<string:diskotek_nr>')
@@ -496,7 +496,7 @@ class AnalyzeVideo(Resource):
         resp = requests.post(
             cfg['rest_api_video_url'] + "/video", json=data)
 
-        return resp.json()
+        return resp.json(), resp.status_code
 
 
 @api.route('/video/<string:video_id>')
@@ -563,7 +563,7 @@ class AnalyzeVideoWithSong(Resource):
         resp = requests.post(
             cfg['rest_api_video_url'] + "/video_with_audio", json=data)
 
-        return resp.json()
+        return resp.json(), resp.status_code
 
 
 @api.route('/video_with_audio/<string:song_id>')
