@@ -1,0 +1,32 @@
+version: '3'
+services:
+  music_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    ports:
+      - '80:8080'
+    command: ./__main__.py --type music
+    depends_on:
+      - pipeline
+
+  pipeline:
+    user: ${CURRENT_UID}
+    build: .
+    volumes:
+      - ./src:/code
+    command: celery -A tasks worker --loglevel=info
+    depends_on:
+      - broker
+      - backend
+
+  broker:
+    image: rabbitmq
+    restart: always
+
+  backend:
+    image: redis
+    restart: always
