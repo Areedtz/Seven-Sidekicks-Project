@@ -25,19 +25,19 @@ services:
         command: ./__main__.py --type music
         depends_on:
             - pipeline
-
-    video_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "82:8080"
-        command: ./__main__.py --type video
-        depends_on:
-            - pipeline
+    #
+    #video_code:
+    #    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    #    user: ${CURRENT_UID}
+    #    build: .
+    #    restart: always
+    #    volumes:
+    #        - ./src:/code
+    #    ports:
+    #        - "82:8080"
+    #    command: ./__main__.py --type video
+    #    depends_on:
+    #        - pipeline
 
     pipeline:
         user: ${CURRENT_UID}
