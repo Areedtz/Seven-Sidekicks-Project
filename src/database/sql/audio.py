@@ -52,8 +52,8 @@ class AudioDB:
             peak FLOAT,
             loudness_integrated FLOAT,
             loudness_range FLOAT,
-            last_updated TIMESTAMP NOT NULL DEFAULT NOW(),
-            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+            last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY(audio_release, audio_side, audio_track)
         )""")
 
