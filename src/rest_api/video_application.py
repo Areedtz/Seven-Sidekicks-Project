@@ -42,7 +42,7 @@ video_fields_with_song = api.model('VideoModelWithSong', {
     'TimeRange': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'SourcePath': fields.String(
+    'sourcePath': fields.String(
         description='The path of the video to analyze',
         required=True),
     'User': fields.String(
@@ -60,7 +60,7 @@ video_fields = api.model('VideoModel', {
     'TimeRange': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'SourcePath': fields.String(
+    'sourcePath': fields.String(
         description='The path of the video to analyze',
         required=True),
     'User': fields.String(
@@ -84,7 +84,7 @@ class AnalyzeVideo(Resource):
         data = request.get_json()
 
         video_id = data['ID']
-        video_path = data['SourcePath']
+        video_path = data['sourcePath']
         video_time_range = data['TimeRange']
 
         check_if_invalid_time_range(video_time_range)
@@ -119,7 +119,7 @@ class AnalyzeVideoWithSong(Resource):
 
         video_id = data['ID']
         song_id = data['SongID']
-        video_path = data['SourcePath']
+        video_path = data['sourcePath']
         video_time_range = data['TimeRange']
 
         check_if_invalid_time_range(video_time_range)
@@ -138,13 +138,15 @@ class AnalyzeVideoWithSong(Resource):
 
         return {'Response': 'The request is being processed and will be available in the database when done.'}
 
+
 def check_if_invalid_time_range(video_time_range):
     if video_time_range["From"] == video_time_range["To"]:
-            api.abort(
-                400,
-                "From and to can not be equal"
-            )
+        api.abort(
+            400,
+            "From and to can not be equal"
+        )
     return
+
 
 def check_if_none(video_path):
     if not os.path.isfile(video_path):

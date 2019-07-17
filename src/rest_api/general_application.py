@@ -29,9 +29,12 @@ api = Api(app)
     Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
-    'SourcePath': fields.String(
+    'sourcePath': fields.String(
         description='The path of the song to analyze',
-        required=True)
+        required=True),
+    'force': fields.String(
+        description='Should every analysis run',
+        required=False)
 })
 
 """
@@ -59,7 +62,7 @@ video_fields_with_song = api.model('VideoModelWithSong', {
     'TimeRange': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'SourcePath': fields.String(
+    'sourcePath': fields.String(
         description='The path of the video to analyze',
         required=True),
     'User': fields.String(
@@ -77,7 +80,7 @@ video_fields = api.model('VideoModel', {
     'TimeRange': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'SourcePath': fields.String(
+    'sourcePath': fields.String(
         description='The path of the video to analyze',
         required=True),
     'User': fields.String(
@@ -94,7 +97,7 @@ class AnalyzeSong(Resource):
         """
 
         req_data = request.get_json()
-        song_path = req_data["SourcePath"]
+        song_path = req_data["sourcePath"]
 
         if not (os.path.isfile(song_path) or os.path.isdir(song_path)):
             api.abort(
@@ -474,7 +477,7 @@ class AnalyzeVideo(Resource):
         data = request.get_json()
 
         video_id = data['ID']
-        video_path = data['SourcePath']
+        video_path = data['sourcePath']
         video_time_range = data['TimeRange']
 
         if video_time_range["From"] == video_time_range["To"]:
@@ -541,7 +544,7 @@ class AnalyzeVideoWithSong(Resource):
 
         video_id = data['ID']
         song_id = data['SongID']
-        video_path = data['SourcePath']
+        video_path = data['sourcePath']
         video_time_range = data['TimeRange']
 
         if video_time_range["From"] == video_time_range["To"]:
@@ -619,7 +622,7 @@ class Similar(Resource):
             api.abort(400, 'No similar songs found')
 
         return similar
-        
+
 
 def check_if_none(result, diskotek_nr):
     if result is None:
@@ -630,9 +633,10 @@ def check_if_none(result, diskotek_nr):
         )
     return
 
+
 def format_date(result):
     date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-    result['Last_Updated'] = date.isoformat()
-    
+        result['last_updated'], '%Y-%m-%dT%H:%M:%S')
+    result['last_updated'] = date.isoformat()
+
     return result
