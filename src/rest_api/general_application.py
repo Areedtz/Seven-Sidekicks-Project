@@ -29,7 +29,7 @@ api = Api(app)
     Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
-    'sourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the song to analyze',
         required=True),
     'force': fields.String(
@@ -41,10 +41,10 @@ song_fields = api.model('SongModel', {
     Models the time-range of a video input
 """
 timerange_model = api.model('TimeRange_Model', {
-    'From': fields.Integer(
+    'from': fields.Integer(
         description='The beginning time of the content to analyze in milliseconds',
         required=True),
-    'To': fields.Integer(
+    'to': fields.Integer(
         description='The end time of the content to analyze milliseconds',
         required=True),
 })
@@ -53,19 +53,19 @@ timerange_model = api.model('TimeRange_Model', {
     Models a request for analyzing a video and song in conjunction so that their data can be collated
 """
 video_fields_with_song = api.model('VideoModelWithSong', {
-    'ID': fields.String(
+    'id': fields.String(
         description='The ID of the video to analyze',
         required=True),
-    'SongID': fields.String(
+    'song_id': fields.String(
         description='The ID of the song in the video',
         required=True),
-    'TimeRange': fields.Nested(
+    'time_range': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'sourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the video to analyze',
         required=True),
-    'User': fields.String(
+    'user': fields.String(
         description='The requesting user',
         required=True),
 })
@@ -74,16 +74,16 @@ video_fields_with_song = api.model('VideoModelWithSong', {
     Models a request for analyzing a video
 """
 video_fields = api.model('VideoModel', {
-    'ID': fields.String(
+    'id': fields.String(
         description='The ID of the video to analyze',
         required=True),
-    'TimeRange': fields.Nested(
+    'time_range': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'sourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the video to analyze',
         required=True),
-    'User': fields.String(
+    'user': fields.String(
         description='The requesting user',
         required=True),
 })
@@ -97,7 +97,7 @@ class AnalyzeSong(Resource):
         """
 
         req_data = request.get_json()
-        song_path = req_data["sourcePath"]
+        song_path = req_data["source_path"]
 
         if not (os.path.isfile(song_path) or os.path.isdir(song_path)):
             api.abort(
@@ -476,11 +476,11 @@ class AnalyzeVideo(Resource):
 
         data = request.get_json()
 
-        video_id = data['ID']
-        video_path = data['sourcePath']
-        video_time_range = data['TimeRange']
+        video_id = data['id']
+        video_path = data['source_path']
+        video_time_range = data['time_range']
 
-        if video_time_range["From"] == video_time_range["To"]:
+        if video_time_range["from"] == video_time_range["to"]:
             api.abort(
                 400,
                 "From and to can not be equal"
@@ -542,12 +542,12 @@ class AnalyzeVideoWithSong(Resource):
 
         data = request.get_json()
 
-        video_id = data['ID']
-        song_id = data['SongID']
-        video_path = data['sourcePath']
-        video_time_range = data['TimeRange']
+        video_id = data['id']
+        song_id = data['song_id']
+        video_path = data['source_path']
+        video_time_range = data['time_range']
 
-        if video_time_range["From"] == video_time_range["To"]:
+        if video_time_range["from"] == video_time_range["to"]:
             api.abort(
                 400,
                 "From and to can not be equal"

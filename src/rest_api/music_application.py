@@ -25,7 +25,7 @@ api = Api(app)
     Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
-    'sourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the song to analyze',
         required=True),
     'force': fields.String(
@@ -42,7 +42,7 @@ class AnalyzeSong(Resource):
         """
 
         data = request.get_json()
-        song_path = data["sourcePath"]
+        song_path = data["source_path"]
 
         if os.path.isfile(song_path):
             if song_path.endswith(("mp3", "wav")):
