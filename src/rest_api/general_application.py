@@ -134,7 +134,7 @@ class GetAnalyzedSong(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/rhythm/<string:diskotek_nr>')
@@ -159,7 +159,7 @@ class GetAnalyzedSongRhythm(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/rhythm/bpm/<string:diskotek_nr>')
@@ -184,7 +184,7 @@ class GetAnalyzedSongBPM(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/timbre/<string:diskotek_nr>')
@@ -209,7 +209,7 @@ class GetAnalyzedSongTimbre(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/<string:diskotek_nr>')
@@ -234,7 +234,7 @@ class GetAnalyzedSongEmotions(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/relaxed/<string:diskotek_nr>')
@@ -259,7 +259,7 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/party/<string:diskotek_nr>')
@@ -284,7 +284,7 @@ class GetAnalyzedSongEmotionsParty(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/aggressive/<string:diskotek_nr>')
@@ -309,7 +309,7 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/happy/<string:diskotek_nr>')
@@ -334,7 +334,7 @@ class GetAnalyzedSongEmotionsHappy(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/sad/<string:diskotek_nr>')
@@ -359,7 +359,7 @@ class GetAnalyzedSongEmotionsSad(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/<string:diskotek_nr>')
@@ -384,7 +384,7 @@ class GetAnalyzedSongMeter(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/peak/<string:diskotek_nr>')
@@ -409,7 +409,7 @@ class GetAnalyzedSongMeterPeak(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/loudness_integrated/<string:diskotek_nr>')
@@ -434,7 +434,7 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/loudness_range/<string:diskotek_nr>')
@@ -459,7 +459,7 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/video')
