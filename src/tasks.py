@@ -23,15 +23,9 @@ app = Celery('tasks', backend='redis://@' +
 def check_done(x):
     db = AudioDB()
 
-    existing_entry = db.get_all(x['audio_id'])
-    if existing_entry and not x['FORCE']:
-        # This should handle if only some fields are set
-        print(existing_entry)
-        raise Exception("Song already exists")
-
-    # TODO: Contact database to see if anything has already been done
-
-    if not x['FORCE']:
+    # The following values are set to have support for only
+    # partially analyzed audio
+    if db.exists(x['audio_id']) and not x['FORCE']:
         x['BPM_DONE'] = True
         x['MER_DONE'] = True
         x['METERING_DONE'] = True
@@ -128,6 +122,12 @@ def add_similarity_features(x):
 @app.task
 def save_to_db(x):
     db = AudioDB()
-    db.post_all(x)
+
+    if db.exists(x['audio_id']) and not x['FORCE']:
+        return
+    elif db.exists(x['audio_id']):
+        db.update_all(x)
+    else:
+        db.post_all(x)
 
     return
