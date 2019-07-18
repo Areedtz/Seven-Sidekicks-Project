@@ -61,7 +61,7 @@ class AudioDB:
 
     def exists(self, audio_id: str):
         query = """
-                SELECT TOP 1 audio_release
+                SELECT audio_release
                 FROM Audio
                 WHERE audio_release=:rel AND audio_side=:side AND audio_track=:track
                 """
