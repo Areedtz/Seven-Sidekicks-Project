@@ -2,6 +2,8 @@ import os
 import fileinput
 from multiprocessing import Pool, Process, Queue, cpu_count, Manager
 
+import threading
+import pykka
 import librosa
 import numpy as np
 import falconn
@@ -10,6 +12,7 @@ from scipy.spatial import distance
 from database.mongo.audio.song_segment import SongSegment
 from utilities.config_loader import load_config
 from utilities.filehandler.handle_path import get_absolute_path
+from utilities.get_song_id import get_song_id
 
 
 cfg = load_config()
@@ -24,6 +27,16 @@ def _flatten(l):
 
     return [item for sublist in l for item in sublist]
 
+class Loader(pykka.ThreadingActor):
+    def __init__(self):
+        super().__init__()
+        self.seg_db = SongSegment()
+
+    def load(self, song):
+        return _load_song(song[0], song[1], self.seg_db)
+
+    def on_stop(self):
+        self.seg_db.close()
 
 def _process_segment(segment, sr):
     """ Computes the features from
@@ -46,13 +59,18 @@ def _load_songs(songs):
     allows for multiple songs to be looked
     up using the same database connection
     """
-    seg_db = SongSegment()
-    segments = []
-    for song in songs:
-        song_id, filename = song
-        segments.append(_load_song(song_id, filename, seg_db))
-    seg_db.close()
-    return _flatten(segments)
+    loaders = [Loader.start().proxy() for _ in range(min(len(songs), cpu_count()))]
+
+    loaded = []
+    for i, song in enumerate(songs):
+        loaded.append(loaders[i % len(loaders)].load(song))
+
+    segs = _flatten(pykka.get_all(loaded))
+
+    for loader in loaders:
+        loader.stop()
+
+    return segs
 
 
 def _load_song(song_id, filename, segments):
@@ -60,6 +78,8 @@ def _load_song(song_id, filename, segments):
     available otherwise loading the file and
     loading features from it directly
     """
+
+    print('Loading: ' + song_id)
     filename = get_absolute_path(filename)
     segs = segments.get_all_by_song_id(song_id)
 
@@ -240,11 +260,23 @@ def _find_matches(searchContext):
     """ Searches for segments that
     are similar in the bucket
     """
+
     
     searchSegment, query_object = searchContext
+    print(searchSegment[1] + " - " + str(searchSegment[2]))
 
     return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
 
+
+class Matcher(pykka.ThreadingActor):
+    def __init__(self, ):
+        super().__init__()
+
+    def match(self, seg, query_object):
+        return _find_matches((seg, query_object))
+
+    def on_stop(self):
+        pass
 
 def analyze_songs(songs):
     """Analyzes the specified songs
@@ -273,9 +305,15 @@ def analyze_songs(songs):
 
     count = ss.count()
 
+    # TODO: Please remove at earliest convenience
+    segs = list(filter(lambda seg: seg[2] == 30, segs))
+
     allMatches = list(map(lambda x: [], segs))
 
+    matchers = [Matcher.start().proxy() for _ in range(cpu_count())]
+    print(count // BUCKET_SIZE + 1)
     for i in range(0, count // BUCKET_SIZE + 1):
+        print(i)
         established_segments = list(filter( lambda x:
             x['mfcc'] != None and
             x['chroma'] != None and
@@ -291,20 +329,23 @@ def analyze_songs(songs):
         query_object = bucket[1].construct_query_pool()
         query_object.set_num_probes(25)
 
-        p = Pool(cpu_count())
+        matched = []
+        for i, seg in enumerate(segs):
+            matched.append(matchers[i % len(matchers)].match(seg, query_object))
 
-        matches = list(map(_find_matches, list(
-            map(lambda seg: (seg, query_object), segs))))
+        matches = pykka.get_all(matched)
+
+        """matches = list(map(_find_matches, list(
+            map(lambda seg: (seg, query_object), segs))))"""
 
         for j in range(0, len(matches)):
-
             allMatches[j].append(
                 list(map(lambda x: established_segments[x], matches[j])))
 
-        p.close()
+    for matcher in matchers:
+        matcher.stop()
 
     for i in range(0, len(segs)):
-        print(segs[i][1] + ": " + str(segs[i][2]))
         best = _find_best_matches(_flatten(allMatches[i]), segs[i])
 
         matches = ss.get_by_ids(list(map(lambda match: match[0][0], best)))
@@ -330,7 +371,8 @@ def analyze_songs(songs):
                 'distance': match[1]
             }))
 
+            print(segs[i][1] + ";" + str(segs[i][2]) + ";" + match[0][1] + ";" + str(match[0][2]) + ";" + str(match[1]))
+
         ss.update_similar(segs[i][0], formatted)
 
     ss.close()
-

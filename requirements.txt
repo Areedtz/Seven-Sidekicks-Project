@@ -1,6 +1,7 @@
 pytest==4.2.1
 pymongo==3.5.1
 pyyaml==5.1
+pykka==2.0.0
 tabulate==0.8.3
 celery==4.3.0
 redis==3.2.1

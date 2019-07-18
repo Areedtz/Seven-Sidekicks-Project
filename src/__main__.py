@@ -11,6 +11,7 @@ from rest_api.music_application import app as m_app
 from rest_api.video_application import app as v_app
 from utilities.config_loader import load_config
 from database.sql.audio import AudioDB
+from similarity.similarity import analyze_songs
 
 
 def main(argv):
@@ -42,6 +43,8 @@ def main(argv):
     elif type == "video":
         v_app.run(host=cfg['rest_api_host_url'],
                   port=cfg['rest_api_host_port'], debug=cfg['rest_api_debug'])
+    elif type == "similarity":
+        print('similarity')
 
 
 if __name__ == "__main__":
