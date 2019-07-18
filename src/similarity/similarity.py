@@ -113,6 +113,11 @@ def _create_feature(mfcc, chroma, tempogram):
     """ Creates a single feature vector from
     the three individual features
     """
+
+    ma = 1
+    ca = 1
+    ta = 1
+
     fm = mfcc
     fc = chroma
     ft = tempogram
@@ -122,7 +127,7 @@ def _create_feature(mfcc, chroma, tempogram):
         fc = fc.flatten()
     if (ft.ndim != 1):
         ft = ft.flatten()
-    return np.concatenate((fm, fc * 133, ft * 280))
+    return np.concatenate((fm * 1 * ma, fc * 133 * ca, ft * 280 * ta))
 
 
 def _create_bucket(segments):

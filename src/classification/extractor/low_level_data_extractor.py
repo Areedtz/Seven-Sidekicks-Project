@@ -19,11 +19,12 @@ def make_low_level_data_file(filename: str, output_file_path: str):
 
     # Allows for the file names to have spaces
     fixed_filename = filename.replace(' ', r'\ ')
-    
-    extractor_path = get_absolute_path("utilities/ressources"
-                                                    + "/extractors/"
-                                                    + "streaming_extractor_music")
 
-    command = '{} {} {}'.format(extractor_path, fixed_filename, output_file_path)
+    extractor_path = get_absolute_path("utilities/ressources"
+                                       + "/extractors/"
+                                       + "streaming_extractor_music")
+
+    command = '{} {} {}'.format(
+        extractor_path, fixed_filename, output_file_path)
 
     subprocess.run(command, shell=True)

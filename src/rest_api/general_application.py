@@ -29,19 +29,22 @@ api = Api(app)
     Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
-    'SourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the song to analyze',
-        required=True)
+        required=True),
+    'force': fields.Boolean(
+        description='Should every analysis run',
+        required=False)
 })
 
 """
     Models the time-range of a video input
 """
 timerange_model = api.model('TimeRange_Model', {
-    'From': fields.Integer(
+    'from': fields.Integer(
         description='The beginning time of the content to analyze in milliseconds',
         required=True),
-    'To': fields.Integer(
+    'to': fields.Integer(
         description='The end time of the content to analyze milliseconds',
         required=True),
 })
@@ -50,19 +53,19 @@ timerange_model = api.model('TimeRange_Model', {
     Models a request for analyzing a video and song in conjunction so that their data can be collated
 """
 video_fields_with_song = api.model('VideoModelWithSong', {
-    'ID': fields.String(
+    'id': fields.String(
         description='The ID of the video to analyze',
         required=True),
-    'SongID': fields.String(
+    'song_id': fields.String(
         description='The ID of the song in the video',
         required=True),
-    'TimeRange': fields.Nested(
+    'time_range': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'SourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the video to analyze',
         required=True),
-    'User': fields.String(
+    'user': fields.String(
         description='The requesting user',
         required=True),
 })
@@ -71,16 +74,16 @@ video_fields_with_song = api.model('VideoModelWithSong', {
     Models a request for analyzing a video
 """
 video_fields = api.model('VideoModel', {
-    'ID': fields.String(
+    'id': fields.String(
         description='The ID of the video to analyze',
         required=True),
-    'TimeRange': fields.Nested(
+    'time_range': fields.Nested(
         timerange_model,
         description='The model for the time range analyzed by the program'),
-    'SourcePath': fields.String(
+    'source_path': fields.String(
         description='The path of the video to analyze',
         required=True),
-    'User': fields.String(
+    'user': fields.String(
         description='The requesting user',
         required=True),
 })
@@ -94,7 +97,7 @@ class AnalyzeSong(Resource):
         """
 
         req_data = request.get_json()
-        song_path = req_data["SourcePath"]
+        song_path = req_data["source_path"]
 
         if not (os.path.isfile(song_path) or os.path.isdir(song_path)):
             api.abort(
@@ -106,7 +109,7 @@ class AnalyzeSong(Resource):
         resp = requests.post(
             cfg['rest_api_music_url'] + "/audio", json=req_data)
 
-        return resp
+        return resp.json(), resp.status_code
 
 
 @api.route('/audio/<string:diskotek_nr>')
@@ -131,7 +134,7 @@ class GetAnalyzedSong(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/rhythm/<string:diskotek_nr>')
@@ -156,7 +159,7 @@ class GetAnalyzedSongRhythm(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/rhythm/bpm/<string:diskotek_nr>')
@@ -181,7 +184,7 @@ class GetAnalyzedSongBPM(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/timbre/<string:diskotek_nr>')
@@ -206,7 +209,7 @@ class GetAnalyzedSongTimbre(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/<string:diskotek_nr>')
@@ -231,7 +234,7 @@ class GetAnalyzedSongEmotions(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/relaxed/<string:diskotek_nr>')
@@ -256,7 +259,7 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/party/<string:diskotek_nr>')
@@ -281,7 +284,7 @@ class GetAnalyzedSongEmotionsParty(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/aggressive/<string:diskotek_nr>')
@@ -306,7 +309,7 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/happy/<string:diskotek_nr>')
@@ -331,7 +334,7 @@ class GetAnalyzedSongEmotionsHappy(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/emotions/sad/<string:diskotek_nr>')
@@ -356,7 +359,7 @@ class GetAnalyzedSongEmotionsSad(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/<string:diskotek_nr>')
@@ -381,7 +384,7 @@ class GetAnalyzedSongMeter(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/peak/<string:diskotek_nr>')
@@ -406,7 +409,7 @@ class GetAnalyzedSongMeterPeak(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/loudness_integrated/<string:diskotek_nr>')
@@ -431,7 +434,7 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/audio/levels/loudness_range/<string:diskotek_nr>')
@@ -456,7 +459,7 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
 
         check_if_none(result, diskotek_nr)
 
-        return format_date(result)
+        return result
 
 
 @api.route('/video')
@@ -473,11 +476,11 @@ class AnalyzeVideo(Resource):
 
         data = request.get_json()
 
-        video_id = data['ID']
-        video_path = data['SourcePath']
-        video_time_range = data['TimeRange']
+        video_id = data['id']
+        video_path = data['source_path']
+        video_time_range = data['time_range']
 
-        if video_time_range["From"] == video_time_range["To"]:
+        if video_time_range["from"] == video_time_range["to"]:
             api.abort(
                 400,
                 "From and to can not be equal"
@@ -493,7 +496,7 @@ class AnalyzeVideo(Resource):
         resp = requests.post(
             cfg['rest_api_video_url'] + "/video", json=data)
 
-        return resp
+        return resp.json(), resp.status_code
 
 
 @api.route('/video/<string:video_id>')
@@ -539,12 +542,12 @@ class AnalyzeVideoWithSong(Resource):
 
         data = request.get_json()
 
-        video_id = data['ID']
-        song_id = data['SongID']
-        video_path = data['SourcePath']
-        video_time_range = data['TimeRange']
+        video_id = data['id']
+        song_id = data['song_id']
+        video_path = data['source_path']
+        video_time_range = data['time_range']
 
-        if video_time_range["From"] == video_time_range["To"]:
+        if video_time_range["from"] == video_time_range["to"]:
             api.abort(
                 400,
                 "From and to can not be equal"
@@ -560,7 +563,7 @@ class AnalyzeVideoWithSong(Resource):
         resp = requests.post(
             cfg['rest_api_video_url'] + "/video_with_audio", json=data)
 
-        return resp
+        return resp.json(), resp.status_code
 
 
 @api.route('/video_with_audio/<string:song_id>')
@@ -619,7 +622,7 @@ class Similar(Resource):
             api.abort(400, 'No similar songs found')
 
         return similar
-        
+
 
 def check_if_none(result, diskotek_nr):
     if result is None:
@@ -629,10 +632,3 @@ def check_if_none(result, diskotek_nr):
             .format(diskotek_nr)
         )
     return
-
-def format_date(result):
-    date = datetime.datetime.strptime(
-            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
-    result['Last_Updated'] = date.isoformat()
-    
-    return result

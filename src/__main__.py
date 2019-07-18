@@ -3,6 +3,9 @@
 import sys
 import getopt
 
+from celery import chain, group
+
+from tasks import check_done, add_bpm, add_emotions, add_metering, add_similarity_features, save_to_db
 from rest_api.general_application import app as g_app
 from rest_api.music_application import app as m_app
 from rest_api.video_application import app as v_app
@@ -15,11 +18,11 @@ def main(argv):
     db.setup()
 
     cfg = load_config()
-    
+
     type = ""
 
     try:
-        opts, args = getopt.getopt(argv, "ht:", ["help", "type="])
+        opts, _ = getopt.getopt(argv, "ht:", ["help", "type="])
     except getopt.GetoptError:
         print('__main__.py -t <api_type>')
         sys.exit(2)
