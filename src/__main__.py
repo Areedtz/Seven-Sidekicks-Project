@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3.6
-#from rest_api.application import app, hostURL, hostPort
 
 import sys
 import getopt
@@ -23,7 +22,7 @@ def main(argv):
     type = ""
 
     try:
-        opts, args = getopt.getopt(argv, "ht:", ["help", "type="])
+        opts, _ = getopt.getopt(argv, "ht:", ["help", "type="])
     except getopt.GetoptError:
         print('__main__.py -t <api_type>')
         sys.exit(2)

@@ -59,7 +59,6 @@ services:
         image: redis
         restart: always
 
-    # Comment out this container if on production envrionment
     mongodb:
         image: mongo
         restart: always
@@ -67,7 +66,6 @@ services:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: pass
 
-    # Comment out this container if on production environment
     sqldb:
         image: postgres
         restart: always

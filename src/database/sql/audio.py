@@ -59,7 +59,20 @@ class AudioDB:
 
         # CREATE INDEXES
 
-    def exists(self, audio_id: str):
+    def exists(self, audio_id: str) -> bool:
+        """Check if an entry with the given audio id exists in the database
+
+        Parameters
+        ----------
+        audio_id : str
+            The id of the audio to search for
+
+        Returns
+        -------
+        bool
+            True if an entry exists, False otherwise
+        """
+
         query = """
                 SELECT audio_release
                 FROM Audio
