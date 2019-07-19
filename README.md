@@ -26,5 +26,5 @@ Setting the user inside the container to fix any potential permission problems.
 ```docker-compose exec CONTAINER_NAME bash```
 
 ### Accessing the API to send requests
-If everything goes smoothly, the API should be accessible on the following URL:
+If everything goes smoothly, the API should be accessible on the following URL:<br>
 ```localhost:80```
