@@ -1,0 +1,23 @@
+FROM python:3.6
+
+RUN apt update && apt update
+
+RUN apt install -y ffmpeg clang-6.0 cron
+
+ENV CC=/usr/bin/clang-6.0
+
+COPY requirements.txt /code/requirements.txt
+
+RUN pip install -r /code/requirements.txt
+
+RUN rm /code/requirements.txt
+
+COPY src /code
+
+# copy crontabs for root user
+COPY src/cronjobs /etc/cron.d/hello-cron
+RUN chmod 0644 /etc/cron.d/hello-cron
+RUN crontab /etc/cron.d/hello-cron
+
+# start crond with log level 8 in foreground, output to stderr
+CMD ["cron", "-f"]
