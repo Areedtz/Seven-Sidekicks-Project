@@ -73,7 +73,7 @@ def _load_songs(songs):
     return segs
 
 
-def _load_song(song_id, filename, segments):
+def _load_song(song_id, filename, segments, force = False):
     """ Loads song features from the database if
     available otherwise loading the file and
     loading features from it directly
@@ -85,7 +85,7 @@ def _load_song(song_id, filename, segments):
 
     segment_data = []
 
-    if (segs == []):
+    if (segs == [] or force):
         # No segments in db, which means no features in db
         y, sr = librosa.load(filename)
 
@@ -305,9 +305,6 @@ def analyze_songs(songs):
 
     count = ss.count()
 
-    # TODO: Please remove at earliest convenience
-    segs = list(filter(lambda seg: seg[2] == 30, segs))
-
     allMatches = list(map(lambda x: [], segs))
 
     matchers = [Matcher.start().proxy() for _ in range(cpu_count())]
@@ -376,3 +373,10 @@ def analyze_songs(songs):
         ss.update_similar(segs[i][0], formatted)
 
     ss.close()
+
+def analyze_missing_similar():
+    s = SongSegment()
+
+    s._db[s._dbcol].find()
+
+    s.close()

@@ -113,7 +113,7 @@ def add_metering(x):
 @app.task
 def add_similarity_features(x):
     if not x['SIMILARITY_DONE']:
-        _load_song(x['audio_id'], x['source_path'], SongSegment())
+        _load_song(x['audio_id'], x['source_path'], SongSegment(), x['FORCE'])
         x['SIMILARITY_DONE'] = True
 
     return x
