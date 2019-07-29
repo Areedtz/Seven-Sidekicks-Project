@@ -2,7 +2,6 @@
 import csv
 import json
 import os
-import re
 import subprocess
 import sys
 import tempfile
@@ -42,7 +41,8 @@ def process_data_and_extract_profiles(
     Returns
     -------
     Tuple[int, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]
-        A tuple of the segment_id and tuples describing BPM, timbre and all moods
+        A tuple of the segment_id and tuples describing BPM,
+        timbre and all moods
     """
 
     # creating the temporary files
@@ -59,17 +59,20 @@ def process_data_and_extract_profiles(
     bpm, beats_confidence = get_song_bpm(song_file)
     bpm_tuple = (bpm, beats_confidence)
 
-    timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad = get_classifier_data(
+    (timbre, mood_relaxed, mood_party, mood_aggressive,
+     mood_happy, mood_sad) = get_classifier_data(
         temp_classifier.name)
 
     # closing and effectively deleting the classifier tempfile
     temp_classifier.close()
 
-    return segment_id, bpm_tuple, timbre, mood_relaxed, mood_party, mood_aggressive, mood_happy, mood_sad
+    return (segment_id, bpm_tuple, timbre, mood_relaxed, mood_party,
+            mood_aggressive, mood_happy, mood_sad)
 
 
 def segment_song_and_return_arguments(
-    filename: str, song_file: str) -> Tuple[str, str, list]:
+                                      filename: str, song_file: str
+                                      ) -> Tuple[str, str, list]:
     """Splits a song and adds the segments and segment ids to a list
 
     Parameters
@@ -82,9 +85,10 @@ def segment_song_and_return_arguments(
     Returns
     -------
     Tuple[str, str, list]
-        A tuple of the song_id, directory path and a list with the segments and their ids
+        A tuple of the song_id, directory path and a list with
+        the segments and their ids
     """
-    
+
     dirname = os.path.abspath(os.path.dirname(filename))
     argument_tuples = []
 
@@ -108,8 +112,8 @@ if __name__ == "__main__":
 
     arg = sys.argv[1]
 
-    song_id, output_folder_path, argument_tuples = segment_song_and_return_arguments(
-        __file__, arg)
+    (song_id, output_folder_path,
+     argument_tuples) = segment_song_and_return_arguments(__file__, arg)
 
     csv_output_file = "{}{}_segmented_output.csv".format(
         output_folder_path, song_id)
@@ -118,7 +122,8 @@ if __name__ == "__main__":
     with open(csv_output_file, 'w') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow([song_id, 'Segment ID', 'Timbre', 'Mood Relaxed',
-                         'Mood Party', 'Mood Aggressive', 'Mood Happy', 'Mood Sad'])
+                         'Mood Party', 'Mood Aggressive', 'Mood Happy',
+                         'Mood Sad'])
 
     csv_file.close()
 
@@ -134,4 +139,3 @@ if __name__ == "__main__":
         writer.writerows(csv_data)
 
     csv_file.close()
-

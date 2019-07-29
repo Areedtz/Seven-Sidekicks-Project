@@ -1,15 +1,14 @@
-import sys
 import os
 import json
 import _thread
-from bson.json_util import dumps
 
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
 from utilities.config_loader import load_config
-from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
+from video_emotion.api_helper import process_data_and_extract_emotions, \
+    process_data_and_extract_emotions_with_song
 
 
 cfg = load_config()
@@ -21,8 +20,9 @@ api = Api(app)
     Models the time-range of a video input
 """
 timerange_model = api.model('TimeRange_Model', {
-    'From': fields.Integer(
-        description='The beginning time of the content to analyze in milliseconds',
+    'from': fields.Integer(
+        description='The beginning time of the ' +
+        'content to analyze in milliseconds',
         required=True),
     'To': fields.Integer(
         description='The end time of the content to analyze milliseconds',
@@ -30,7 +30,8 @@ timerange_model = api.model('TimeRange_Model', {
 })
 
 """
-    Models a request for analyzing a video and song in conjunction so that their data can be collated
+    Models a request for analyzing a video and song in
+    conjunction so that their data can be collated
 """
 video_fields_with_song = api.model('VideoModelWithSong', {
     'ID': fields.String(
@@ -100,7 +101,8 @@ class AnalyzeVideo(Resource):
             )
         )
 
-        return {'Response': 'The request is being processed and will be available in the database when done.'}
+        return {'Response': 'The request is being processed and will be' +
+                'available in the database when done.'}
 
 
 @api.route('/video_with_audio')
@@ -136,7 +138,9 @@ class AnalyzeVideoWithSong(Resource):
             )
         )
 
-        return {'Response': 'The request is being processed and will be available in the database when done.'}
+        return {'Response': 'The request is being processed and will be' +
+                'available in the database when done.'}
+
 
 def check_if_invalid_time_range(video_time_range):
     if video_time_range["From"] == video_time_range["To"]:
@@ -145,6 +149,7 @@ def check_if_invalid_time_range(video_time_range):
                 "From and to can not be equal"
             )
     return
+
 
 def check_if_none(video_path):
     if not os.path.isfile(video_path):

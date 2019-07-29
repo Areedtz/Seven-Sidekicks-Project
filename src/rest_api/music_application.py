@@ -1,14 +1,16 @@
-import sys
 import os
 import json
-import _thread
-from bson.json_util import dumps
 
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
 import classification.api_helper as music_emotion_classifier
+# Some linting can show this as not being imported
+from celery import chain
+
+from tasks import check_done, add_bpm, add_emotions, add_metering, \
+    add_similarity_features, save_to_db
 from utilities.config_loader import load_config
 
 
@@ -43,9 +45,8 @@ class AnalyzeSong(Resource):
                 # Send to pipeline
             print("Got request for the " + song_path + " file")
         else:  # Is folder
-            # for file in os.listdir(song_path):
-                # if file.endswith(("mp3", "wav")):
-                    # Send to pipeline
-            print("Got request for the " + song_path + " folder")
+            for _ in os.listdir(song_path):
+                add_to_pipeline(data, song_path)
 
-        return {'Response': 'The request has been received and this API does nothing atm'}, 201
+        return {'Response': 'The song has been added to the pipeline' +
+                'and will be available once analyzed'}, 201

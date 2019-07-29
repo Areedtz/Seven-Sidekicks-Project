@@ -1,7 +1,3 @@
-import essentia
-import os
-
-
 def split_song(audio, segment_length=5):
 
     sr = 44100
@@ -13,4 +9,3 @@ def split_song(audio, segment_length=5):
         segment_list.append(segment)
 
     return segment_list
-

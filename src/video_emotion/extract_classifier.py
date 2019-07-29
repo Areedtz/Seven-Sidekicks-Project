@@ -1,8 +1,5 @@
-import sys
-from typing import Dict
-
 from video_emotion.facial_recognition.facial_recognition import analyze_video
-from video_emotion.emotionTagger.face_emotion_extraction import classify_faces
+from video_emotion.emotion_tagger.face_emotion_extraction import classify_faces
 
 
 def classify_video(video_path: str, time_range=None):
@@ -32,7 +29,7 @@ def classify_video(video_path: str, time_range=None):
         neutral_sum = 0.0
     number_of_faces = 0
     realFaces = []
-    for key, value in faces.items():
+    for _, value in faces.items():
         for face in value:
             realFaces.append(face)
     faces = classify_faces(realFaces)

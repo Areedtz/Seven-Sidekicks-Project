@@ -1,6 +1,8 @@
 from typing import Dict
 import json
 
+# Some linting might say this doesn't get imported
+# It does.
 from records import Database
 
 from utilities.config_loader import load_config
@@ -11,7 +13,8 @@ class AudioDB:
         cfg = load_config()
 
         self._db = Database("{}://{}:{}@{}/{}".format(
-            cfg['sql_type'], cfg['sql_user'], cfg['sql_pass'], cfg['sql_host'], cfg['sql_db']))
+            cfg['sql_type'], cfg['sql_user'], cfg['sql_pass'],
+            cfg['sql_host'], cfg['sql_db']))
 
     def get_data(self, query, audio_id):
         ids = audio_id.split("-")
@@ -59,8 +62,31 @@ class AudioDB:
 
         # CREATE INDEXES
 
+    def exists(self, audio_id: str) -> bool:
+        """Check if an entry with the given audio id exists in the database
+
+        Parameters
+        ----------
+        audio_id : str
+            The id of the audio to search for
+
+        Returns
+        -------
+        bool
+            True if an entry exists, False otherwise
+        """
+
+        query = """
+                SELECT audio_release
+                FROM Audio
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
+                """
+
+        return self._get_data(query, audio_id) is not None
+
     def post_all(self, data: Dict) -> str:
-        if not 'audio_id' in data:
+        if 'audio_id' not in data:
             pass
 
         ids = data['audio_id'].split("-")
@@ -96,18 +122,24 @@ class AudioDB:
             query = query + "NULL, NULL, "
 
         if 'emotions' in data:
-            query = "{}{}, {}, ".format(
-                query, data['emotions']['relaxed']['value'], data['emotions']['relaxed']['confidence'])
-            query = "{}{}, {}, ".format(
-                query, data['emotions']['party']['value'], data['emotions']['party']['confidence'])
-            query = "{}{}, {}, ".format(
-                query, data['emotions']['aggressive']['value'], data['emotions']['aggressive']['confidence'])
-            query = "{}{}, {}, ".format(
-                query, data['emotions']['happy']['value'], data['emotions']['happy']['confidence'])
-            query = "{}{}, {}, ".format(
-                query, data['emotions']['sad']['value'], data['emotions']['sad']['confidence'])
+            query = "{}'{}', {}, ".format(
+                query, data['emotions']['relaxed']['value'],
+                data['emotions']['relaxed']['confidence'])
+            query = "{}'{}', {}, ".format(
+                query, data['emotions']['party']['value'],
+                data['emotions']['party']['confidence'])
+            query = "{}'{}', {}, ".format(
+                query, data['emotions']['aggressive']['value'],
+                data['emotions']['aggressive']['confidence'])
+            query = "{}'{}', {}, ".format(
+                query, data['emotions']['happy']['value'],
+                data['emotions']['happy']['confidence'])
+            query = "{}'{}', {}, ".format(
+                query, data['emotions']['sad']['value'],
+                data['emotions']['sad']['confidence'])
         else:
-            query = query + "NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "
+            query = (query + "NULL, NULL, NULL, NULL, " +
+                     " NULL, NULL, NULL, NULL, NULL, NULL, ")
 
         if 'loudness' in data:
             query = "{}{}, ".format(query, data['loudness']['peak'])
@@ -116,6 +148,70 @@ class AudioDB:
             query = "{}{}, ".format(query, data['loudness']['loudness_range'])
         else:
             query = query + "NULL, NULL, NULL)"
+
+        self._db.query(query)
+
+    def update_all(self, data: Dict) -> str:
+        if 'audio_id' not in data:
+            pass
+
+        ids = data['audio_id'].split("-")
+
+        if len(ids) != 3:
+            return None
+
+        query = "UPDATE Audio SET "
+
+        if 'BPM' in data:
+            query = "{}bpm={}, bpm_confidence={}, ".format(
+                query, data['BPM']['value'], data['BPM']['confidence'])
+        else:
+            query = query + "bpm=NULL, bpm_confidence=NULL, "
+
+        if 'timbre' in data:
+            query = "{}timbre='{}', timbre_confidence={}, ".format(
+                query, data['timbre']['value'], data['timbre']['confidence'])
+        else:
+            query = query + "timbre=NULL, timbre_confidence=NULL, "
+
+        if 'emotions' in data:
+            query = "{}relaxed='{}', relaxed_confidence={}, ".format(
+                query, data['emotions']['relaxed']['value'],
+                data['emotions']['relaxed']['confidence'])
+            query = "{}party='{}', party_confidence={}, ".format(
+                query, data['emotions']['party']['value'],
+                data['emotions']['party']['confidence'])
+            query = "{}aggressive='{}', aggressive_confidence={}, ".format(
+                query, data['emotions']['aggressive']['value'],
+                data['emotions']['aggressive']['confidence'])
+            query = "{}happy='{}', happy_confidence={}, ".format(
+                query, data['emotions']['happy']['value'],
+                data['emotions']['happy']['confidence'])
+            query = "{}sad='{}', sad_confidence={}, ".format(
+                query, data['emotions']['sad']['value'],
+                data['emotions']['sad']['confidence'])
+        else:
+            query = (query + "relaxed=NULL, relaxed_confidence=NULL," +
+                     "party=NULL, party_confidence=NULL," +
+                     "aggressive=NULL, aggressive_confidence=NULL," +
+                     "happy=NULL, happy_confidence=NULL, sad=NULL," +
+                     "sad_confidence=NULL, ")
+
+        if 'loudness' in data:
+            query = "{}peak={}, ".format(query, data['loudness']['peak'])
+            query = "{}loudness_integrated={}, ".format(
+                query, data['loudness']['loudness_integrated'])
+            query = "{}loudness_range={}, ".format(
+                query, data['loudness']['loudness_range'])
+        else:
+            query = (query + "peak=NULL, loudness_integrated=NULL," +
+                     "loudness_range=NULL, ")
+
+        query = query + "last_updated=CURRENT_TIMESTAMP "
+
+        query = ("{}WHERE audio_release={} AND audio_side={}" +
+                 "AND audio_track={}").format(
+            query, ids[0], ids[1], ids[2])
 
         self._db.query(query)
 
@@ -134,9 +230,10 @@ class AudioDB:
         """
 
         query = """
-                SELECT * 
-                FROM Audio 
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                SELECT *
+                FROM Audio
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -156,9 +253,10 @@ class AudioDB:
         """
 
         query = """
-                SELECT BPM, BPM_Confidence, Last_Updated
-                FROM Audio 
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                SELECT bpm, bpm_confidence, last_updated
+                FROM Audio
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -178,9 +276,10 @@ class AudioDB:
         """
 
         query = """
-                SELECT BPM, BPM_Confidence, Last_Updated
-                FROM Audio 
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                SELECT bpm, bpm_confidence, last_updated
+                FROM Audio
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -202,7 +301,8 @@ class AudioDB:
         query = """
                 SELECT Timbre, Timbre_Confidence, Last_Updated
                 FROM Audio
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -222,11 +322,14 @@ class AudioDB:
         """
 
         query = """
-                SELECT Relaxed, Relaxed_Confidence, Party, Party_Confidence, 
-                       Aggressive, Aggressive_Confidence, Happy, Happy_Confidence, 
-                       Sad, Sad_Confidence, Last_Updated
-                FROM Audio 
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                SELECT relaxed, relaxed_confidence, party,
+                       party_confidence, aggressive,
+                       aggressive_confidence, happy,
+                       happy_confidence, sad,
+                       sad_confidence, last_updated
+                FROM Audio
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -248,7 +351,8 @@ class AudioDB:
         query = """
                 SELECT Relaxed, Relaxed_Confidence, Last_Updated
                 FROM Audio
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -270,7 +374,8 @@ class AudioDB:
         query = """
             SELECT Party, Party_Confidence, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)
@@ -292,7 +397,8 @@ class AudioDB:
         query = """
             SELECT Aggressive, Aggressive_Confidence, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)
@@ -314,7 +420,8 @@ class AudioDB:
         query = """
             SELECT Happy, Happy_Confidence, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)
@@ -336,7 +443,8 @@ class AudioDB:
         query = """
                 SELECT Sad, Sad_Confidence, Last_Updated
                 FROM Audio
-                WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+                WHERE audio_release=:rel AND audio_side=:side
+                AND audio_track=:track
                 """
 
         return self.get_data(query, audio_id)
@@ -358,7 +466,8 @@ class AudioDB:
         query = """
             SELECT Peak, Loudness_integrated, Loudness_Range, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)
@@ -380,7 +489,8 @@ class AudioDB:
         query = """
             SELECT Peak, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)
@@ -402,7 +512,8 @@ class AudioDB:
         query = """
             SELECT Loudness_integrated, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)
@@ -424,7 +535,8 @@ class AudioDB:
         query = """
             SELECT Loudness_Range, Last_Updated
             FROM Audio
-            WHERE sRelease=:rel AND sSide=:side AND sTrack=:track
+            WHERE audio_release=:rel AND audio_side=:side
+            AND audio_track=:track
             """
 
         return self.get_data(query, audio_id)

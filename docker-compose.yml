@@ -8,7 +8,7 @@ services:
         volumes:
             - ./src:/code
         ports:
-            - "80:8080"
+            - "81:8080"
         command: ./__main__.py --type general
 
     music_code:
@@ -19,7 +19,7 @@ services:
         volumes:
             - ./src:/code
         ports:
-            - "81:8080"
+            - "82:8080"
         command: ./__main__.py --type music
 
     video_code:
@@ -30,7 +30,7 @@ services:
         volumes:
             - ./src:/code
         ports:
-            - "82:8080"
+            - "83:8080"
         command: ./__main__.py --type video
 
     # Comment out this container if on production environment

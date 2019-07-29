@@ -1,5 +1,3 @@
-import typing
-
 from database.mongo.database import Database
 from database.mongo.storinator import Storinator
 
@@ -15,10 +13,12 @@ class SongSegment(Storinator):
         Insert song segment into the song_segmentation collection
 
     get(song_id)
-        Gets the newest document with the given song id in the song_segmentation collection
+        Gets the newest document with the given song id in the
+        song_segmentation collection
 
     get_by_ids(ids)
-        Gets all song segments from the song_segmentation collection by document object ids
+        Gets all song segments from the song_segmentation
+        collection by document object ids
 
     get_all_by_song_id(song_id)
         Gets all song segments from the song_segmentation collection by song id
@@ -27,11 +27,12 @@ class SongSegment(Storinator):
         Gets all song_segments from the database
 
     get_all_in_range(from_count, to_count)
-        Get all documents in the song_segmentation collection in the given time range
+        Get all documents in the song_segmentation collection
+        in the given time range
 
     update_similar(id, similar)
         Updates a document in the song_segmentation collection
-    
+
     count()
         Counts the number of documents in the song_segmentation collection
 
@@ -43,7 +44,8 @@ class SongSegment(Storinator):
         self._dbcol = 'song_segmentation'
         self._db = Database()
 
-    def add(self, song_id: str, time_from: int, time_to: int, mfcc, chroma, tempogram, similar) -> str:
+    def add(self, song_id: str, time_from: int, time_to: int,
+            mfcc, chroma, tempogram, similar) -> str:
         """Insert song segment into the song_segmentation collection
 
         Parameters
@@ -78,7 +80,8 @@ class SongSegment(Storinator):
         })
 
     def get(self, song_id: str):
-        """Gets the newest document with the given song id in the song_segmentation collection
+        """Gets the newest document with the given song id
+        in the song_segmentation collection
 
         Parameters
         ----------
@@ -94,7 +97,8 @@ class SongSegment(Storinator):
         return self._db.find(self._dbcol, song_id)
 
     def get_by_ids(self, ids: [str]):
-        """Gets all song segments from the song_segmentation collection by document object ids
+        """Gets all song segments from the song_segmentation
+        collection by document object ids
 
         Parameters
         ----------
@@ -141,7 +145,8 @@ class SongSegment(Storinator):
         return self._db.find_all(self._dbcol)
 
     def get_all_in_range(self, from_count: int, to_count: int):
-        """Get all documents in the song_segmentation collection in the given time range
+        """Get all documents in the song_segmentation
+        collection in the given time range
 
         Parameters
         ----------
@@ -157,7 +162,11 @@ class SongSegment(Storinator):
         """
 
         results = []
-        for r in self._db._db[self._dbcol].find().limit(to_count - from_count).skip(from_count):
+        for r in self._db._db[
+                              self._dbcol
+                              ].find().limit(
+                                             to_count - from_count
+                                             ).skip(from_count):
             results.append(r)
 
         return results

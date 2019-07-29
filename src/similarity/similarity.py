@@ -1,6 +1,5 @@
 import os
-import fileinput
-from multiprocessing import Pool, Process, Queue, cpu_count, Manager
+from multiprocessing import Pool, Process, cpu_count
 
 import librosa
 import numpy as np
@@ -17,7 +16,7 @@ MATCHES = cfg['similarity_matches']
 BUCKET_SIZE = cfg['similarity_bucket_size']
 
 
-def _flatten(l): 
+def _flatten(l):
     """ Creates an array from
     an array of arrays
     """
@@ -88,11 +87,14 @@ def _load_song(song_id, filename, segments):
         for i in range(0, len(segs)):
             segment = segs[i]
 
-            if segment['mfcc'] == None or segment['chroma'] == None or segment['tempogram'] == None:
+            if (segment['mfcc'] is None or
+               segment['chroma'] is None or
+               segment['tempogram'] is None):
                 break
 
-            feature = _create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
-                segment['chroma']), np.frombuffer(segment['tempogram']))
+            feature = _create_feature(np.frombuffer(segment['mfcc']),
+                                      np.frombuffer(segment['chroma']),
+                                      np.frombuffer(segment['tempogram']))
 
             segment_data.append((segment['_id'], song_id, i*5, feature))
 
@@ -106,7 +108,8 @@ def _process_db_segment(segment):
     feature = _create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
         segment['chroma']), np.frombuffer(segment['tempogram']))
 
-    return (segment['_id'], segment['song_id'], segment['time_from'] // 1000, feature)
+    return (segment['_id'], segment['song_id'],
+            segment['time_from'] // 1000, feature)
 
 
 def _create_feature(mfcc, chroma, tempogram):
@@ -137,7 +140,8 @@ def _create_bucket(segments):
     params_cp.num_rotations = 2
     params_cp.seed = 5721840
     params_cp.num_setup_threads = 0
-    params_cp.storage_hash_table = falconn.StorageHashTable.BitPackedFlatHashTable
+    params_cp.storage_hash_table = (
+        falconn.StorageHashTable.BitPackedFlatHashTable)
     falconn.compute_number_of_hash_functions(18, params_cp)
 
     table = falconn.LSHIndex(params_cp)
@@ -199,13 +203,13 @@ def query_similar(song_id, from_time, to_time):
     seg_db = SongSegment()
     segments = seg_db.get_all_by_song_id(song_id)
 
-    best = None
+    best = (None, None)
     for segment in segments:
         localdist = abs(from_time - segment['time_from'])
-        if best == None or localdist < best[0]:
+        if best is None or localdist < best[0]:
             best = (localdist, segment)
 
-    if best == None or 'similar' not in best[1]:
+    if best is None or 'similar' not in best[1]:
         return None
 
     segment = best[1]
@@ -218,7 +222,8 @@ def query_similar(song_id, from_time, to_time):
 
     similar_segments = []
     for i in range(0, len(similar)):
-        sim_seg = next(seg for seg in similar_full if seg['_id'] == similar[i]['id'])
+        sim_seg = next(
+            seg for seg in similar_full if seg['_id'] == similar[i]['id'])
         similar_segments.append(dict({
             'song_id': sim_seg['song_id'],
             'from_time': sim_seg['time_from'],
@@ -235,10 +240,10 @@ def _find_matches(searchContext):
     """ Searches for segments that
     are similar in the bucket
     """
-    
-    searchSegment, query_object = searchContext
 
-    return query_object.find_k_nearest_neighbors(searchSegment[3], MATCHES)
+    search_segment, query_object = searchContext
+
+    return query_object.find_k_nearest_neighbors(search_segment[3], MATCHES)
 
 
 def analyze_songs(songs):
@@ -253,13 +258,13 @@ def analyze_songs(songs):
 
     """
 
-    fileChunks = []
+    file_chunks = []
     x = len(songs) // cpu_count() + 1
     for i in range(0, cpu_count()):
-        fileChunks.append(songs[i * x: (i+1) * x])
+        file_chunks.append(songs[i * x: (i+1) * x])
 
     p = Pool(cpu_count())
-    segments = p.map(_load_songs, fileChunks)
+    segments = p.map(_load_songs, file_chunks)
     p.close()
 
     segs = _flatten(segments)
@@ -271,10 +276,11 @@ def analyze_songs(songs):
     allMatches = list(map(lambda x: [], segs))
 
     for i in range(0, count // BUCKET_SIZE + 1):
-        established_segments = list(filter( lambda x:
-            x['mfcc'] != None and
-            x['chroma'] != None and
-            x['tempogram'] != None,
+        established_segments = list(filter(
+            lambda x:
+            x['mfcc'] is not None and
+            x['chroma'] is not None and
+            x['tempogram'] is not None,
             ss.get_all_in_range(i*BUCKET_SIZE, (i+1)*BUCKET_SIZE)))
         established_segments = list(
             map(_process_db_segment, established_segments))
@@ -328,4 +334,3 @@ def analyze_songs(songs):
         ss.update_similar(segs[i][0], formatted)
 
     ss.close()
-

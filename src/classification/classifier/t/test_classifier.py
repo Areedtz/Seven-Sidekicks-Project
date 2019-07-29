@@ -1,11 +1,11 @@
 import os
-import sys
 
 from classification.classifier.profile_data_extractor \
     import get_classifier_data
 
+
 def test_profile_song_data():
-    # This is the setup required to dynamically run this 
+    # This is the setup required to dynamically run this
     # test from anywhere you'd like.
     dirname = os.path.abspath(os.path.dirname(__file__))
     filename = os.path.join(
@@ -14,7 +14,7 @@ def test_profile_song_data():
 
     song_data = get_classifier_data(filename)
 
-    assert song_data != None
+    assert song_data is not None
     assert song_data[0] == ("dark", 0.728462159634)
     assert song_data[1] == ("not_relaxed", 0.980210959911)
     assert song_data[2] == ("not_party", 0.643296301365)
