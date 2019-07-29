@@ -3,6 +3,7 @@ pymongo==3.5.1
 pyyaml==5.1
 tabulate==0.8.3
 celery==4.3.0
+flower==0.9.3
 redis==3.2.1
 records==0.5.3
 # Sql db dependencies

@@ -1,3 +1,5 @@
+**WIP**
+
 # Seven-Sidekicks-Project
 
 This repo, in short, is about tagging emotions to songs, using both audio and video input, and finding similar sounding songs. Head on over to our [wiki](https://github.com/nsst19/Seven-Sidekicks-Project/wiki) if you want to read more about the project!
