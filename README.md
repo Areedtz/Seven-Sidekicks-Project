@@ -1,4 +1,4 @@
-**WIP**
+---------- * **WIP** * ----------
 
 # Seven-Sidekicks-Project
 
