@@ -1,1 +1,1 @@
-* * * * * python /code/similarity.py > /proc/1/fd/1 2>/proc/1/fd/2
+0 17 * * * cd /code && pipenv run python similarity.py > /proc/1/fd/1 2>/proc/1/fd/2

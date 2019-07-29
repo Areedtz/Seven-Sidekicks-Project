@@ -2,10 +2,9 @@ version: '3'
 services:
   server:
     user: ${CURRENT_UID}
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-ss
     restart: always
-    volumes:
-      - ./src:/code
     ports:
       - '80:8080'
-    command: python similarity.py
