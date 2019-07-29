@@ -8,7 +8,7 @@ services:
         volumes:
             - ./src:/code
         ports:
-            - "81:8080"
+            - "80:8080"
         command: ./__main__.py --type general
         depends_on:
             - pipeline
@@ -21,7 +21,7 @@ services:
         volumes:
             - ./src:/code
         ports:
-            - "82:8080"
+            - "81:8080"
         command: ./__main__.py --type music
         depends_on:
             - pipeline
@@ -34,7 +34,7 @@ services:
         volumes:
             - ./src:/code
         ports:
-            - "83:8080"
+            - "82:8080"
         command: ./__main__.py --type video
         depends_on:
             - pipeline
