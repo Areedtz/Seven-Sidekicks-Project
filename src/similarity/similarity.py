@@ -301,6 +301,9 @@ def analyze_songs(songs):
 
     segs = _flatten(segments)
 
+    analyze_segments(segs)
+
+def analyze_segments(segs):
     ss = SongSegment()
 
     count = ss.count()
@@ -374,9 +377,23 @@ def analyze_songs(songs):
 
     ss.close()
 
+
 def analyze_missing_similar():
     s = SongSegment()
 
-    s._db[s._dbcol].find()
+    segment_data = []
+
+    for segment in s._db._db[s._dbcol].find({'similar.' + str(MATCHES - 1): {'$exists': False}}):
+        if segment['mfcc'] == None or segment['chroma'] == None or segment['tempogram'] == None:
+                break
+
+        feature = _create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
+                segment['chroma']), np.frombuffer(segment['tempogram']))
+
+        segment_data.append((segment['_id'], segment['song_id'], segment['time_from'], feature))
 
     s.close()
+
+    print(len(segment_data))
+
+    analyze_segments(segment_data)
