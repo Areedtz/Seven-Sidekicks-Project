@@ -96,10 +96,9 @@ def add_emotions(x):
 @app.task
 def add_metering(x):
     if not x['METERING_DONE']:
-        song = get_audio_loaded_song("loudness/t/test_loudness_extractor/8376-1-"
-                                     + "1_Demolition_Man_proud_music_preview.wav")
+        audio_loaded_song = get_audio_loaded_song(x['source_path'])
         max_loudness, integratedLoudness, loudnessRange = get_song_loudness(
-            song)
+            audio_loaded_song)
         x['loudness'] = dict({
             'peak': max_loudness,
             'loudness_integrated': integratedLoudness,
