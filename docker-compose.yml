@@ -1,3 +1,4 @@
+# This file is generally only used for development
 version: "3"
 services:
     general_code:
@@ -42,6 +43,7 @@ services:
     pipeline:
         user: ${CURRENT_UID}
         build: .
+        restart: always
         volumes:
             - ./src:/code
         command: celery -A tasks worker --loglevel=info
@@ -50,6 +52,18 @@ services:
             - mongodb
             - backend
             - sqldb
+
+    flower:
+        user: ${CURRENT_UID}
+        build: .
+        restart: always
+        volumes:
+            - ./src:/code
+        ports:
+            - 83:5555
+        command: flower -A tasks --port=5555
+        depends_on:
+            - pipeline
 
     broker:
         image: rabbitmq

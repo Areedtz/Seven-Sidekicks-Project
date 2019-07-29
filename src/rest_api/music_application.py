@@ -35,12 +35,12 @@ song_fields = api.model('SongModel', {
 
 
 pipeline = chain(
-    check_done.s(),
-    add_bpm.s(),
-    add_emotions.s(),
-    add_metering.s(),
-    add_similarity_features.s(),
-    save_to_db.s()
+    check_done.s(priority=6),
+    add_bpm.s(priority=5),
+    add_emotions.s(priority=4),
+    add_metering.s(priority=3),
+    add_similarity_features.s(priority=2),
+    save_to_db.s(priority=1)
 )
 
 
