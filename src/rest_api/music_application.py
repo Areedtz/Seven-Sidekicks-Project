@@ -6,11 +6,6 @@ from flask import request
 from flask_restplus import Resource, Api, fields
 from celery import chain
 
-from tasks import check_done, add_bpm, add_emotions, add_metering, add_similarity_features, save_to_db
-import classification.api_helper as music_emotion_classifier
-# Some linting can show this as not being imported
-from celery import chain
-
 from tasks import check_done, add_bpm, add_emotions, add_metering, \
     add_similarity_features, save_to_db
 from utilities.config_loader import load_config
