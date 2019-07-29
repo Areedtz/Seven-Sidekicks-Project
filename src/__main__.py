@@ -3,9 +3,6 @@
 import sys
 import getopt
 
-from celery import chain, group
-
-from tasks import check_done, add_bpm, add_emotions, add_metering, add_similarity_features, save_to_db
 from rest_api.general_application import app as g_app
 from rest_api.music_application import app as m_app
 from rest_api.video_application import app as v_app
@@ -15,7 +12,7 @@ from database.sql.audio import AudioDB
 
 def main(argv):
     db = AudioDB()
-    db.setup()
+    #db.setup()
 
     cfg = load_config()
 
