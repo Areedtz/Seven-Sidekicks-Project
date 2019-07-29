@@ -1,16 +1,13 @@
-import sys
 import os
 import json
-import _thread
-from bson.json_util import dumps
 
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 from celery import chain
 
-from tasks import check_done, add_bpm, add_emotions, add_metering, add_similarity_features, save_to_db
-import classification.api_helper as music_emotion_classifier
+from tasks import check_done, add_bpm, add_emotions, add_metering, \
+    add_similarity_features, save_to_db
 from utilities.config_loader import load_config
 from utilities.get_song_id import get_song_id
 
@@ -82,4 +79,5 @@ class AnalyzeSong(Resource):
                         if os.path.isfile(inner_filename):
                             add_to_pipeline(data, inner_filename)
 
-        return {'Response': 'The song has been added to the pipeline and will be available once analyzed'}, 201
+        return {'Response': 'The song has been added to the pipeline' +
+                'and will be available once analyzed'}, 201

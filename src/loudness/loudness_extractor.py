@@ -13,7 +13,7 @@ def get_song_loudness(audio) -> Tuple[float, float, float]:
     Parameters
     ----------
     audio
-        Raw audio that has been loaded into an Audioloader 
+        Raw audio that has been loaded into an Audioloader
 
     Returns
     -------
@@ -30,7 +30,7 @@ def get_song_loudness(audio) -> Tuple[float, float, float]:
     audio.bit_rate >> (p, "bit_rate")
     audio.codec >> (p, "codec")
 
-    b = LoudnessEBUR128(hopSize = 0.1, sampleRate = 44100)
+    b = LoudnessEBUR128(hopSize=0.1, sampleRate=44100)
     audio.audio >> b.signal
     b.momentaryLoudness >> (p, "momentaryLoudness")
     b.shortTermLoudness >> (p, "shortTermLoudness")
@@ -41,7 +41,7 @@ def get_song_loudness(audio) -> Tuple[float, float, float]:
 
     # Essentia had 2 ways of determining the loudness or DBFS of a clip
     # we went with the average of both values as the final value
-    max_loudness = (max(p["momentaryLoudness"]) + max(p["shortTermLoudness"])) / 2
+    max_loudness = (max(p["momentaryLoudness"]) +
+                    max(p["shortTermLoudness"])) / 2
 
     return max_loudness, p["integratedLoudness"], p["loudnessRange"]
-    

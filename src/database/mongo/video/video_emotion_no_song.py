@@ -1,5 +1,3 @@
-from typing import Dict
-
 from database.mongo.storinator import Storinator
 from database.mongo.video.video_emotion_database_no_song import VEDatabase
 
@@ -21,7 +19,8 @@ class VideoEmotionNS(Storinator):
         Gets a video segment from the video_emotion_no_song collection
 
     get_by_video_id(video_id)
-        Gets all video segments from the video_emotion_no_song collection by video id
+        Gets all video segments from the video_emotion_no_song
+        collection by video id
 
     get_all()
         Gets all video segments from the video_emotion_no_song collection
@@ -71,7 +70,8 @@ class VideoEmotionNS(Storinator):
         return self._db.find(self._dbcol, video_id)
 
     def get_by_video_id(self, video_id: str) -> [object]:
-        """Gets all video segments from the video_emotion_no_song collection by video id
+        """Gets all video segments from the video_emotion_no_song
+        collection by video id
 
         Parameters
         ----------
@@ -81,7 +81,8 @@ class VideoEmotionNS(Storinator):
         Returns
         -------
         object list
-            A list of the objects in the video_emotion_no_song collection from a given song id
+            A list of the objects in the video_emotion_no_song
+            collection from a given song id
         """
 
         return self._db.find_by_video_id(self._dbcol, video_id)

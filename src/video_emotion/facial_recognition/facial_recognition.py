@@ -9,11 +9,11 @@ from utilities.filehandler.handle_path import get_absolute_path
 dirname = os.path.dirname(__file__)
 CONFIDENCE_MINIMUM = 0.7
 
-OPENCV_PROTOTXT = get_absolute_path("video_emotion/facial_recognition/deploy"
-                                    + ".prototxt.txt")
+OPENCV_PROTOTXT = get_absolute_path("video_emotion/facial_recognition/" +
+                                    "deploy.prototxt.txt")
 
-OPENCV_MODEl = get_absolute_path("video_emotion/facial_recognition/res10_300x"
-                                 + "300_ssd_iter_140000_fp16.caffemodel")
+OPENCV_MODEl = get_absolute_path("video_emotion/facial_recognition/res10" +
+                                 "_300x300_ssd_iter_140000_fp16.caffemodel")
 # Load model from disk
 NET = cv2.dnn.readNetFromCaffe(OPENCV_PROTOTXT, OPENCV_MODEl)
 
@@ -25,7 +25,7 @@ GREEN = 177.0
 BLUE = 123.0
 
 
-def analyze_video(video_path : str, time_range:int =None) -> Dict:
+def analyze_video(video_path: str, time_range: int =None) -> Dict:
     """Analyses video finding faces, given videopath and a timerange
 
     Parameters
@@ -41,11 +41,11 @@ def analyze_video(video_path : str, time_range:int =None) -> Dict:
     Dict
         A dictionary of the facetuples found from the frames
     """
-	
+
     if time_range is not None:
         fro, to = time_range
     cap = cv2.VideoCapture(video_path)
-    cap.set(cv2.CAP_PROP_POS_MSEC,fro) #Jump to specified time in video
+    cap.set(cv2.CAP_PROP_POS_MSEC, fro)  # Jump to specified time in video
     dict_of_faces = {}
     while cap.isOpened():
         # Get frame from video
@@ -68,7 +68,8 @@ def analyze_video(video_path : str, time_range:int =None) -> Dict:
 
         # Add found frames to our dictionary
         if len(faces) > 0:
-            dict_of_faces[str(int(cap.get(cv2.CAP_PROP_POS_MSEC)))] = faces #save current time rounded
+            # save current time rounded
+            dict_of_faces[str(int(cap.get(cv2.CAP_PROP_POS_MSEC)))] = faces
     # Release resources used to open video
     cap.release()
 
@@ -88,16 +89,16 @@ def analyze_frame(frame) -> [[int, int]]:
     [[int, int]]
         A list of facetuples that describe the placement of a face in the frame
     """
-    
+
     # Get width and height of frame
     (h, w) = frame.shape[:2]
 
     # Resize frame and load it as blob
     blob = cv2.dnn.blobFromImage(cv2.resize(frame,
                                             (IMAGE_RESIZE, IMAGE_RESIZE)),
-                                            SIZE_CONSTANT,
-                                            (IMAGE_RESIZE, IMAGE_RESIZE),
-                                            (RED, GREEN, BLUE))
+                                 SIZE_CONSTANT,
+                                 (IMAGE_RESIZE, IMAGE_RESIZE),
+                                 (RED, GREEN, BLUE))
 
     # Detect faces in the frame and loop over the detections
     NET.setInput(blob)
@@ -141,6 +142,5 @@ def analyze_frame(frame) -> [[int, int]]:
         # Cut face out of frame and add it to our array of faces
         face = frame[int(startY):int(endY), int(startX):int(endX)]
         faces_tuple.append(face)
-        
+
     return faces_tuple
-    

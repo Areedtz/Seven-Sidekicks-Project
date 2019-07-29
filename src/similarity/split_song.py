@@ -1,6 +1,3 @@
-import os
-
-
 def split_song(audio, segment_length=5):
     sr = 44100
     song_length = len(audio) // sr

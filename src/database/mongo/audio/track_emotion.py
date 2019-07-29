@@ -1,5 +1,3 @@
-from typing import Dict
-
 from database.mongo.database import Database
 from database.mongo.storinator import Storinator
 
@@ -15,7 +13,8 @@ class TrackEmotion(Storinator):
         Insert document into the track_emotion collection
 
     get(song_id)
-        Gets the newest document with the given id in the track_emotion collection
+        Gets the newest document with the given id in
+        the track_emotion collection
 
     get_all()
         Gets all documents from the track_emotion collection

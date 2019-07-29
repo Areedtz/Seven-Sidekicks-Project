@@ -1,24 +1,17 @@
-import sys
 import os
 import json
-import _thread
 import datetime
-from bson.json_util import dumps
 
 import requests
 from flask import Flask
 from flask import request
 from flask_restplus import Resource, Api, fields
 
-import classification.api_helper as music_emotion_classifier
 from database.sql.audio import AudioDB
-from database.mongo.audio.track_emotion import TrackEmotion
 from database.mongo.video.video_emotion import VideoEmotion
 from database.mongo.video.video_emotion_no_song import VideoEmotionNS
 from similarity.similarity import query_similar
 from utilities.config_loader import load_config
-from video_emotion.api_helper import process_data_and_extract_emotions, process_data_and_extract_emotions_with_song
-
 
 cfg = load_config()
 
@@ -42,7 +35,8 @@ song_fields = api.model('SongModel', {
 """
 timerange_model = api.model('TimeRange_Model', {
     'from': fields.Integer(
-        description='The beginning time of the content to analyze in milliseconds',
+        description=('The beginning time of the content' +
+                     'to analyze in milliseconds'),
         required=True),
     'to': fields.Integer(
         description='The end time of the content to analyze milliseconds',
@@ -50,7 +44,8 @@ timerange_model = api.model('TimeRange_Model', {
 })
 
 """
-    Models a request for analyzing a video and song in conjunction so that their data can be collated
+    Models a request for analyzing a video and song in
+    conjunction so that their data can be collated
 """
 video_fields_with_song = api.model('VideoModelWithSong', {
     'id': fields.String(
@@ -150,7 +145,8 @@ class GetAnalyzedSongRhythm(Resource):
         Returns
         -------
         object
-            A json object containing the rhythm information of the analyzed song
+            A json object containing the rhythm
+            information of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -200,7 +196,8 @@ class GetAnalyzedSongTimbre(Resource):
         Returns
         -------
         object
-            A json object containing the timbre information of the analyzed song
+            A json object containing the timbre
+            information of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -225,7 +222,8 @@ class GetAnalyzedSongEmotions(Resource):
         Returns
         -------
         object
-            A json object containing the emotion information of the analyzed song
+            A json object containing the emotion
+            information of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -250,7 +248,8 @@ class GetAnalyzedSongEmotionsRelaxed(Resource):
         Returns
         -------
         object
-            A json object containing the relaxed information of the analyzed song
+            A json object containing the relaxed
+            information of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -300,7 +299,8 @@ class GetAnalyzedSongEmotionsAggressive(Resource):
         Returns
         -------
         object
-            A json object containing the aggressive information of the analyzed song
+            A json object containing the aggressive
+            information of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -375,7 +375,8 @@ class GetAnalyzedSongMeter(Resource):
         Returns
         -------
         object
-            A json object containing the levels information of the analyzed song
+            A json object containing the levels
+            information of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -415,7 +416,8 @@ class GetAnalyzedSongMeterPeak(Resource):
 @api.route('/audio/levels/loudness_integrated/<string:diskotek_nr>')
 class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
     def get(self, diskotek_nr: str) -> object:
-        """Retrieves a previously analyzed song's loudness integrated data from the database
+        """Retrieves a previously analyzed song's loudness
+           integrated data from the database
 
         Parameters
         ----------
@@ -425,7 +427,8 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
         Returns
         -------
         object
-            A json object containing the loudness integrated of the analyzed song
+            A json object containing the loudness
+            integrated of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -440,7 +443,8 @@ class GetAnalyzedSongMeterLoudnessIntegrated(Resource):
 @api.route('/audio/levels/loudness_range/<string:diskotek_nr>')
 class GetAnalyzedSongMeterLoudnessRange(Resource):
     def get(self, diskotek_nr: str) -> object:
-        """Retrieves a previously analyzed song's loudness range data from the database
+        """Retrieves a previously analyzed song's
+           loudness range data from the database
 
         Parameters
         ----------
@@ -450,7 +454,8 @@ class GetAnalyzedSongMeterLoudnessRange(Resource):
         Returns
         -------
         object
-            A json object containing the peak loudness range of the analyzed song
+            A json object containing the peak
+            loudness range of the analyzed song
         """
 
         db_connection = AudioDB()
@@ -476,7 +481,6 @@ class AnalyzeVideo(Resource):
 
         data = request.get_json()
 
-        video_id = data['id']
         video_path = data['source_path']
         video_time_range = data['time_range']
 
@@ -542,8 +546,6 @@ class AnalyzeVideoWithSong(Resource):
 
         data = request.get_json()
 
-        video_id = data['id']
-        song_id = data['song_id']
         video_path = data['source_path']
         video_time_range = data['time_range']
 
@@ -617,7 +619,7 @@ class Similar(Resource):
 
         similar = query_similar(diskotek_nr, from_time, to_time)
 
-        if similar == None:
+        if similar is None:
             # Should be 404, but restplus inserts additional text
             api.abort(400, 'No similar songs found')
 
@@ -632,3 +634,11 @@ def check_if_none(result, diskotek_nr):
             .format(diskotek_nr)
         )
     return
+
+
+def format_date(result):
+    date = datetime.datetime.strptime(
+            result['Last_Updated'], '%Y-%m-%dT%H:%M:%S')
+    result['Last_Updated'] = date.isoformat()
+    
+    return result

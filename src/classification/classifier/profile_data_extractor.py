@@ -1,4 +1,3 @@
-import sys
 import os
 import subprocess
 import json
@@ -12,8 +11,7 @@ from utilities.filehandler.handle_path import get_absolute_path
 def get_classifier_data(
     data_file_name: str) -> Tuple[
         Tuple, Tuple, Tuple, Tuple, Tuple, Tuple]:
-    """Extracts the highlevel 
-       mood classification from a given song file
+    """Extracts the highlevel mood classifications from a given song file
 
     Parameters
     ----------
@@ -26,11 +24,11 @@ def get_classifier_data(
         A tuple of tuples describing all moods and their probability
     """
 
-    # This is the setup required to dynamically run this 
+    # This setup is required, to dynamically run this
     # test from anywhere you'd like.
     dirname = os.path.abspath(os.path.dirname(__file__))
-    profile_file = get_absolute_path("utilities/ressources/"
-                                     + "timbre_moods_profile.yaml")
+    profile_file = get_absolute_path("utilities/ressources/" +
+                                     "timbre_moods_profile.yaml")
 
     # Temp file used instead of writing to an actual file
     temp_file = NamedTemporaryFile(delete=True)
@@ -40,8 +38,7 @@ def get_classifier_data(
 
     subprocess.run("cd {} && {}".format(dirname, command), shell=True)
 
-    with temp_file as f:
-        data = json.load(f)
+    data = json.load(temp_file)
 
     temp_file.close()
 
@@ -67,11 +64,11 @@ def get_classifier_data(
     mood_sad_probability = highlevel['mood_sad']['probability']
 
     # list for beautifying code
-    t = [(timbre, timbre_probability), 
+    t = [(timbre, timbre_probability),
          (mood_relaxed, mood_relaxed_probability),
-         (mood_party, mood_party_probability), 
+         (mood_party, mood_party_probability),
          (mood_aggressive, mood_aggressive_probability),
-         (mood_happy, mood_happy_probability), 
+         (mood_happy, mood_happy_probability),
          (mood_sad, mood_sad_probability)
          ]
 

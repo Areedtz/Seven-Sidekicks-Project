@@ -79,7 +79,8 @@ class VEDatabase:
             username=cfg['mongo_user'], password=cfg['mongo_pass'])
         self._db = self._client[cfg['mongo_db']]
 
-    def insert(self, col: str, video_id: str, time: dict, emotion: dict) -> str:
+    def insert(self, col: str, video_id: str,
+               time: dict, emotion: dict) -> str:
         """Insert video segment into the given collection
 
         Parameters
@@ -162,7 +163,7 @@ class VEDatabase:
         Returns
         -------
         object list
-            A list of the objects in the collection 
+            A list of the objects in the collection
         """
 
         results = []

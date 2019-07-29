@@ -144,4 +144,3 @@ def test_get_all():
     assert vet2['sad'] == 0.5
     assert vet2['surprise'] == 0.234
     assert vet2['neutral'] == 0.43
-
