@@ -23,10 +23,10 @@ def test_add_and_get():
     assert seg['song_id'] == 1
     assert seg['time_from'] == 0
     assert seg['time_to'] == 5000
-    assert seg['mfcc'] == None
-    assert seg['chroma'] == None
-    assert seg['tempogram'] == None
-    assert seg['similar'] == None
+    assert seg['mfcc'] is None
+    assert seg['chroma'] is None
+    assert seg['tempogram'] is None
+    assert seg['similar'] is None
 
 
 def test_get_all():
@@ -35,4 +35,3 @@ def test_get_all():
     seg = ss.get_all()
 
     assert len(seg) > 0
-

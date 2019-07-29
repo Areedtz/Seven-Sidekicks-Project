@@ -6,7 +6,8 @@ import utilities.get_song_id as s_id
 
 from multiprocessing import Pool
 
-from classification.segmented_audio_analysis import process_data_and_extract_profiles
+from classification.segmented_audio_analysis import \
+    process_data_and_extract_profiles
 from similarity.split_song import split_song
 from utilities.filehandler.audio_loader import get_mono_loaded_song
 
@@ -14,22 +15,21 @@ from pprint import pprint
 
 
 def test_profile_song_data():
-    filename = "classification/t/test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav"
+    filename = ("classification/t/test_segmented_audio_analysis/" +
+                "8376-1-1_Demolition_Man_proud_music_preview.wav")
 
     split_song_list = load_and_split_song(filename)
 
-    (segment_id, bpm, 
-     timbre, mood_relaxed, 
-     mood_party, mood_aggressive, 
-     mood_happy, mood_sad) = process_data_and_extract_profiles(
-            0, 
+    (segment_id, bpm,
+     timbre, _, _, _,
+     _, _) = process_data_and_extract_profiles(
+            0,
             split_song_list[0])
 
-    (segment_id1, bpm1, 
-     timbre1, mood_relaxed1, 
-     mood_party1, mood_aggressive1, 
-     mood_happy1, mood_sad1) = process_data_and_extract_profiles(
-            1, 
+    (segment_id1, bpm1,
+     timbre1, _, _, _,
+     _, _) = process_data_and_extract_profiles(
+            1,
             split_song_list[1])
 
     assert segment_id == 0
@@ -45,11 +45,12 @@ def test_audio_analysis_makes_csvfile():
     output_folder_path = os.path.join(dirname, "")
     filename = os.path.join(
         dirname,
-        "test_segmented_audio_analysis/8376-1-1_Demolition_Man_proud_music_preview.wav")
+        "test_segmented_audio_analysis/" +
+        "8376-1-1_Demolition_Man_proud_music_preview.wav")
     argument_tuples = []
 
     song_id = s_id.get_song_id(filename)
-    
+
     split_song_list = load_and_split_song(filename)
 
     for i in range(len(split_song_list)):
@@ -63,7 +64,9 @@ def test_audio_analysis_makes_csvfile():
     # CSV file header
     with open(csv_output_file, 'w') as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow(['Segment ID', 'BPM', 'Timbre', 'Mood Relaxed', 'Mood Party', 'Mood Aggressive', 'Mood Happy', 'Mood Sad'])
+        writer.writerow(['Segment ID', 'BPM', 'Timbre',
+                         'Mood Relaxed', 'Mood Party',
+                         'Mood Aggressive', 'Mood Happy', 'Mood Sad'])
 
     csv_file.close()
 
@@ -81,6 +84,7 @@ def test_audio_analysis_makes_csvfile():
     csv_file.close()
 
     assert csv_file
+
 
 def load_and_split_song(filename):
     loaded_song = get_mono_loaded_song(filename)

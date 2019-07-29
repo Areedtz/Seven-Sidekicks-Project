@@ -14,7 +14,7 @@ from utilities.filehandler.audio_loader import get_audio_loaded_song
 
 def process_data_and_extract_profiles(
         song_id: str, song_file_path: str):
-    """Extracts BPM, moods and loudness values from a song 
+    """Extracts BPM, moods and loudness values from a song
     and puts it into the database
 
     Parameters

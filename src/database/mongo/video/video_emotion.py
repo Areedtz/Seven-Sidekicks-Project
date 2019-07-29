@@ -1,5 +1,3 @@
-from typing import Dict
-
 from database.mongo.storinator import Storinator
 from database.mongo.video.video_emotion_database import VEDatabase
 
@@ -31,7 +29,8 @@ class VideoEmotion(Storinator):
         self._col = 'video_emotion'
         self._db = VEDatabase()
 
-    def add(self, song_id: str, video_id: str, time: dict, emotions: dict) -> str:
+    def add(self, song_id: str, video_id: str,
+            time: dict, emotions: dict) -> str:
         """Insert video segment into the video_emotion collection
 
         Parameters
@@ -82,7 +81,8 @@ class VideoEmotion(Storinator):
         Returns
         -------
         object list
-            A list of the objects in the video_emotion collection from a given song id
+            A list of the objects in the video_emotion
+            collection from a given song id
         """
 
         return self._db.find_by_song_id(self._col, song_id)

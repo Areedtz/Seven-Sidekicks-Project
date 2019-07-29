@@ -1,16 +1,15 @@
 from typing import Tuple
-from multiprocessing import Pool
 
 from essentia.standard import RhythmExtractor2013
 
 
 def get_song_bpm(audio) -> Tuple[float, float]:
-    """Extracts the BPM for the given audio file
+    """Extracts the BPM for the given monoloaded audio file
 
     Parameters
     ----------
     audio
-        Raw audio to be analyzed
+        Monoloaded audio to be analyzed
 
     Returns
     -------

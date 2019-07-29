@@ -24,6 +24,7 @@ def get_mono_loaded_song(song_path: str):
 
     return loader()
 
+
 def get_audio_loaded_song(song_path: str):
     """Loads the file given at the path and returns the audio as a stereosample
 
@@ -43,4 +44,3 @@ def get_audio_loaded_song(song_path: str):
     loader = AudioLoader(filename=path)
 
     return loader
-    
