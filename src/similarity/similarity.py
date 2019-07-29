@@ -335,9 +335,6 @@ def analyze_segments(segs):
 
         matches = pykka.get_all(matched)
 
-        """matches = list(map(_find_matches, list(
-            map(lambda seg: (seg, query_object), segs))))"""
-
         for j in range(0, len(matches)):
             allMatches[j].append(
                 list(map(lambda x: established_segments[x], matches[j])))
