@@ -4,8 +4,6 @@ services:
         user: ${CURRENT_UID}
         build: .
         restart: always
-        volumes:
-            - ./src:/code
         ports:
             - "80:8080"
         command: echo "Not implemented"
