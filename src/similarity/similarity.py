@@ -26,6 +26,7 @@ def _flatten(l):
 
     return [item for sublist in l for item in sublist]
 
+
 class Loader(pykka.ThreadingActor):
     def __init__(self):
         super().__init__()
@@ -36,6 +37,7 @@ class Loader(pykka.ThreadingActor):
 
     def on_stop(self):
         self.seg_db.close()
+
 
 def _process_segment(segment, sr):
     """ Computes the features from
@@ -58,7 +60,8 @@ def _load_songs(songs):
     allows for multiple songs to be looked
     up using the same database connection
     """
-    loaders = [Loader.start().proxy() for _ in range(min(len(songs), cpu_count()))]
+    loaders = [Loader.start().proxy()
+               for _ in range(min(len(songs), cpu_count()))]
 
     loaded = []
     for i, song in enumerate(songs):
@@ -72,7 +75,7 @@ def _load_songs(songs):
     return segs
 
 
-def _load_song(song_id, filename, segments, force = False):
+def _load_song(song_id, filename, segments, force=False):
     """ Loads song features from the database if
     available otherwise loading the file and
     loading features from it directly
@@ -108,8 +111,8 @@ def _load_song(song_id, filename, segments, force = False):
             segment = segs[i]
 
             if (segment['mfcc'] is None or
-               segment['chroma'] is None or
-               segment['tempogram'] is None):
+                segment['chroma'] is None or
+                    segment['tempogram'] is None):
                 break
 
             feature = _create_feature(np.frombuffer(segment['mfcc']),
@@ -281,6 +284,7 @@ class Matcher(pykka.ThreadingActor):
     def on_stop(self):
         pass
 
+
 def analyze_songs(songs):
     """Analyzes the specified songs
     and adds their features and similar
@@ -306,6 +310,7 @@ def analyze_songs(songs):
 
     analyze_segments(segs)
 
+
 def analyze_segments(segs):
     ss = SongSegment()
 
@@ -314,7 +319,8 @@ def analyze_segments(segs):
     allMatches = list(map(lambda x: [], segs))
 
     matchers = [Matcher.start().proxy() for _ in range(cpu_count())]
-    print("Searching through " + str(count // BUCKET_SIZE + 1) + " buckets, with " + str(BUCKET_SIZE) + " segments in each")
+    print("Searching through " + str(count // BUCKET_SIZE + 1) +
+          " buckets, with " + str(BUCKET_SIZE) + " segments in each")
     for i in range(0, count // BUCKET_SIZE + 1):
         print("Bucket: " + str(i + 1))
         established_segments = list(filter(
@@ -335,7 +341,8 @@ def analyze_segments(segs):
 
         matched = []
         for i, seg in enumerate(segs):
-            matched.append(matchers[i % len(matchers)].match(seg, query_object))
+            matched.append(matchers[i % len(matchers)
+                                    ].match(seg, query_object))
 
         matches = pykka.get_all(matched)
 
@@ -384,12 +391,13 @@ def analyze_missing_similar():
 
     for segment in s._db._db[s._dbcol].find({'similar.' + str(MATCHES - 1): {'$exists': False}}):
         if segment['mfcc'] == None or segment['chroma'] == None or segment['tempogram'] == None:
-                break
+            break
 
         feature = _create_feature(np.frombuffer(segment['mfcc']), np.frombuffer(
-                segment['chroma']), np.frombuffer(segment['tempogram']))
+            segment['chroma']), np.frombuffer(segment['tempogram']))
 
-        segment_data.append((segment['_id'], segment['song_id'], segment['time_from'], feature))
+        segment_data.append(
+            (segment['_id'], segment['song_id'], segment['time_from'], feature))
 
     s.close()
 
