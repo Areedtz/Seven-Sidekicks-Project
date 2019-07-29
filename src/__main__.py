@@ -8,6 +8,7 @@ from rest_api.music_application import app as m_app
 from rest_api.video_application import app as v_app
 from utilities.config_loader import load_config
 from database.sql.audio import AudioDB
+from similarity.similarity import analyze_songs
 
 
 def main(argv):
