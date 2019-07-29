@@ -15,8 +15,8 @@ from similarity.similarity import analyze_songs
 
 
 def main(argv):
-    db = AudioDB()
-    db.setup()
+    # db = AudioDB() # This should only be run once
+    # db.setup() # This should only be run once
 
     cfg = load_config()
 

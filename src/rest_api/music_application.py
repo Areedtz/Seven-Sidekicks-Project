@@ -28,7 +28,7 @@ song_fields = api.model('SongModel', {
     'source_path': fields.String(
         description='The path of the song to analyze',
         required=True),
-    'force': fields.String(
+    'force': fields.Boolean(
         description='Should every analysis run',
         required=False)
 })
@@ -69,7 +69,17 @@ class AnalyzeSong(Resource):
         if os.path.isfile(song_path):
             add_to_pipeline(data, song_path)
         else:  # Is folder
-            for file in os.listdir(song_path):
-                add_to_pipeline(data, song_path)
+            for outer_name in os.listdir(song_path):
+                outer_filename = os.path.join(song_path, outer_name)
+
+                if os.path.isfile(outer_filename):
+                    add_to_pipeline(data, outer_filename)
+                else:
+                    for inner_name in os.listdir(outer_filename):
+                        inner_filename = os.path.join(
+                            outer_filename, inner_name)
+
+                        if os.path.isfile(inner_filename):
+                            add_to_pipeline(data, inner_filename)
 
         return {'Response': 'The song has been added to the pipeline and will be available once analyzed'}, 201
