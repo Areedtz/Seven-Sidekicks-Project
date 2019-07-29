@@ -53,7 +53,9 @@ def classify_video(video_path: str, time_range=None):
         "surprise": surprise_sum / number_of_faces,
         "neutral": neutral_sum / number_of_faces
     }
-def find_emotions_cutoffs(emotions:[float]) -> str:
+
+
+def find_emotions_cutoffs(emotions: [float]) -> str:
     """Finds the emotional cutoffs for a set of emotions as a list
 
     Parameters
@@ -83,4 +85,3 @@ def find_emotions_cutoffs(emotions:[float]) -> str:
             string = string + key + "_" + str(value.round(decimals=2)) + "_"
 
     return string
-

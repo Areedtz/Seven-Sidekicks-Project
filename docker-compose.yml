@@ -10,6 +10,8 @@ services:
         ports:
             - "81:8080"
         command: ./__main__.py --type general
+        depends_on:
+            - pipeline
 
     music_code:
         # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
@@ -21,6 +23,8 @@ services:
         ports:
             - "82:8080"
         command: ./__main__.py --type music
+        depends_on:
+            - pipeline
 
     video_code:
         # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
@@ -32,8 +36,29 @@ services:
         ports:
             - "83:8080"
         command: ./__main__.py --type video
+        depends_on:
+            - pipeline
 
-    # Comment out this container if on production environment
+    pipeline:
+        user: ${CURRENT_UID}
+        build: .
+        volumes:
+            - ./src:/code
+        command: celery -A tasks worker --loglevel=info
+        depends_on:
+            - broker
+            - mongodb
+            - backend
+            - sqldb
+
+    broker:
+        image: rabbitmq
+        restart: always
+
+    backend:
+        image: redis
+        restart: always
+
     mongodb:
         image: mongo
         restart: always
@@ -41,12 +66,9 @@ services:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: pass
 
-    # Comment out this container if on production environment
     sqldb:
-        image: mysql
-        command: --default-authentication-plugin=mysql_native_password
+        image: postgres
         restart: always
         environment:
-            MYSQL_DATABASE: itumir
-            MYSQL_ROOT_PASSWORD: pass
-            
+            POSTGRES_DB: itumir
+            POSTGRES_PASSWORD: pass

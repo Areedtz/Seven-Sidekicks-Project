@@ -2,11 +2,11 @@ mongo_host: mongodb
 mongo_port: 27017
 mongo_user: root
 mongo_pass: pass
-mongo_db: dr
+mongo_db: admin
 
-sql_type: mysql
+sql_type: postgresql
 sql_host: sqldb
-sql_user: root
+sql_user: postgres
 sql_pass: pass
 sql_db: itumir
 
@@ -20,3 +20,6 @@ rest_api_video_url: http://video_code:8080
 
 similarity_matches: 10
 similarity_bucket_size: 6000
+
+rmq_host: broker
+redis_host: backend
