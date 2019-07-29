@@ -1,4 +1,3 @@
-# Some linting might say these imports fail
 from similarity.split_song import split_song
 from utilities.filehandler.audio_loader import get_mono_loaded_song
 

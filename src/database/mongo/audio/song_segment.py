@@ -163,10 +163,10 @@ class SongSegment(Storinator):
 
         results = []
         for r in self._db._db[
-                              self._dbcol
-                              ].find().limit(
-                                             to_count - from_count
-                                             ).skip(from_count):
+            self._dbcol
+            ].find().limit(
+            to_count - from_count
+                          ).skip(from_count):
             results.append(r)
 
         return results

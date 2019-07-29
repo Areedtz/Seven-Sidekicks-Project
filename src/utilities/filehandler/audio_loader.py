@@ -1,4 +1,3 @@
-# Some linting might say these imports fail
 from essentia.standard import MonoLoader
 from essentia.streaming import AudioLoader
 
