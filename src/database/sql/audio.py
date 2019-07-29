@@ -77,8 +77,9 @@ class AudioDB:
         query = """
                 SELECT audio_release
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id) is not None
@@ -231,8 +232,9 @@ class AudioDB:
         query = """
                 SELECT *
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -254,8 +256,9 @@ class AudioDB:
         query = """
                 SELECT bpm, bpm_confidence, last_updated
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -277,8 +280,9 @@ class AudioDB:
         query = """
                 SELECT bpm, bpm_confidence, last_updated
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -300,8 +304,9 @@ class AudioDB:
         query = """
                 SELECT timbre, timbre_confidence, last_updated
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -327,8 +332,9 @@ class AudioDB:
                        happy_confidence, sad,
                        sad_confidence, last_updated
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -350,8 +356,9 @@ class AudioDB:
         query = """
                 SELECT relaxed, relaxed_confidence, last_updated
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -373,8 +380,9 @@ class AudioDB:
         query = """
             SELECT party, party_confidence, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
@@ -396,8 +404,9 @@ class AudioDB:
         query = """
             SELECT aggressive, aggressive_confidence, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
@@ -419,8 +428,9 @@ class AudioDB:
         query = """
             SELECT happy, happy_confidence, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
@@ -442,8 +452,9 @@ class AudioDB:
         query = """
                 SELECT sad, sad_confidence, last_updated
                 FROM Audio
-                WHERE audio_release=:rel AND audio_side=:side
-                                         AND audio_track=:track
+                WHERE audio_release=:rel
+                    AND audio_side=:side
+                    AND audio_track=:track
                 """
 
         return self._get_data(query, audio_id)
@@ -465,8 +476,9 @@ class AudioDB:
         query = """
             SELECT peak, Loudness_integrated, loudness_range, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
@@ -488,8 +500,9 @@ class AudioDB:
         query = """
             SELECT peak, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
@@ -511,8 +524,9 @@ class AudioDB:
         query = """
             SELECT Loudness_integrated, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
@@ -534,8 +548,9 @@ class AudioDB:
         query = """
             SELECT loudness_range, last_updated
             FROM Audio
-            WHERE audio_release=:rel AND audio_side=:side
-                                     AND audio_track=:track
+            WHERE audio_release=:rel
+                AND audio_side=:side
+                AND audio_track=:track
             """
 
         return self._get_data(query, audio_id)
