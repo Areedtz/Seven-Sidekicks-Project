@@ -311,9 +311,9 @@ def analyze_segments(segs):
     allMatches = list(map(lambda x: [], segs))
 
     matchers = [Matcher.start().proxy() for _ in range(cpu_count())]
-    print(count // BUCKET_SIZE + 1)
+    print("Searching through " + str(count // BUCKET_SIZE + 1) + " buckets, with " + str(BUCKET_SIZE) + " segments in each")
     for i in range(0, count // BUCKET_SIZE + 1):
-        print(i)
+        print("Bucket: " + str(i + 1))
         established_segments = list(filter( lambda x:
             x['mfcc'] != None and
             x['chroma'] != None and
@@ -371,8 +371,6 @@ def analyze_segments(segs):
                 'distance': match[1]
             }))
 
-            print(segs[i][1] + ";" + str(segs[i][2]) + ";" + match[0][1] + ";" + str(match[0][2]) + ";" + str(match[1]))
-
         ss.update_similar(segs[i][0], formatted)
 
     ss.close()
@@ -394,6 +392,6 @@ def analyze_missing_similar():
 
     s.close()
 
-    print(len(segment_data))
+    print("Updating similar for " + str(len(segment_data)) + " segments")
 
     analyze_segments(segment_data)
