@@ -30,7 +30,9 @@ services:
     video_code:
         # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
         user: ${CURRENT_UID}
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile-vas
         restart: always
         volumes:
             - ./src:/code
