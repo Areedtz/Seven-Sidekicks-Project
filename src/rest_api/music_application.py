@@ -7,7 +7,7 @@ from flask_restplus import Resource, Api, fields
 from celery import chain
 
 from tasks import check_done, add_bpm, add_emotions, add_metering, \
-    add_similarity_features, save_to_db
+    add_similarity_features
 from utilities.config_loader import load_config
 from utilities.get_song_id import get_song_id
 
@@ -32,12 +32,11 @@ song_fields = api.model('SongModel', {
 
 
 pipeline = chain(
-    check_done.s().set(priority=6),
-    add_bpm.s().set(priority=5),
-    add_emotions.s().set(priority=4),
-    add_metering.s().set(priority=3),
-    add_similarity_features.s().set(priority=2),
-    save_to_db.s().set(priority=1)
+    check_done.s().set(priority=5),
+    add_bpm.s().set(priority=4),
+    add_emotions.s().set(priority=3),
+    add_metering.s().set(priority=2),
+    add_similarity_features.s().set(priority=1)
 )
 
 
