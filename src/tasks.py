@@ -21,6 +21,13 @@ app = Celery('tasks', backend='redis://@' +
 db = AudioDB()
 
 
+def _save_to_db(x):
+    if x['DB_EXISTS']:
+        db.update_all(x)
+    else:
+        db.post_all(x)
+
+
 @app.task
 def check_done(x):
     existing_entry = db.get_all(x['audio_id'])
@@ -99,10 +106,7 @@ def add_bpm(x):
 
         x['BPM'] = dict({'value': bpm, 'confidence': confidence})
 
-        if x['DB_EXISTS']:
-            db.update_all(x)
-        else:
-            db.post_all(x)
+        _save_to_db(x)
 
         x['BPM_DONE'] = True
 
@@ -147,10 +151,7 @@ def add_emotions(x):
             })
         })
 
-        if x['DB_EXISTS']:
-            db.update_all(x)
-        else:
-            db.post_all(x)
+        _save_to_db(x)
 
         x['MER_DONE'] = True
 
@@ -169,10 +170,7 @@ def add_metering(x):
             'loudness_range': loudnessRange,
         })
 
-        if x['DB_EXISTS']:
-            db.update_all(x)
-        else:
-            db.post_all(x)
+        _save_to_db(x)
 
         x['METERING_DONE'] = True
 
