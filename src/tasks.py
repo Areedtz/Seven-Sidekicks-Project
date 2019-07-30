@@ -107,6 +107,7 @@ def add_bpm(x):
         x['BPM'] = dict({'value': bpm, 'confidence': confidence})
 
         _save_to_db(x)
+        x['DB_EXISTS'] = True
 
         x['BPM_DONE'] = True
 
@@ -152,6 +153,7 @@ def add_emotions(x):
         })
 
         _save_to_db(x)
+        x['DB_EXISTS'] = True
 
         x['MER_DONE'] = True
 
@@ -171,6 +173,7 @@ def add_metering(x):
         })
 
         _save_to_db(x)
+        x['DB_EXISTS'] = True
 
         x['METERING_DONE'] = True
 
