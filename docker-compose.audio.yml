@@ -28,8 +28,13 @@ services:
 
   broker:
     image: rabbitmq
+    hostname: broker
     restart: always
+    volumes:
+      - /docker/persistent/rabbitmq:/var/lib/rabbitmq
 
   backend:
     image: redis
     restart: always
+    volumes:
+      - /docker/persistent/redis:/data

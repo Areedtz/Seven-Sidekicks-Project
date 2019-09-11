@@ -350,6 +350,12 @@ def analyze_segments(segs):
             allMatches[j].append(
                 list(map(lambda x: established_segments[x], matches[j])))
 
+        del data
+        del bucket
+        del established_segments
+        del query_object
+        del matches
+
     for matcher in matchers:
         matcher.stop()
 
