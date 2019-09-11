@@ -7,7 +7,7 @@ from flask_restplus import Resource, Api, fields
 from celery import chain
 
 from tasks import check_done, add_bpm, add_emotions, add_metering, \
-    add_similarity_features, save_to_db
+    add_similarity_features
 from utilities.config_loader import load_config
 from utilities.get_song_id import get_song_id
 

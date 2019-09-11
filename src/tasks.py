@@ -18,23 +18,82 @@ cfg = load_config()
 app = Celery('tasks', backend='redis://@' +
              cfg['redis_host'], broker='pyamqp://guest@' + cfg['rmq_host'] + '//')
 
+db = AudioDB()
+
+
+def _save_to_db(x):
+    if x['DB_EXISTS']:
+        db.update_all(x)
+    else:
+        db.post_all(x)
+
 
 @app.task
 def check_done(x):
-    db = AudioDB()
+    existing_entry = db.get_all(x['audio_id'])
 
-    # The following values are set to have support for only
-    # partially analyzed audio
-    if db.exists(x['audio_id']) and not x['FORCE']:
-        x['BPM_DONE'] = True
-        x['MER_DONE'] = True
-        x['METERING_DONE'] = True
-        x['SIMILARITY_DONE'] = True
+    if existing_entry is None:
+        x['DB_EXISTS'] = False
+    else:
+        x['DB_EXISTS'] = True
+
+    if existing_entry is not None and not x['FORCE']:
+        if existing_entry['bpm'] is None:
+            x['BPM_DONE'] = False
+        else:
+            x['BPM'] = dict({
+                'value': existing_entry['bpm'],
+                'confidence': existing_entry['bpm_confidence']
+            })
+
+            x['BPM_DONE'] = True
+
+        if existing_entry['timbre'] is None:
+            x['MER_DONE'] = False
+        else:
+            x['timbre'] = dict({
+                'value': existing_entry['timbre'],
+                'confidence': existing_entry['timbre_confidence']
+            })
+            x['emotions'] = dict({
+                'relaxed': dict({
+                    'value': existing_entry['relaxed'],
+                    'confidence': existing_entry['relaxed_confidence']
+                }),
+                'party': dict({
+                    'value': existing_entry['party'],
+                    'confidence': existing_entry['party_confidence']
+                }),
+                'aggressive': dict({
+                    'value': existing_entry['aggressive'],
+                    'confidence': existing_entry['aggressive_confidence']
+                }),
+                'happy': dict({
+                    'value': existing_entry['happy'],
+                    'confidence': existing_entry['happy_confidence']
+                }),
+                'sad': dict({
+                    'value': existing_entry['sad'],
+                    'confidence': existing_entry['sad_confidence']
+                })
+            })
+
+            x['MER_DONE'] = True
+
+        if existing_entry['peak'] is None:
+            x['METERING_DONE'] = False
+        else:
+            x['loudness'] = dict({
+                'peak': existing_entry['peak'],
+                'loudness_integrated': existing_entry['loudness_integrated'],
+                'loudness_range': existing_entry['loudness_range']
+            })
+
+            x['METERING_DONE'] = True
     else:
         x['BPM_DONE'] = False
         x['MER_DONE'] = False
         x['METERING_DONE'] = False
-        x['SIMILARITY_DONE'] = False
 
     return x
 
@@ -46,6 +105,10 @@ def add_bpm(x):
         bpm, confidence = get_song_bpm(song)
 
         x['BPM'] = dict({'value': bpm, 'confidence': confidence})
+
+        _save_to_db(x)
+        x['DB_EXISTS'] = True
+
         x['BPM_DONE'] = True
 
     return x
@@ -88,6 +151,10 @@ def add_emotions(x):
                 'confidence': sad[1]
             })
         })
+
+        _save_to_db(x)
+        x['DB_EXISTS'] = True
+
         x['MER_DONE'] = True
 
     return x
@@ -104,6 +171,10 @@ def add_metering(x):
             'loudness_integrated': integratedLoudness,
             'loudness_range': loudnessRange,
         })
+
+        _save_to_db(x)
+        x['DB_EXISTS'] = True
+
         x['METERING_DONE'] = True
 
     return x
@@ -111,22 +182,6 @@ def add_metering(x):
 
 @app.task
 def add_similarity_features(x):
-    if not x['SIMILARITY_DONE']:
-        _load_song(x['audio_id'], x['source_path'], SongSegment())
-        x['SIMILARITY_DONE'] = True
+    _load_song(x['audio_id'], x['source_path'], SongSegment(), x['FORCE'])
 
     return x
-
-
-@app.task
-def save_to_db(x):
-    db = AudioDB()
-
-    if db.exists(x['audio_id']) and not x['FORCE']:
-        return
-    elif db.exists(x['audio_id']):
-        db.update_all(x)
-    else:
-        db.post_all(x)
-
-    return

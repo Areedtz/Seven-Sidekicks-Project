@@ -1,4 +1,4 @@
-**WIP**
+---------- * **WIP** * ----------
 
 # Seven-Sidekicks-Project
 
@@ -11,7 +11,18 @@ We have a super simple installation guide down below that will show you how to s
 ### Running the docker-compose file
 Build docker: ```docker-compose build```
 
-Setup containers: ```docker-compose up -d```
+When creating the database locally, there is a bug with creating a database that already exists. This is the current work around:
+
+First setup of containers: ```docker-compose up -d```
+
+Edit main file: <br>
+- Go into "/src/\_\_main\_\_.py"
+- Find the these two lines and comment them out:
+  - ```db = AudioDB()``` --> ```#db = AudioDB()```
+  - ```db.setup()``` --> ```#db.setup()```
+
+Final setup of containers: ```docker-compose down && docker-compose up -d```
+
 
 Stop and remove containers: ```docker-compose down```
 
