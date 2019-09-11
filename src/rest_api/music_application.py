@@ -37,7 +37,6 @@ pipeline = chain(
     add_emotions.s().set(priority=3),
     add_metering.s().set(priority=4),
     add_similarity_features.s().set(priority=5),
-    save_to_db.s().set(priority=6)
 )
 
 
