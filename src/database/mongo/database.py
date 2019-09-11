@@ -117,8 +117,8 @@ class Database:
         collection = self._db[col]
         ins = _augment_document(_create_default_document(song_id), doc)
 
-        _id = collection.update_one({'song_id': song_id}, ins, {
-            'upsert': True}).upserted_id
+        _id = collection.update_one({'song_id': song_id}, {'$set': ins},
+                                    upsert=True).upserted_id
 
         return _id
 
