@@ -19,7 +19,7 @@ rest_api_music_url: http://music_code:8080
 rest_api_video_url: http://video_code:8080
 
 similarity_matches: 10
-similarity_bucket_size: 6000
+similarity_bucket_size: 5000
 
 rmq_host: broker
 redis_host: backend

@@ -1,88 +1,90 @@
 # This file is generally only used for development
-version: "3"
+version: '3'
 services:
-    general_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "80:8080"
-        command: ./__main__.py --type general
-        depends_on:
-            - pipeline
+  general_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    ports:
+      - '80:8080'
+    command: ./__main__.py --type general
+    depends_on:
+      - pipeline
 
-    music_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "81:8080"
-        command: ./__main__.py --type music
-        depends_on:
-            - pipeline
+  music_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    ports:
+      - '81:8080'
+    command: ./__main__.py --type music
+    depends_on:
+      - pipeline
 
-    video_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - "82:8080"
-        command: ./__main__.py --type video
-        depends_on:
-            - pipeline
+  # video_code:
+  #     # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+  #     user: ${CURRENT_UID}
+  #     build: .
+  #     restart: always
+  #     volumes:
+  #         - ./src:/code
+  #     ports:
+  #         - "82:8080"
+  #     command: ./__main__.py --type video
+  #     depends_on:
+  #         - pipeline
 
-    pipeline:
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        command: celery -A tasks worker --loglevel=info
-        depends_on:
-            - broker
-            - mongodb
-            - backend
-            - sqldb
+  pipeline:
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    command: celery -A tasks worker --loglevel=info --concurrency 1 -Ofair
+    depends_on:
+      - broker
+      - mongodb
+      - backend
+      - sqldb
 
-    flower:
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - ./src:/code
-        ports:
-            - 83:5555
-        command: flower -A tasks --port=5555
-        depends_on:
-            - pipeline
+  flower:
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - ./src:/code
+    ports:
+      - 83:5555
+    command: flower -A tasks --port=5555
+    depends_on:
+      - pipeline
 
-    broker:
-        image: rabbitmq
-        restart: always
+  broker:
+    image: rabbitmq
+    restart: always
 
-    backend:
-        image: redis
-        restart: always
+  backend:
+    image: redis
+    restart: always
 
-    mongodb:
-        image: mongo
-        restart: always
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: pass
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
 
-    sqldb:
-        image: postgres
-        restart: always
-        environment:
-            POSTGRES_DB: itumir
-            POSTGRES_PASSWORD: pass
+  sqldb:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: itumir
+      POSTGRES_PASSWORD: pass

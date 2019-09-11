@@ -1,13 +1,13 @@
-version: "3"
+version: '3'
 services:
-    general_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - /mnt/download:/download
-            - /mnt/archive:/archive
-        ports:
-            - "80:8080"
-        command: ./__main__.py --type general
+  general_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - /mnt/download:/download
+      - /mnt/archive:/archive
+    ports:
+      - '80:8080'
+    command: ./__main__.py --type general

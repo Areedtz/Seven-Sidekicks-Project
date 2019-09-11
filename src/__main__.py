@@ -11,8 +11,8 @@ from database.sql.audio import AudioDB
 
 
 def main(argv):
-    # db = AudioDB() # This should only be run once
-    # db.setup() # This should only be run once
+    # db = AudioDB()  # This should only be run once
+    # db.setup()  # This should only be run once
 
     cfg = load_config()
 

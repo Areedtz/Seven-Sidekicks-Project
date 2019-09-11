@@ -1,35 +1,35 @@
-version: "3"
+version: '3'
 services:
-    music_code:
-        # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - /mnt/download:/download
-            - /mnt/archive:/archive
-        ports:
-            - "80:8080"
-        command: ./__main__.py --type music
-        depends_on:
-            - pipeline
+  music_code:
+    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - /mnt/download:/download
+      - /mnt/archive:/archive
+    ports:
+      - '80:8080'
+    command: ./__main__.py --type music
+    depends_on:
+      - pipeline
 
-    pipeline:
-        user: ${CURRENT_UID}
-        build: .
-        restart: always
-        volumes:
-            - /mnt/download:/download
-            - /mnt/archive:/archive
-        command: celery -A tasks worker --loglevel=info
-        depends_on:
-            - broker
-            - backend
+  pipeline:
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    volumes:
+      - /mnt/download:/download
+      - /mnt/archive:/archive
+    command: celery -A tasks worker --loglevel=info --concurrency 1 -Ofair
+    depends_on:
+      - broker
+      - backend
 
-    broker:
-        image: rabbitmq
-        restart: always
+  broker:
+    image: rabbitmq
+    restart: always
 
-    backend:
-        image: redis
-        restart: always
+  backend:
+    image: redis
+    restart: always
