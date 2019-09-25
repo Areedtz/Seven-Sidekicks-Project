@@ -1,6 +1,7 @@
 import os
 from multiprocessing import Pool, Process, cpu_count
 
+import time
 import threading
 import pykka
 import librosa
@@ -409,4 +410,8 @@ def analyze_missing_similar():
 
     print("Updating similar for " + str(len(segment_data)) + " segments")
 
-    analyze_segments(segment_data)
+    if len(segment_data):
+        analyze_segments(segment_data)
+    else:
+        # This seems like the wrong place for this, but good enough for now
+        time.sleep(60*10)

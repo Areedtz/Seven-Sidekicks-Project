@@ -1,0 +1,11 @@
+flower.* {
+  proxy / flower:5555 {
+    transparent
+  }
+}
+
+* {
+  proxy / music_code:8080 {
+    transparent
+  }
+} 

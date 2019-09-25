@@ -21,7 +21,7 @@ services:
     volumes:
       - /mnt/download:/download
       - /mnt/archive:/archive
-    command: celery -A tasks worker --loglevel=info --concurrency 1 -Ofair
+    command: celery -A tasks worker --loglevel=info --concurrency 16 -Ofair
     depends_on:
       - broker
       - backend
@@ -38,3 +38,19 @@ services:
     restart: always
     volumes:
       - /docker/persistent/redis:/data
+
+  flower:
+    user: ${CURRENT_UID}
+    build: .
+    restart: always
+    command: flower -A tasks --port=5555
+    depends_on:
+      - pipeline
+
+  proxy:
+    image: abiosoft/caddy
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - ./Caddyfile-audio:/etc/Caddyfile

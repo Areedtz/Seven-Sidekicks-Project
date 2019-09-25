@@ -1,0 +1,11 @@
+* {
+  proxy / general_code:8080 {
+    transparent
+  }
+} 
+
+flower.* {
+  proxy / flower.*:80 {
+    transparent
+  } 
+}
