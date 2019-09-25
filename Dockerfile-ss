@@ -14,10 +14,7 @@ RUN rm /code/requirements.txt
 
 COPY src /code
 
-# copy crontabs for root user
-COPY src/cronjobs /etc/cron.d/hello-cron
-RUN chmod 0644 /etc/cron.d/hello-cron
-RUN crontab /etc/cron.d/hello-cron
+WORKDIR /code/src
 
 # Start cron in foreground
-CMD ["cron", "-f"]
+CMD ["./similarity.sh"]
