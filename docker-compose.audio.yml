@@ -8,8 +8,6 @@ services:
     volumes:
       - /mnt/download:/download
       - /mnt/archive:/archive
-    ports:
-      - '80:8080'
     command: ./__main__.py --type music
     depends_on:
       - pipeline
