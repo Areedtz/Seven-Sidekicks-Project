@@ -44,10 +44,12 @@ def add_to_pipeline(data, song_path):
     if song_path.endswith(("mp3", "wav")):
         id = get_song_id(song_path)
         force = data['force'] if 'force' in data else False
+        config = data['config'] if 'config' in data else {}
         song = dict({
             'audio_id': id,
             'source_path': song_path,
             'FORCE': force,
+            'config': config,
         })
 
         pipeline.delay(song)
@@ -79,5 +81,5 @@ class AnalyzeSong(Resource):
                         if os.path.isfile(inner_filename):
                             add_to_pipeline(data, inner_filename)
 
-        return {'Response': 'The song has been added to the pipeline' +
+        return {'Response': 'The song has been added to the pipeline ' +
                 'and will be available once analyzed'}, 201

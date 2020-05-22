@@ -103,9 +103,14 @@ def check_done(x):
 
 @app.task
 def add_bpm(x):
-    if not x['BPM_DONE']:
+    if not x['BPM_DONE'] or ('config' in x and 'BPM' in x['config']):
         song = get_mono_loaded_song(x['source_path'])
-        bpm, confidence = get_song_bpm(song)
+
+        params = {}
+        if 'config' in x and 'BPM' in x['config']:
+            params = x['config']['BPM']
+
+        bpm, confidence = get_song_bpm(song, params)
 
         x['BPM'] = dict({'value': bpm, 'confidence': confidence})
 
