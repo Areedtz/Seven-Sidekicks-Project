@@ -18,24 +18,30 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
         echo "Swig not installed. Installing swig..."
         cd $HOME
 
-        git clone https://github.com/swig/swig.git
-        cd swig
+        wget https://github.com/swig/swig/archive/rel-4.0.0.zip
+        unzip rel-4.0.0.zip
+        cd swig-rel-4.0.0
 
         ./autogen.sh
         ./configure
         make
         sudo make install
+        cd ..
+        rm -rf *rel-4.0.0*
     fi
     
     echo "Swig installed. Installing gaia..."
     cd $HOME
 
-    git clone https://github.com/MTG/gaia/
-    cd gaia
+    wget https://github.com/MTG/gaia/archive/v2.4.5.zip
+    unzip v2.4.5.zip
+    cd gaia-2.4.5
 
     python2 ./waf configure --with-python-bindings
     python2 ./waf
     sudo python2 ./waf install
+    cd ..
+    rm -rf *2.4.5
 
     echo "Gaia installed."
 fi
@@ -56,6 +62,9 @@ if [ ! -d "/home/travis/virtualenv/python3.6.7/lib/python3.6/site-packages/essen
     sudo python3 ./waf install
 
     python -c 'import essentia'
+
+    cd ..
+    rm -rf essentia
     echo "Essentia installed."
 fi
 
