@@ -2,7 +2,6 @@ import sys
 from typing import Tuple
 
 from essentia import run, Pool
-# With some linting these imports will look like they are failing
 from essentia.standard import RhythmExtractor2013
 from essentia.streaming import LoudnessEBUR128
 
@@ -39,9 +38,8 @@ def get_song_loudness(audio) -> Tuple[float, float, float]:
 
     run(audio)
 
-    # Essentia had 2 ways of determining the loudness or DBFS of a clip
-    # we went with the average of both values as the final value
-    max_loudness = (max(p["momentaryLoudness"]) +
-                    max(p["shortTermLoudness"])) / 2
+    # Essentia had 2 methods of determining the loudness or DBFS of a clip
+    # we use the max value of either method
+    max_loudness = max(*p["momentaryLoudness"], *p["shortTermLoudness"])
 
     return max_loudness, p["integratedLoudness"], p["loudnessRange"]
