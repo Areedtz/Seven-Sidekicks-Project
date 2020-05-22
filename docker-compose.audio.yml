@@ -48,7 +48,7 @@ services:
   proxy:
     build:
       context: .
-      dockerfile: Dockerfile-caddy
+      dockerfile: dockerfiles/Dockerfile-caddy
     restart: always
     ports:
       - '80:80'

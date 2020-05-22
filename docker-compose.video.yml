@@ -5,7 +5,7 @@ services:
     user: ${CURRENT_UID}
     build:
       context: .
-      dockerfile: Dockerfile-vas
+      dockerfile: dockerfiles/Dockerfile-vas
     restart: always
     volumes:
       - /mnt/download:/download
