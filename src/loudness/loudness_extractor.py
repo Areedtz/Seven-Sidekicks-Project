@@ -40,6 +40,6 @@ def get_song_loudness(audio) -> Tuple[float, float, float]:
 
     # Essentia had 2 methods of determining the loudness or DBFS of a clip
     # we use the max value of either method
-    max_loudness = max(*p["momentaryLoudness"], *p["shortTermLoudness"])
+    max_loudness = max(*p["momentaryLoudness"], *p["shortTermLoudness"]) * 1.0
 
     return max_loudness, p["integratedLoudness"], p["loudnessRange"]
