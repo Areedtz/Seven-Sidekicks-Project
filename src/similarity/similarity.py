@@ -84,11 +84,14 @@ def _load_song(song_id, filename, segments, force=False):
 
     print('Loading: ' + song_id)
     filename = get_absolute_path(filename)
+    print(song_id + ' loading song segments')
     segs = segments.get_all_by_song_id(song_id)
+    print(song_id + ' song segments loaded')
 
     segment_data = []
 
     if (segs == [] or force):
+        print('Loading audio file')
         # No segments in db, which means no features in db
         y, sr = librosa.load(filename)
 
@@ -107,6 +110,7 @@ def _load_song(song_id, filename, segments, force=False):
             segment_data.append((_id, song_id, i*5, feature))
 
     else:
+        print('Loaded from database')
         # There are segments in db, look for features
         for i in range(0, len(segs)):
             segment = segs[i]
@@ -396,7 +400,7 @@ def analyze_missing_similar():
 
     segment_data = []
 
-    for segment in s._db._db[s._dbcol].find({'similar.' + str(MATCHES - 1): {'$exists': False}}):
+    for segment in s._db._db[s._dbcol].find({'similar.' + str(MATCHES - 1): {'$exists': False}}).limit(1000000):
         if segment['mfcc'] == None or segment['chroma'] == None or segment['tempogram'] == None:
             break
 
