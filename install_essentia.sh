@@ -2,12 +2,12 @@
 
 # Install apt dependencies
 echo "Installing apt dependencies..."
-apt-get update
-apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config libyaml-dev > /dev/null
+sudo apt-get update > /dev/null
+sudo apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config libyaml-dev > /dev/null
 
-apt-get install -y libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev > /dev/null
-apt-get install -y python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six > /dev/null
-apt-get install -y python3-dev python3-numpy-dev python3-numpy python3-yaml > /dev/null
+sudo apt-get install -y libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev > /dev/null
+sudo apt-get install -y python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six > /dev/null
+sudo apt-get install -y python3-dev python3-numpy-dev python3-numpy python3-yaml > /dev/null
 
 # Install Gaia2 if not already installed
 if [ ! -d "/usr/local/include/gaia2" ]; then
@@ -25,7 +25,7 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
         ./autogen.sh
         ./configure
         make
-        make install
+        sudo make install
         cd ..
         rm -rf *rel-4.0.0*
     fi
@@ -39,7 +39,7 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
 
     python2 ./waf configure --with-python-bindings
     python2 ./waf
-    python2 ./waf install
+    sudo python2 ./waf install
     cd ..
     rm -rf *2.4.5
 
@@ -51,7 +51,7 @@ if [ ! -d "/home/travis/virtualenv/python3.6.7/lib/python3.6/site-packages/essen
     echo "Essentia not installed. Installing Essentia..."
     cd $HOME
 
-    git clone https://github.com/MTG/essentia
+    git clone https://github.com/MTG/essentia > /dev/null
     cd essentia
 
     # As of the moment I'm making this commit (25/03/2019), their master doesn't work. This commit works.
@@ -59,7 +59,7 @@ if [ ! -d "/home/travis/virtualenv/python3.6.7/lib/python3.6/site-packages/essen
 
     ./waf configure --build-static --with-examples --with-python --with-gaia
     ./waf
-    python3 ./waf install
+    sudo python3 ./waf install
 
     python -c 'import essentia'
 
