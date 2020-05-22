@@ -1,5 +1,5 @@
 sudo: required
-dist: cosmic
+dist: bionic
 language: python
 python:
 - '3.6'
@@ -16,7 +16,7 @@ install:
 script:
 - pytest
 services:
-- mongod
+- mongodb
 before_install:
 - bash install_essentia.sh
 notifications:

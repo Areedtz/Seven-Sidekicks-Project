@@ -2,12 +2,12 @@
 
 # Install apt dependencies
 echo "Installing apt dependencies..."
-sudo apt-get update
-sudo apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config libyaml-dev
+apt-get update
+apt-get install -y build-essential libqt4-dev libyaml-dev pkg-config libyaml-dev > /dev/null
 
-sudo apt-get install -y libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev
-sudo apt-get install -y python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six
-sudo apt-get install -y python3-dev python3-numpy-dev python3-numpy python3-yaml
+apt-get install -y libfftw3-dev libavcodec-dev libavformat-dev libavutil-dev libavresample-dev > /dev/null
+apt-get install -y python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev python-six > /dev/null
+apt-get install -y python3-dev python3-numpy-dev python3-numpy python3-yaml > /dev/null
 
 # Install Gaia2 if not already installed
 if [ ! -d "/usr/local/include/gaia2" ]; then
@@ -18,14 +18,14 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
         echo "Swig not installed. Installing swig..."
         cd $HOME
 
-        wget https://github.com/swig/swig/archive/rel-4.0.0.zip
-        unzip rel-4.0.0.zip
+        wget https://github.com/swig/swig/archive/rel-4.0.0.zip > /dev/null
+        unzip rel-4.0.0.zip > /dev/null
         cd swig-rel-4.0.0
 
         ./autogen.sh
         ./configure
         make
-        sudo make install
+        make install
         cd ..
         rm -rf *rel-4.0.0*
     fi
@@ -33,13 +33,13 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
     echo "Swig installed. Installing gaia..."
     cd $HOME
 
-    wget https://github.com/MTG/gaia/archive/v2.4.5.zip
-    unzip v2.4.5.zip
+    wget https://github.com/MTG/gaia/archive/v2.4.5.zip > /dev/null
+    unzip v2.4.5.zip > /dev/null
     cd gaia-2.4.5
 
     python2 ./waf configure --with-python-bindings
     python2 ./waf
-    sudo python2 ./waf install
+    python2 ./waf install
     cd ..
     rm -rf *2.4.5
 
@@ -59,7 +59,7 @@ if [ ! -d "/home/travis/virtualenv/python3.6.7/lib/python3.6/site-packages/essen
 
     ./waf configure --build-static --with-examples --with-python --with-gaia
     ./waf
-    sudo python3 ./waf install
+    python3 ./waf install
 
     python -c 'import essentia'
 
