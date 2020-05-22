@@ -43,10 +43,11 @@ pipeline = chain(
 def add_to_pipeline(data, song_path):
     if song_path.endswith(("mp3", "wav")):
         id = get_song_id(song_path)
+        force = data['force'] if 'force' in data else False
         song = dict({
             'audio_id': id,
             'source_path': song_path,
-            'FORCE': data['force'],
+            'FORCE': force,
         })
 
         pipeline.delay(song)

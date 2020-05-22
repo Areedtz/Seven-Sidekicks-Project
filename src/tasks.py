@@ -37,6 +37,9 @@ def check_done(x):
     else:
         x['DB_EXISTS'] = True
 
+    if not 'FORCE' in x:
+        x['FORCE'] = False
+
     if existing_entry is not None and not x['FORCE']:
         if existing_entry['bpm'] is None:
             x['BPM_DONE'] = False
