@@ -46,9 +46,9 @@ services:
       - pipeline
 
   proxy:
-    image: abiosoft/caddy
+    build:
+      context: .
+      dockerfile: Dockerfile-caddy
     restart: always
     ports:
       - '80:80'
-    volumes:
-      - ./Caddyfile-audio:/etc/Caddyfile
