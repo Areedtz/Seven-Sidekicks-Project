@@ -18,14 +18,25 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
         echo "Swig not installed. Installing swig..."
         cd $HOME
 
+        echo "Downloading swig..."
         wget -q https://github.com/swig/swig/archive/rel-4.0.0.zip
-        unzip rel-4.0.0.zip > /dev/null
+
+        echo "Unzipping swig..."
+        unzip rel-4.0.0.zip > /dev/null 2>&1
         cd swig-rel-4.0.0
 
-        ./autogen.sh > /dev/null
-        ./configure > /dev/null
-        make > /dev/null
-        sudo make install /dev/null
+        echo "Running swig autogen.sh..."
+        ./autogen.sh > /dev/null 2>&1
+
+        echo "Running swig configure..."
+        ./configure > /dev/null 2>&1
+
+        echo "Running swig make..."
+        make > /dev/null 2>&1
+
+        echo "Running swig make install..."
+        sudo make install > /dev/null 2>&1
+
         cd ..
         rm -rf *rel-4.0.0*
     fi
@@ -33,13 +44,22 @@ if [ ! -d "/usr/local/include/gaia2" ]; then
     echo "Swig installed. Installing gaia..."
     cd $HOME
 
+    echo "Downloading gaia..."
     wget -q https://github.com/MTG/gaia/archive/v2.4.5.zip
-    unzip v2.4.5.zip > /dev/null
+
+    echo "Unzipping gaia..."
+    unzip v2.4.5.zip > /dev/null 2>&1
     cd gaia-2.4.5
 
+    echo "Running gaia waf configure..."
     python2 ./waf configure --with-python-bindings > /dev/null 2>&1
+
+    echo "Running gaia waf..."
     python2 ./waf > /dev/null 2>&1
+
+    echo "Running gaia waf install..."
     sudo python2 ./waf install > /dev/null 2>&1
+
     cd ..
     rm -rf *2.4.5
 
@@ -51,15 +71,21 @@ if [ ! -d "/home/travis/virtualenv/python3.6.7/lib/python3.6/site-packages/essen
     echo "Essentia not installed. Installing Essentia..."
     cd $HOME
 
-    git clone https://github.com/MTG/essentia > /dev/null
+    echo "Cloning essentia..."
+    git clone https://github.com/MTG/essentia > /dev/null 2>&1
     cd essentia
 
     # As of the moment I'm making this commit (25/03/2019), their master doesn't work. This commit works.
     git reset --hard 6b584720c2d0dc0202a9ed5fc4e2121756dadd3a
 
-    ./waf configure --build-static --with-examples --with-python --with-gaia > /dev/null 2>&1
-    ./waf > /dev/null 2>&1
-    sudo python3 ./waf install > /dev/null 2>&1
+    echo "Running essentia waf configure..."
+    ./waf configure --build-static --with-examples --with-python --with-gaia
+
+    echo "Running essentia waf.."
+    ./waf
+
+    echo "Running essentia waf install..."
+    sudo python3 ./waf install
 
     python -c 'import essentia'
 
