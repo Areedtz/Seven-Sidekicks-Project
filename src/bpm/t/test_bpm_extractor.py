@@ -7,5 +7,5 @@ def test_get_song_bpm():
                                 "1_Demolition_Man_proud_music_preview.wav")
     bpm, confidence = get_song_bpm(song)
 
-    assert round(bpm, 3) == 139.847
-    assert round(confidence, 4) == 2.4134
+    assert int(bpm) == 139
+    assert int(confidence) == 2

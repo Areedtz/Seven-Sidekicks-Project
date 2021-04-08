@@ -17,7 +17,7 @@ def test_api_helper():
     data = DBConnection.get(id)
 
     assert data['song_id'] == '1337'
-    assert round(data['bpm']['value'], 3) == 139.847
+    assert int(data['bpm']['value']) == 139
     assert data['timbre']['value'] == 'dark'
     assert data['relaxed']['value'] == 'not_relaxed'
     assert data['party']['value'] == 'not_party'
