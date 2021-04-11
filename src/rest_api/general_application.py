@@ -22,12 +22,16 @@ api = Api(app)
     Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
+    'mediesek_id': fields.String(
+        description='',
+        required=True),
     'source_path': fields.String(
         description='The path of the song to analyze',
         required=True),
     'force': fields.Boolean(
-        description='Should every analysis run',
-        required=False)
+        description='Should every analysis run'),
+    'config': fields.Raw(
+        description='Config parameters for the analysis')
 })
 
 """
@@ -94,10 +98,17 @@ class AnalyzeSong(Resource):
         req_data = request.get_json()
         song_path = req_data["source_path"]
 
-        if not (os.path.isfile(song_path) or os.path.isdir(song_path)):
+        if not (os.path.isfile(song_path)):
+            if os.path.isdir(song_path):
             api.abort(
                 400,
-                "The given source path '{}' does not seem to exist"
+                    "The given path {} is a folder and not a file"
+                    .format(song_path)
+                )
+            else:
+                api.abort(
+                    400,
+                    "The given file {} can not be found"
                 .format(song_path)
             )
 

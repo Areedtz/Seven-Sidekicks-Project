@@ -22,12 +22,16 @@ api = Api(app)
     Models an analysis request for a piece of music including its location
 """
 song_fields = api.model('SongModel', {
+    'mediesek_id': fields.String(
+        description='',
+        required=True),
     'source_path': fields.String(
         description='The path of the song to analyze',
         required=True),
     'force': fields.Boolean(
-        description='Should every analysis run',
-        required=False)
+        description='Should every analysis run'),
+    'config': fields.Raw(
+        description='Config parameters for the analysis')
 })
 
 
@@ -65,21 +69,21 @@ class AnalyzeSong(Resource):
         data = request.get_json()
         song_path = data["source_path"]
 
-        if os.path.isfile(song_path):
-            add_to_pipeline(data, song_path)
-        else:  # Is folder
-            for outer_name in os.listdir(song_path):
-                outer_filename = os.path.join(song_path, outer_name)
-
-                if os.path.isfile(outer_filename):
-                    add_to_pipeline(data, outer_filename)
+        if not (os.path.isfile(song_path)):
+            if os.path.isdir(song_path):
+                api.abort(
+                    400,
+                    "The given path {} is a folder and not a file"
+                    .format(song_path)
+                )
                 else:
-                    for inner_name in os.listdir(outer_filename):
-                        inner_filename = os.path.join(
-                            outer_filename, inner_name)
+                api.abort(
+                    400,
+                    "The given file {} can not be found"
+                    .format(song_path)
+                )
 
-                        if os.path.isfile(inner_filename):
-                            add_to_pipeline(data, inner_filename)
+        add_to_pipeline(data, song_path)
 
         return {'Response': 'The song has been added to the pipeline ' +
                 'and will be available once analyzed'}, 201
