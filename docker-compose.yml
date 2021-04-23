@@ -4,7 +4,9 @@ services:
   general_code:
     # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - ./src:/code
@@ -17,7 +19,9 @@ services:
   music_code:
     # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - ./src:/code
@@ -27,24 +31,26 @@ services:
     depends_on:
       - pipeline
 
-  video_code:
-    # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
-    user: ${CURRENT_UID}
-    build:
-      context: .
-      dockerfile: dockerfiles/Dockerfile-vas
-    restart: always
-    volumes:
-      - ./src:/code
-    ports:
-      - '82:8080'
-    command: ./__main__.py --type video
-    depends_on:
-      - pipeline
+  #video_code:
+  ## Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
+  #  user: ${CURRENT_UID}
+  #  build: 
+  #    context: .
+  #    dockerfile: ./docker/video-analysis/Dockerfile
+  #  restart: always
+  #  volumes:
+  #    - ./src:/code
+  #  ports:
+  #    - '82:8080'
+  #  command: ./__main__.py --type video
+  #  depends_on:
+  #    - pipeline
 
   pipeline:
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - ./src:/code
@@ -57,7 +63,9 @@ services:
 
   flower:
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - ./src:/code

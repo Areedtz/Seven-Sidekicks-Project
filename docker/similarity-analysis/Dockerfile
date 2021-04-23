@@ -12,7 +12,7 @@ RUN cd /code && pipenv install --skip-lock && cd
 
 RUN rm /code/requirements.txt
 
-COPY src /code
+COPY src/ /code
 
 WORKDIR /code/src
 
