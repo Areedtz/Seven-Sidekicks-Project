@@ -46,9 +46,13 @@ services:
       - pipeline
 
   proxy:
-    build:
-      context: .
-      dockerfile: dockerfiles/Dockerfile-caddy
+    image: caddy:2-alpine
     restart: always
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy:/data
     ports:
       - '80:80'
+
+volumes:
+  caddy:
