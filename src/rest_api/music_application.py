@@ -50,6 +50,7 @@ def add_to_pipeline(data, song_path):
         force = data['force'] if 'force' in data else False
         config = data['config'] if 'config' in data else {}
         song = dict({
+            'mediesek_id': data['mediesek_id'],
             'audio_id': id,
             'source_path': song_path,
             'FORCE': force,
@@ -76,7 +77,7 @@ class AnalyzeSong(Resource):
                     "The given path {} is a folder and not a file"
                     .format(song_path)
                 )
-                else:
+            else:
                 api.abort(
                     400,
                     "The given file {} can not be found"

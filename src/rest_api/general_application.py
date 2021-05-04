@@ -100,8 +100,8 @@ class AnalyzeSong(Resource):
 
         if not (os.path.isfile(song_path)):
             if os.path.isdir(song_path):
-            api.abort(
-                400,
+                api.abort(
+                    400,
                     "The given path {} is a folder and not a file"
                     .format(song_path)
                 )
@@ -109,8 +109,8 @@ class AnalyzeSong(Resource):
                 api.abort(
                     400,
                     "The given file {} can not be found"
-                .format(song_path)
-            )
+                    .format(song_path)
+                )
 
         resp = requests.post(
             cfg['rest_api_music_url'] + "/audio", json=req_data)
