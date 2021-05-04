@@ -33,6 +33,7 @@ class AudioDB:
         self._db.query("""
         CREATE TABLE Audio
         (
+            mediesek_id INT NOT NULL,
             audio_release INT NOT NULL,
             audio_side INT NOT NULL,
             audio_track INT NOT NULL,
@@ -95,7 +96,8 @@ class AudioDB:
 
         query = """
         INSERT INTO Audio (
-            audio_release, audio_side, audio_track,
+            mediesek_id, audio_release, 
+            audio_side, audio_track,
             bpm, bpm_confidence, timbre,
             timbre_confidence, relaxed,
             relaxed_confidence, party,
@@ -107,7 +109,7 @@ class AudioDB:
         )
         VALUES ("""
 
-        query = "{}{}, {}, {}, ".format(query, ids[0], ids[1], ids[2])
+        query = "{}{}, {}, {}, {}, ".format(query, data['mediesek_id'], ids[0], ids[1], ids[2])
 
         if 'BPM' in data:
             query = "{}{}, {}, ".format(
