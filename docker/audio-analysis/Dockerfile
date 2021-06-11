@@ -64,15 +64,15 @@ WORKDIR /code
 
 # librosa mp3 dependency
 RUN apt-get update && \
-    apt-get update && apt-get install -y ffmpeg
+    apt-get install -y ffmpeg
 
 # Leftover packages from cleanup. Don't know if they're needed
-RUN apt-get update \
-    && apt-get install -y libavcodec-dev libavformat-dev libavutil-dev \
+RUN apt-get update && \
+    apt-get install -y libavcodec-dev libavformat-dev libavutil-dev \
     libavresample-dev python-dev libsamplerate0-dev libtag1-dev libchromaprint-dev
 
-RUN apt-get update \
-    && apt-get install -y python3-dev python3-numpy-dev \
+RUN apt-get update && \
+    apt-get install -y python3-dev python3-numpy-dev \
     python3-numpy python3-yaml libffi-dev
 
 # For live work
