@@ -1,0 +1,8 @@
+http:// {
+  @flower {
+    expression {host}.startsWith("flower.")
+  }
+
+  reverse_proxy @flower flower:5555
+  reverse_proxy music_code:8080
+}

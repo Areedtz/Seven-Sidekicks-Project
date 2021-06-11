@@ -52,7 +52,12 @@ services:
       - pipeline
 
   proxy:
-    build: ./docker/caddy-proxy/
+    build: ./docker/proxy
     restart: always
+    volumes:
+      - caddy:/data
     ports:
       - '80:80'
+
+volumes:
+  caddy:
