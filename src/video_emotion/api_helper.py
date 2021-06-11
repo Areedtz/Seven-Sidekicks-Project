@@ -26,7 +26,7 @@ def process_data_and_extract_emotions(
         The boolean describing whether it succeeded
     """
 
-    data = classify_video(video_path, (time_range['From'], time_range['To']))
+    data = classify_video(video_path, (time_range['from'], time_range['to']))
     vet = VideoEmotionNS()
     vet.add(video_id, time_range, data)
     return True
@@ -58,7 +58,7 @@ def process_data_and_extract_emotions_with_song(
         Returns a boolean telling if the function succeeded
     """
 
-    data = classify_video(video_path, (time_range['From'], time_range['To']))
+    data = classify_video(video_path, (time_range['from'], time_range['to']))
     vet = VideoEmotion()
     vet.add(video_id, song_id, time_range, data)
     return True
