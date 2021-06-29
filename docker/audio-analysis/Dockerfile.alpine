@@ -1,0 +1,85 @@
+FROM python:3.7-alpine3.9
+
+# Dependencies for the swig package
+RUN apk add --update --no-cache \
+        bison automake make autoconf \
+        gcc g++ pcre-dev
+
+# Compile, build and install the swig package
+WORKDIR /tmp
+
+RUN wget https://github.com/swig/swig/archive/rel-4.0.0.zip; \
+    unzip rel-4.0.0.zip; cd swig-rel-4.0.0; \
+    ./autogen.sh; ./configure; make; make install; \
+    cd ..; rm -rf *rel-4.0.0*
+
+# Dependencies for the gaia package
+RUN apk add --update --no-cache \
+        python2-dev qt-dev yaml-dev
+
+# Compile, build and install the gaia package
+RUN wget https://github.com/MTG/gaia/archive/v2.4.5.zip; \
+    unzip v2.4.5.zip; cd gaia-2.4.5; \
+    python2 waf configure --with-python-bindings; \
+    python2 waf; python2.7 waf install; \
+    cd ..; rm -rf *2.4.5*
+
+# Dependencies for the essentia package
+RUN apk add --update --no-cache \
+        fftw-dev git ffmpeg-dev \
+        libsamplerate-dev taglib-dev 
+RUN apk add --update --no-cache \
+        py-numpy py-yaml python3-dev
+
+# Compile, build and install the essentia package
+WORKDIR /essentia
+
+RUN git clone https://github.com/MTG/essentia.git; \
+    cd /essentia/essentia; git reset --hard 6b584720c2d0dc0202a9ed5fc4e2121756dadd3a; \
+    python3 waf configure --build-static --with-examples --with-gaia; \
+    python3 waf; python3 waf install; \
+    cd /; rm -rf /essentia
+
+# Install cx_oracle requirements
+RUN apk add --update --no-cache \
+        libaio-dev
+
+ENV ORACLE_HOME /opt/oracle/instantclient_12_1
+ENV LD_RUN_PATH $ORACLE_HOME
+ENV LD_LIBRARY_PATH $ORACLE_HOME:$LD_LIBRARY_PATH
+
+WORKDIR /tmp
+
+RUN wget https://github.com/odedlaz/docker-cx_oracle/raw/master/instantclient/instantclient-basic-linux.x64-12.1.0.2.0.zip -O basic.zip
+RUN wget https://github.com/odedlaz/docker-cx_oracle/raw/master/instantclient/instantclient-sdk-linux.x64-12.1.0.2.0.zip -O sdk.zip
+RUN mkdir /opt/oracle/; unzip basic.zip -d /opt/oracle; \
+    unzip sdk.zip -d /opt/oracle; rm -rf *.zip
+RUN ln -s $ORACLE_HOME/libclntsh.so.12.1 $ORACLE_HOME/libclntsh.so
+RUN mkdir $ORACLE_HOME/lib && cp $ORACLE_HOME/libclntsh.so.12.1 $ORACLE_HOME/lib/libclntsh.so
+
+# Install the clang compiler
+RUN apk add --update --no-cache \
+        clang
+
+# Set environment to use the clang compiler instead of gcc for use with pip
+ENV CC=/usr/bin/clang
+
+# # Leftover packages from cleanup. Don't know if they're needed
+RUN apk add --update --no-cache \
+        libffi-dev
+
+# Pip package dependencies
+RUN apk add --update --no-cache \
+        mariadb-dev postgresql-dev
+
+RUN pip3 install --upgrade pip
+
+COPY requirements.txt /requirements.txt
+RUN pip3 install -r /requirements.txt
+    
+RUN mkdir /code; chown 1000:1000 /code
+
+WORKDIR /code
+
+# For live work
+COPY src /code/
