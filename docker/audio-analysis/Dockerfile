@@ -57,7 +57,7 @@ ENV CC=/usr/bin/clang-6.0
 
 # librosa mp3 dependency
 RUN apt-get update && \
-    apt-get update && apt-get install -y ffmpeg
+    apt-get install -y ffmpeg
 
 RUN pip3 install essentia
 COPY requirements.txt /requirements.txt

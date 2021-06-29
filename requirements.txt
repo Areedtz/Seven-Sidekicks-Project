@@ -72,6 +72,7 @@ pymongo==3.11.4
 pyparsing==2.4.7
 pyrsistent==0.17.3
 pytest==6.2.4
+pytest-mock==3.6.1
 pytz==2021.1
 PyYAML==5.4.1
 records==0.5.3
