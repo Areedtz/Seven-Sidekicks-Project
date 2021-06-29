@@ -3,7 +3,9 @@ services:
   general_code:
     # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - /mnt/download:/download

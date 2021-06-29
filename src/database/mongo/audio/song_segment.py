@@ -1,4 +1,5 @@
-from database.mongo.database import Database
+from database.mongo.database import Database, \
+    _create_default_document, _augment_document
 from database.mongo.storinator import Storinator
 
 
@@ -70,7 +71,8 @@ class SongSegment(Storinator):
             The document's object id
         """
 
-        return self._db.insert(self._dbcol, song_id, {
+        collection = self._db._db[self._dbcol]
+        ins = _augment_document(_create_default_document(song_id), {
             "time_from": time_from,
             "time_to": time_to,
             "mfcc": mfcc,
@@ -78,6 +80,14 @@ class SongSegment(Storinator):
             "tempogram": tempogram,
             "similar": similar,
         })
+
+        _id = collection.update_one({
+            "song_id": song_id,
+            "time_from": time_from,
+            "time_to": time_to
+        }, {'$set': ins}, upsert=True).upserted_id
+
+        return _id
 
     def get(self, song_id: str):
         """Gets the newest document with the given song id
@@ -118,7 +128,8 @@ class SongSegment(Storinator):
         return results
 
     def get_all_by_song_id(self, song_id: str):
-        """Gets all song segments from the song_segmentation collection by song id
+        """Gets all song segments from the song_segmentation
+        collection by song id
 
         Parameters
         ----------
@@ -166,7 +177,7 @@ class SongSegment(Storinator):
                 self._dbcol
             ].find().limit(
                 to_count - from_count
-                          ).skip(from_count):
+        ).skip(from_count):
             results.append(r)
 
         return results

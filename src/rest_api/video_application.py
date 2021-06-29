@@ -101,7 +101,7 @@ class AnalyzeVideo(Resource):
             )
         )
 
-        return {'Response': 'The request is being processed and will be' +
+        return {'Response': 'The request is being processed and will be ' +
                 'available in the database when done.'}
 
 
@@ -138,7 +138,7 @@ class AnalyzeVideoWithSong(Resource):
             )
         )
 
-        return {'Response': 'The request is being processed and will be' +
+        return {'Response': 'The request is being processed and will be ' +
                 'available in the database when done.'}
 
 

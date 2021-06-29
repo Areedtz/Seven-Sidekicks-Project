@@ -3,7 +3,9 @@ services:
   music_code:
     # Set CURRENT_ID by running CURRENT_UID=$(id -u):$(id -g) docker-compose up
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - /mnt/download:/download
@@ -14,7 +16,9 @@ services:
 
   pipeline:
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     volumes:
       - /mnt/download:/download
@@ -39,16 +43,21 @@ services:
 
   flower:
     user: ${CURRENT_UID}
-    build: .
+    build: 
+      context: .
+      dockerfile: ./docker/audio-analysis/Dockerfile
     restart: always
     command: flower -A tasks --port=5555
     depends_on:
       - pipeline
 
   proxy:
-    build:
-      context: .
-      dockerfile: dockerfiles/Dockerfile-caddy
+    build: ./docker/proxy
     restart: always
+    volumes:
+      - caddy:/data
     ports:
       - '80:80'
+
+volumes:
+  caddy:

@@ -2,9 +2,9 @@ version: '3'
 services:
   server:
     user: ${CURRENT_UID}
-    build:
+    build: 
       context: .
-      dockerfile: dockerfiles/Dockerfile-ss
+      dockerfile: ./docker/similarity-analysis/Dockerfile
     restart: always
     ports:
       - '80:8080'
