@@ -12,7 +12,7 @@ Keras==2.3.1
 numpy==1.18.5
 opencv-python==4.5.2.54
 scipy==1.7.0
-tensorflow==1.15.5
+tensorflow==2.5.3
 # Rest API
 flask-restplus==0.13.0
 requests==2.25.1
