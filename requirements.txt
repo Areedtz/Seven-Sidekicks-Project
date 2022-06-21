@@ -9,7 +9,7 @@ numba==0.53.1
 # Video dependencies
 h5py==2.10.0
 Keras==2.3.1
-numpy==1.18.5
+numpy==1.22.0
 opencv-python==4.5.2.54
 scipy==1.7.0
 tensorflow==1.15.5
