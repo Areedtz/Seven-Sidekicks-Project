@@ -64,7 +64,7 @@ packaging==20.9
 pluggy==0.13.1
 pooch==1.4.0
 prometheus-client==0.8.0
-protobuf==3.17.3
+protobuf==3.18.3
 py==1.10.0
 pycparser==2.20
 Pykka==2.0.3
